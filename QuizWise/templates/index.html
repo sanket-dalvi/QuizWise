@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style>
+        /* CSS for the gradient background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        /* CSS for header */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+        }
+
+        /* CSS for buttons in header */
+        header button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            border-radius: 5px;
+        }
+
+        /* CSS for main content */
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 65vh;
+        }
+
+        /* CSS for the image and form */
+        .content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-container img {
+            width: 300px; /* Adjust as needed */
+            margin-right: 20px;
+        }
+
+        .content-container input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 10px;
+            width: 200px; /* Adjust as needed */
+        }
+
+        .content-container button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background: #fff;
+            color: #1DA3B8;
+        }
+
+        /* CSS for footer */
+        footer {
+            text-align: center;
+            padding: 50px;
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-content">
+        <header>
+            <h1>QuizWiz</h1>
+            <div>
+                <button>Login</button>
+                <button>Register</button>
+            </div>
+        </header>
+    </div>
+
+    {% load static %}
+    <div class="main-content">
+        <div class="content-container">
+            <form> 
+                <input type="text" placeholder="Your email address">
+                <button>Register</button>
+            </form>
+            <img src="{% static 'teachingowl.jpg' %}" alt="Your Image">
+        </div>
+    </div>
+
+    <div class="footer-content">
+        <footer>
+            <p>&copy; 2023 Your Website</p>
+        </footer>
+    </div>
+</body>
+
+</html>
