@@ -1,6 +1,132 @@
-<!-- login.html -->
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Wise Registration</title>
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, h3, p, form {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* CSS for the gradient background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* CSS for header */
+        header {
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+        }
+
+        /* CSS for buttons in header */
+        header button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            border-radius: 5px;
+            background-color: #673AB7; /* Darker purple for contrast */
+        }
+
+        /* CSS for main content */
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            width: 200%;
+        }
+
+        /* CSS for the image and form */
+        .content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 80%; /* Adjusted width for better responsiveness */
+            max-width: 600px; /* Added max-width for larger screens */
+        }
+
+        .content-container img {
+            width: 100%;
+            max-width: 200px; /* Adjusted size for better balance */
+            margin-right: 20px;
+            border-radius: 50%; /* Circular image */
+        }
+
+        .content-container form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .content-container input {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .content-container button {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background: #1DA3B8;
+            color: white;
+            font-size: 16px;
+        }
+
+        .content-container button:hover {
+            background: #155E70; /* Darker color on hover */
+        }
+
+        /* CSS for footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            width: 100%;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Quiz Wise Registration</h1>
+        <button>already have account? Log In</button>
+    </header>
+
+    <div class="main-content">
+        <div class="content-container">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
