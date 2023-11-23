@@ -23,7 +23,7 @@ def register_user(request):
             # Redirect to a success page
             return render(request, 'success_page.html')  
     else:
-        form = UserRegistrationForm()
+        form = UserRegistrationForm(initial={'email': request.GET.get("email")})
     return render(request, 'register.html', {'form': form})
 
 def user_login(request):

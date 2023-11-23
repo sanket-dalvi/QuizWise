@@ -135,9 +135,9 @@
                 <h2>Online Quiz Builder</h2>
                 <br>
                 <h4>QuizWiz - Building Online Exams and Tests Made Fun, Easy, and Engaging!</h4>
-                <form> 
-                    <input type="text" placeholder="Your email address">
-                    <button>Register</button>
+                <form method="get" action="{% url 'register_user' %}"> 
+                    <input type="text" placeholder="Your email address" name="email">
+                    <button type="submit">Register</button>
                 </form>
             </div>
             <div class="dialogbox">
