@@ -115,6 +115,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Quiz Wise Registration</h1>
@@ -123,10 +124,18 @@
 
     <div class="main-content">
         <div class="content-container">
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+            <img src="https://media.giphy.com/media/J1YFTAeTT3UAxnl6Bx/giphy.gif" alt="GIF Image">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Footer content goes here -->
+    </footer>
 </body>
+
 </html>
