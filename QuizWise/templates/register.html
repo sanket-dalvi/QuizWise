@@ -6,13 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Wise Registration</title>
     <style>
-        /* Reset some default styles */
         body, h1, h2, h3, p, form {
             margin: 0;
             padding: 0;
         }
 
-        /* CSS for the gradient background */
         body {
             margin: 0;
             padding: 0;
@@ -25,7 +23,6 @@
             min-height: 100vh;
         }
 
-        /* CSS for header */
         header {
             width: 100%;
             padding: 20px;
@@ -35,48 +32,60 @@
             background: linear-gradient(to right, #1DA3B8, #77AB59);
         }
 
-        /* CSS for buttons in header */
         header button {
             padding: 10px 20px;
             border: none;
             cursor: pointer;
             color: white;
             border-radius: 5px;
-            background-color: #673AB7; /* Darker purple for contrast */
+            background-color: #673AB7;
         }
 
-        /* CSS for main content */
         .main-content {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 80vh;
-            width: 200%;
+            width: 100%;
+            position: relative;
         }
 
-        /* CSS for the image and form */
+        .gif-container {
+            position: absolute;
+            top: 20%;
+            left: 0;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .gif-container img {
+            width: 300px;
+            border-radius: 50%;
+        }
+
         .content-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             padding: 40px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            width: 80%; /* Adjusted width for better responsiveness */
-            max-width: 600px; /* Added max-width for larger screens */
+            width: 80%;
+            max-width: 600px;
+            margin-left: 20px;
         }
 
         .content-container img {
             width: 100%;
-            max-width: 200px; /* Adjusted size for better balance */
-            margin-right: 20px;
-            border-radius: 50%; /* Circular image */
+            max-width: 5px;
+            border-radius: 50%;
+            margin-left: 0;
+            margin-bottom: 20px;
         }
 
         .content-container form {
-            display: flex;
-            flex-direction: column;
             width: 100%;
         }
 
@@ -102,10 +111,9 @@
         }
 
         .content-container button:hover {
-            background: #155E70; /* Darker color on hover */
+            background: #155E70;
         }
 
-        /* CSS for footer */
         footer {
             text-align: center;
             padding: 20px;
@@ -123,8 +131,11 @@
     </header>
 
     <div class="main-content">
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/3o7abkwfIVAeDT6RSU/giphy.gif" alt="Your GIF">
+        </div>
+
         <div class="content-container">
-            
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
