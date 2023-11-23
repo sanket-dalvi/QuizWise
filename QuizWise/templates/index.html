@@ -153,9 +153,8 @@
             <div class="middle-content">
                 <h2>Online Quiz Builder</h2>
                 <h4>QuizWiz - Building Online Exams and Tests Made Fun, Easy, and Engaging!</h4>
-                <form method="post" action="{% url 'register_user' %}"> 
-                    {% csrf_token %}
-                    <input type="text" placeholder="Your email address">
+                <form method="get" action="{% url 'register_user' %}"> 
+                    <input type="text" placeholder="Your email address" name="email">
                     <button type="submit">Register</button>
                 </form>
             </div>

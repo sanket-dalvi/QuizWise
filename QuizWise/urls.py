@@ -25,7 +25,7 @@ urlpatterns = [
     path('register', views.register_user, name='register_user'),
     path('login', views.user_login, name='login'),
     path('logout', views.user_logout, name='logout'),
-
+    path('forget', views.forget, name='forget'),
     path("test", views.examiner_test, name = "examiner_test"),
     path("unauthorized", views.unauthorized, name = "unauthorized")
 

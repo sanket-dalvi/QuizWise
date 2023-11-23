@@ -115,18 +115,29 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Quiz Wise Login</h1>
         <button>already have account? Log In</button>
     </header>
+    
 
     <div class="main-content">
         <div class="content-container">
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+            <img src="https://media.giphy.com/media/L1VRSg6CslKVZoxWBu/giphy.gif" alt="GIF Image">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+                <p>If you forgot your password, <a href="forgot_password.html">click here</a> to reset it.</p>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p> 2023 Quiz Wise</p>
+    </footer>
 </body>
+
 </html>

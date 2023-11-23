@@ -23,7 +23,7 @@ def register_user(request):
             # Redirect to a success page
             return render(request, 'success_page.html')  
     else:
-        form = UserRegistrationForm()
+        form = UserRegistrationForm(initial={'email': request.GET.get("email")})
     return render(request, 'register.html', {'form': form})
 
 def user_login(request):
@@ -57,3 +57,6 @@ def examiner_test(request):
 
 def unauthorized(request):
     return render(request, "unauthorized.html")
+
+def forget(request):
+    return render(request, "forget.html")
