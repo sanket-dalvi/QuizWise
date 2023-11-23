@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Wise Website</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-z5I4/mYQvQ1PCv1OR5WmNSxEbLAnNywTROexB4Y+RgR1G8+V9dz+EVtpQFVW5MjRFFQdZlaeqZRdA8S3WWYezW4A==" crossorigin="anonymous" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+        }
+
+        header div,
+        nav,
+        header button {
+            margin: 0 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav li {
+            margin-right: 15px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .introduction {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .portfolio img {
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .portfolio img:hover {
+            transform: scale(1.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input,
+        textarea {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: none;
+            width: 100%;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        .contact {
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .contact h2,
+        .contact p {
+            margin: 0;
+        }
+
+        .button-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1DA3B8;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1DA3B8;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+
+            </ul>
+        </nav>
+        <div>
+            <a class="button-link" href="{% url 'login' %}">Already have an account? Log in here.</a>
+        </div>
+    </header>
+
+    <div class="main-content">
+
+        <div class="introduction">
+            <h2>Quiz Wise</h2>
+            <p>Be ready. Be smart. Be noticed!</p>
+        </div>
+
+        <div class="contact">
+
+
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button class="w3-button w3-black w3-right w3-section" type="submit" fdprocessedid="9486j">
+                    <i class="fa fa-paper-plane"></i> SEND MESSAGE
+                </button>
+            </form>
+            <div>
+                <h2>Contact</h2>
+                <p>Give us feedback!</p>
+                <p>Binghamton, US</p>
+                <p>Email: quizwise@mail.com</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2023 My Quiz Website. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>
