@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
+    {% load static %}
     <style>
         /* CSS for the gradient background */
         body {
@@ -30,6 +31,7 @@
             cursor: pointer;
             color: white;
             border-radius: 5px;
+            background-color: purple;
         }
 
         /* CSS for main content */
@@ -65,8 +67,8 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
-            background: #fff;
-            color: #1DA3B8;
+            background: white;
+            color: black;
         }
 
         /* CSS for footer */
@@ -79,17 +81,11 @@
 </head>
 
 <body>
-    <div class="header-content">
-        <header>
-            <h1>QuizWiz</h1>
-            <div>
-                <button>Login</button>
-                <button>Register</button>
-            </div>
-        </header>
+    <div>
+        {% include 'header.html' %}    
     </div>
 
-    {% load static %}
+    
     <div class="main-content">
         <div class="content-container">
             <form> 
@@ -101,9 +97,7 @@
     </div>
 
     <div class="footer-content">
-        <footer>
-            <p>&copy; 2023 Your Website</p>
-        </footer>
+        {% include 'footer.html'%}
     </div>
 </body>
 
