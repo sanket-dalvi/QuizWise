@@ -1,8 +1,48 @@
 {% load static %}
+<style>
+    .logo img {
+        max-width: 100%;
+        height: auto;
+        max-height: 50px; 
+    }
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo img {
+        max-width: 100%;
+        height: auto;
+        max-height: 50px;
+    }
+
+    h1 {
+        margin-left: 10px; 
+        margin-bottom: 0;
+        font-size: 40px;
+        margin-top: 8px;
+    }
+
+    header div {
+        display: flex;
+        gap: 10px; 
+    }
+    h1 span.quiz {
+        color: white;
+    }
+
+    h1 span.wiz {
+        color: #663399;
+    }
+</style>
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <div class="header-content">
     <header>
-        <h1>QuizWiz</h1>
+        <div class="logo">
+            <img src="{% static 'logo.png' %}" alt="Your Image">
+            <h1><span class="quiz">Quiz</span><span class="wiz">Wiz</span></h1>
+        </div>
+
         <div>
             <button>Login</button>
             <button>Register</button>
