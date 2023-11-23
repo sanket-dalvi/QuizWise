@@ -57,3 +57,6 @@ def examiner_test(request):
 
 def unauthorized(request):
     return render(request, "unauthorized.html")
+
+def forget(request):
+    return render(request, "forget.html")
