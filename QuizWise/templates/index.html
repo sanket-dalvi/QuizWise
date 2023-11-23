@@ -3,10 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
     {% load static %}
     <style>
         /* CSS for the gradient background */
+        
+
         body {
             margin: 0;
             padding: 0;
@@ -22,16 +26,22 @@
             justify-content: space-between;
             align-items: center;
             background: linear-gradient(to right, #1DA3B8, #77AB59);
+            margin-bottom: 40px;
         }
 
         /* CSS for buttons in header */
         header button {
-            padding: 10px 20px;
+            padding: 15px 20px;
             border: none;
             cursor: pointer;
             color: white;
-            border-radius: 5px;
-            background-color: purple;
+            border-radius: 20px;
+            background-color: #663399;
+            transition: background-color 0.3s;
+        }
+
+        header button:hover {
+            background-color: #E6549C; /* New color on hover */
         }
 
         /* CSS for main content */
@@ -39,7 +49,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 65vh;
+            height: 63vh;
         }
 
         /* CSS for the image and form */
@@ -48,27 +58,60 @@
             align-items: center;
             justify-content: center;
         }
+        
 
         .content-container img {
+            width: 500px; /* Adjust as needed */
+            margin-left: -140px;
+            margin-right: 100px;
+        }
+
+        .dialogbox img {
             width: 300px; /* Adjust as needed */
-            margin-right: 20px;
+            margin-left: 10px;
+            margin-right: 0px;
+            margin-top: -300px;
         }
 
-        .content-container input {
+        .middle-content form {
+            display: flex;
+            max-width: 300px; /* Adjust the max-width as needed */
+            min-width: fit-content;
+        }
+
+        .middle-content input {
+            flex: 1;
+            width: 500px;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            border: 1px solid #ccc; /* Add any additional styling as needed */
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .middle-content button {
+            width: 100px;
+            color: aliceblue;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border: 1px solid #663399; /* Add any additional styling as needed */
             padding: 10px;
-            border-radius: 5px;
-            border: none;
-            margin-right: 10px;
-            width: 200px; /* Adjust as needed */
+            box-sizing: border-box;
+            cursor: pointer;
+            background-color: #663399;
+            transition: background-color 0.3s;
+            margin-left: -30px;
         }
 
-        .content-container button {
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            background: white;
-            color: black;
+        .content-container button:hover {
+            background-color: #E6549C; /* New color on hover */
+            border: #E6549C
+        }
+
+        .middle-content{
+            padding: 10px;
+            margin-left: 100px;
+            height: 250px;
         }
 
         /* CSS for footer */
@@ -88,11 +131,19 @@
     
     <div class="main-content">
         <div class="content-container">
-            <form> 
-                <input type="text" placeholder="Your email address">
-                <button>Register</button>
-            </form>
-            <img src="{% static 'teachingowl.jpg' %}" alt="Your Image">
+            <div class="middle-content">
+                <h2>Online Quiz Builder</h2>
+                <br>
+                <h4>QuizWiz - Building Online Exams and Tests Made Fun, Easy, and Engaging!</h4>
+                <form> 
+                    <input type="text" placeholder="Your email address">
+                    <button>Register</button>
+                </form>
+            </div>
+            <div class="dialogbox">
+                <img src="{% static 'dialogbox.png' %}" alt="Your Image">
+            </div>
+            <img src="{% static 'mainowl.png' %}" alt="Your Image">
         </div>
     </div>
 
