@@ -22,7 +22,14 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('create_user/', views.create_user, name='create_user'),
+    path('register', views.register_user, name='register_user'),
+    path('login', views.user_login, name='login'),
+    path('logout', views.user_logout, name='logout'),
+
+    path("test", views.examiner_test, name = "examiner_test"),
+    path("unauthorized", views.unauthorized, name = "unauthorized")
+
+
     #path('examiner/', include("QuizCreator.urls")),
     #path('examinee/', include("QuizParticipant.urls")),
 ]

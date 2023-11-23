@@ -29,6 +29,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     contact = models.CharField(max_length=15, unique=True, validators=[RegexValidator(r'^\d{10}$', message='Contact number must be 10 digits.')])
     password = models.CharField(max_length=128)  # Will store hashed passwords
 
+    # New field for role selection
+    is_examinee = models.BooleanField(default=False)
+    is_examiner = models.BooleanField(default=False)
+
 
     # Update groups field with unique related_name
     groups = models.ManyToManyField(
@@ -49,8 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'contact']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'contact']
 
     def save(self, *args, **kwargs):
         # Encrypt password before saving
