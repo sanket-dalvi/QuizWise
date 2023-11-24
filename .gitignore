@@ -162,3 +162,7 @@ cython_debug/
 
 # Ignore Visual Studio Code settings
 .vscode/
+
+# Ignore Pipenv files
+Pipfile
+Pipfile.lock
