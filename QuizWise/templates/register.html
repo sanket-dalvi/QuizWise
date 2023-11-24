@@ -32,13 +32,30 @@
             background: linear-gradient(to right, #1DA3B8, #77AB59);
         }
 
-        header button {
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            text-decoration: none;
             color: white;
-            border-radius: 5px;
+        }
+
+        header h1 a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header #login-button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
             background-color: #673AB7;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        header #login-button:hover {
+            background-color: #512DA8;
         }
 
         .main-content {
@@ -105,7 +122,7 @@
             border: none;
             cursor: pointer;
             border-radius: 8px;
-            background: #1DA3B8;
+            background: #673AB7;
             color: white;
             font-size: 16px;
         }
@@ -126,8 +143,8 @@
 
 <body>
     <header>
-        <h1>Quiz Wise Registration</h1>
-        <button>already have account? Log In</button>
+        <h1><a href="{% url 'index' %}">Quiz Wise Registration</a></h1>
+        <a id="login-button" href="{% url 'login' %}">Already have an account? Log in here.</a>
     </header>
 
     <div class="main-content">

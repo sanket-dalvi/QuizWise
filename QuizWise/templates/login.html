@@ -96,7 +96,7 @@
             border: none;
             cursor: pointer;
             border-radius: 8px;
-            background: #1DA3B8;
+            background:#673AB7;
             color: white;
             font-size: 16px;
         }
@@ -113,13 +113,32 @@
             width: 100%;
             box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* Styling for the links */
+        header a,
+        .content-container a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background:  #673AB7; /* Darker purple for contrast */
+            color: white;
+            text-decoration: none;
+        }
+
+        header a:hover,
+        .content-container a:hover {
+            background:  #1DA3B8; /* Darker color on hover */
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Quiz Wise Registration</h1>
-        <button>already have account? Log In</button>
+        <h1><a href="{% url 'index' %}">Quiz Wise Registration</a></h1>
+        <a href="{% url 'register' %}">Register Here</a>
     </header>
     
 
@@ -130,13 +149,13 @@
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Login</button>
-                <p>If you forgot your password, <a href="forgot_password.html">click here</a> to reset it.</p>
+                <a href="{% url 'forget' %}">Forget password? Click here.</a>
             </form>
         </div>
     </div>
 
     <footer>
-        <p> 2023 Quiz Wise</p>
+        <p>© 2023 My Quiz Website. All rights reserved.</p>
     </footer>
 </body>
 
