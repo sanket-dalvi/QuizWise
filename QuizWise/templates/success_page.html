@@ -15,7 +15,7 @@
         {% include 'header.html' %}
     </div>
 
-    <form method="post" action="{% url 'your_view_name' %}">
+    <form method="post" action="{% url 'register' %}">
         {% csrf_token %}
         <!-- Your form fields and buttons go here -->
     </form>

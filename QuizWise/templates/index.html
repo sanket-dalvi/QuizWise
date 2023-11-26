@@ -22,8 +22,10 @@
             background-repeat: no-repeat;
         }
 
+        .loggeduser{
+            display: none;
+        }
         
-
         .main-content {
             display: flex;
             align-items: center;
@@ -37,7 +39,6 @@
             justify-content: center;
         }
         
-
         .content-container img {
             width: 500px; 
             margin-left: -140px;
@@ -92,9 +93,9 @@
             height: 300px;
             color: black;
             text-shadow: #ccc;
-            background-color: rgba(0, 0, 0, 0.2); 
+            background-color: rgba(0, 0, 0, 0.1); 
             padding: 10px; 
-            border-radius: 15px; 
+            border-radius: 25px; 
         }
 
         .middle-content h2{
@@ -126,7 +127,7 @@
         <div class="content-container">
             <div class="middle-content">
                 <h2>Online Quiz Builder</h2>
-                <h4>QuizWiz - Building Online Exams and Tests Made Fun, Easy, and Engaging!</h4>
+                <h4>QuizWise - Building Online Exams and Tests Made Fun, Easy, and Engaging!</h4>
                 <form method="get" action="{% url 'register' %}"> 
                     <input type="text" placeholder="Your email address" name="email">
                     <button type="submit">Register</button>
