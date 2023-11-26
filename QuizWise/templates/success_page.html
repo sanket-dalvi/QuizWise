@@ -1,1 +1,25 @@
-successs. hurrayyyyy
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% load static %}
+    <style>
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <form method="post" action="{% url 'your_view_name' %}">
+        {% csrf_token %}
+        <!-- Your form fields and buttons go here -->
+    </form>
+
+</body>
+
+</html>

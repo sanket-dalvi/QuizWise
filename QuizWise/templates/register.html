@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Wise Registration</title>
+    <title>QuizWiz Registration</title>
     <style>
         body, h1, h2, h3, p, form {
             margin: 0;
@@ -32,6 +32,15 @@
             background: linear-gradient(to right, #1DA3B8, #77AB59);
         }
 
+        .loginlinkbutton {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            background-color: #673AB7;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
         header h1 {
             margin: 0;
             font-size: 24px;
@@ -94,19 +103,16 @@
             margin-left: 20px;
         }
 
-        .content-container img {
-            width: 100%;
-            max-width: 5px;
-            border-radius: 50%;
-            margin-left: 0;
-            margin-bottom: 20px;
-        }
-
         .content-container form {
             width: 100%;
         }
 
-        .content-container input {
+        .content-container p{
+            align-self: center;
+            display: grid;
+        }
+
+        .content-container input, select {
             margin: 10px 0;
             padding: 15px;
             border-radius: 8px;
@@ -122,48 +128,66 @@
             border: none;
             cursor: pointer;
             border-radius: 8px;
-            background: #673AB7;
+            background-color: #663399;
             color: white;
             font-size: 16px;
         }
 
         .content-container button:hover {
-            background: #155E70;
+            background-color: #E6549C; 
         }
 
         footer {
+            padding: 30px;
+            font-size: small;
             text-align: center;
-            padding: 20px;
-            background: #fff;
-            width: 100%;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+            color: white;
         }
+        
+        .helptext {
+            color: red;
+        }
+
+        .headerbuttons{
+            display: none;
+        }
+        .header {
+            width: 100%;
+            display: grid;
+        }
+
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>Quiz Wise Registration</h1>
-        <a href="/login"><button>already have account? Log In</button></a>
-    </header>
+    <div class="header">
+        {% include 'header.html' %}
+    </div> 
 
     <div class="main-content">
-        <div class="gif-container">
-            <img src="https://media.giphy.com/media/3o7abkwfIVAeDT6RSU/giphy.gif" alt="Your GIF">
-        </div>
-
         <div class="content-container">
             <form method="post">
+                <p style="text-align: center;">
+                    <a class="loginlink" href="/login" style="font-weight: bold;">Already have an account? Click here to Log In</a>
+                    <br>
+                    <span style="color: white; font-weight: bold;">OR</span>
+                    <br>
+                    <span style="color: #663399; font-weight: bold;">Register below</span>
+                </p>
+                <br>
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit">Create User</button>
+                <p>
+                    <button type="submit">Register</button>
+                </p>
+                
             </form>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2023 Your Company Name. All Rights Reserved.</p>
-    </footer>
+    <div class="footer-content">
+        {% include 'footer.html'%}
+    </div>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Wise Registration</title>
+    <title>QuizWiz Login</title>
     <style>
         /* Reset some default styles */
         body, h1, h2, h3, p, form {
@@ -25,27 +25,10 @@
             min-height: 100vh;
         }
 
-        /* CSS for header */
-        header {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to right, #1DA3B8, #77AB59);
+        .headerbuttons{
+            display: none;
         }
 
-        /* CSS for buttons in header */
-        header button {
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            color: white;
-            border-radius: 5px;
-            background-color: #673AB7; /* Darker purple for contrast */
-        }
-
-        /* CSS for main content */
         .main-content {
             display: flex;
             align-items: center;
@@ -54,7 +37,6 @@
             width: 200%;
         }
 
-        /* CSS for the image and form */
         .content-container {
             display: flex;
             align-items: center;
@@ -63,15 +45,8 @@
             border-radius: 10px;
             padding: 40px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            width: 80%; /* Adjusted width for better responsiveness */
-            max-width: 600px; /* Added max-width for larger screens */
-        }
-
-        .content-container img {
-            width: 100%;
-            max-width: 200px; /* Adjusted size for better balance */
-            margin-right: 20px;
-            border-radius: 50%; /* Circular image */
+            width: 80%; 
+            max-width: 600px; 
         }
 
         .content-container form {
@@ -96,22 +71,24 @@
             border: none;
             cursor: pointer;
             border-radius: 8px;
-            background:#673AB7;
+            background-color: #663399;
             color: white;
             font-size: 16px;
         }
 
         .content-container button:hover {
-            background: #155E70; /* Darker color on hover */
+            background-color: #E6549C; 
         }
 
-        /* CSS for footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #fff;
+        .header {
             width: 100%;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+            display: grid;
+        }
+
+        footer {
+            font-size: small;
+            text-align: center;
+            color: white;
         }
 
         /* Styling for the links */
@@ -136,15 +113,14 @@
 </head>
 
 <body>
-    <header>
-        <h1>Quiz Wise Login</h1>
-        <button>already have account? Log In</button>
-    </header>
+    <div class="header">
+        {% include 'header.html' %}
+    </div>
     
-
+    Login Now
     <div class="main-content">
+        
         <div class="content-container">
-            <img src="https://media.giphy.com/media/L1VRSg6CslKVZoxWBu/giphy.gif" alt="GIF Image">
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
@@ -154,9 +130,9 @@
         </div>
     </div>
 
-    <footer>
-        <p>© 2023 My Quiz Website. All rights reserved.</p>
-    </footer>
+    <div class="footer-content">
+        {% include 'footer.html'%}
+    </div>
 </body>
 
 </html>

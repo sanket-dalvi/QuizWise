@@ -8,9 +8,7 @@
     <title>Index</title>
     {% load static %}
     <style>
-        /* CSS for the gradient background */
-        
-
+     
         body {
             margin: 0;
             height: max-content;
@@ -24,32 +22,8 @@
             background-repeat: no-repeat;
         }
 
-        /* CSS for header */
-        header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to right, #1DA3B8, #77AB59);
-            margin-bottom: 40px;
-        }
+        
 
-        /* CSS for buttons in header */
-        header button {
-            padding: 15px 20px;
-            border: none;
-            cursor: pointer;
-            color: white;
-            border-radius: 20px;
-            background-color: #663399;
-            transition: background-color 0.3s;
-        }
-
-        header button:hover {
-            background-color: #E6549C; /* New color on hover */
-        }
-
-        /* CSS for main content */
         .main-content {
             display: flex;
             align-items: center;
@@ -57,7 +31,6 @@
             height: 63vh;
         }
 
-        /* CSS for the image and form */
         .content-container {
             display: flex;
             align-items: center;
@@ -66,13 +39,13 @@
         
 
         .content-container img {
-            width: 500px; /* Adjust as needed */
+            width: 500px; 
             margin-left: -140px;
             margin-right: 100px;
         }
 
         .dialogbox img {
-            width: 300px; /* Adjust as needed */
+            width: 300px; 
             margin-left: 10px;
             margin-right: 0px;
             margin-top: -300px;
@@ -80,7 +53,7 @@
 
         .middle-content form {
             display: flex;
-            max-width: 300px; /* Adjust the max-width as needed */
+            max-width: 300px; 
             min-width: fit-content;
         }
 
@@ -89,7 +62,7 @@
             width: 500px;
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
-            border: 1px solid #ccc; /* Add any additional styling as needed */
+            border: 1px solid #ccc; 
             padding: 15px;
             box-sizing: border-box;
         }
@@ -99,17 +72,18 @@
             color: aliceblue;
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
-            border: 1px solid #663399; /* Add any additional styling as needed */
+            border: 1px solid #663399; 
             padding: 10px;
             box-sizing: border-box;
             cursor: pointer;
             background-color: #663399;
             transition: background-color 0.3s;
             margin-left: -30px;
+            font-weight: bold;
         }
 
         .content-container button:hover {
-            background-color: #E6549C; /* New color on hover */
+            background-color: #E6549C; 
             border: #E6549C
         }
 
@@ -118,9 +92,9 @@
             height: 300px;
             color: black;
             text-shadow: #ccc;
-            background-color: rgba(0, 0, 0, 0.2); /* Set your desired background color with some opacity */
-            padding: 10px; /* Add padding for better visual appearance */
-            border-radius: 15px; /* Optionally add rounded corners */
+            background-color: rgba(0, 0, 0, 0.2); 
+            padding: 10px; 
+            border-radius: 15px; 
         }
 
         .middle-content h2{
@@ -129,12 +103,12 @@
 
         .middle-content h4{
             font-size: 3vb;
+            color: white;
         }
 
-
-        /* CSS for footer */
         footer {
             padding: 30px;
+            font-size: small;
             text-align: center;
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             color: white;

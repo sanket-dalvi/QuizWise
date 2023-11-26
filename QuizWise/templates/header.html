@@ -1,5 +1,28 @@
 {% load static %}
 <style>
+    header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            margin-bottom: 40px;
+        }
+
+    header button {
+        padding: 15px 20px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        border-radius: 20px;
+        background-color: #663399;
+        transition: background-color 0.3s;
+    }
+
+    header button:hover {
+        background-color: #E6549C; 
+    }
+
     .logo img {
         max-width: 100%;
         height: auto;
@@ -27,6 +50,7 @@
         display: flex;
         gap: 10px; 
     }
+
     h1 span.quiz {
         color: white;
     }
@@ -34,6 +58,12 @@
     h1 span.wiz {
         color: #663399;
     }
+
+    header div a button {
+    font-weight: bold;
+}
+
+
 </style>
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <div class="header-content">
@@ -43,7 +73,7 @@
             <h1><span class="quiz">Quiz</span><span class="wiz">Wiz</span></h1>
         </div>
 
-        <div>
+        <div class="headerbuttons">
             <a href="/login"><button>Login</button></a>
             <a href="/register"><button>Register</button></a>
         </div>
