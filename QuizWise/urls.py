@@ -27,9 +27,9 @@ urlpatterns = [
     path('logout', views.user_logout, name='logout'),
     path('forget', views.forget, name='forget'),
     path("test", views.examiner_test, name = "examiner_test"),
-    path("unauthorized", views.unauthorized, name = "unauthorized")
+    path("unauthorized", views.unauthorized, name = "unauthorized"),
 
 
-    #path('examiner/', include("QuizCreator.urls")),
-    #path('examinee/', include("QuizParticipant.urls")),
+    path('examiner/', include("QuizCreator.urls")),
+    path('examinee/', include("QuizParticipant.urls")),
 ]

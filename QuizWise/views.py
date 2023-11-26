@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegistrationForm, UserLoginForm
 from .auth_decorator  import examinee_required, examiner_required
 from django.contrib import messages
+from .email_utils import send_custom_email
 
 
 def index(request):
@@ -32,13 +33,15 @@ def user_login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            print(username)
-            print(password)
             user = authenticate(request, username=username, password=password)
             print(user)
             if user is not None:
                 login(request, user)
-                return render(request, 'success_page.html')  
+                #send_custom_email("QuizWise", "This is test message", ["dalvi.sanket26@gmail.com", "alishabingewar19@gmail.com", "patil.animesh@outlook.com"])
+                if user.is_examiner:
+                    return redirect("examiner/home")
+                else:
+                    return redirect("examinee/home")  
             else:
                 messages.error(request, 'Invalid username or password') 
     else:
