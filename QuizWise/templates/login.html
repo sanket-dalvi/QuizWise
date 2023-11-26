@@ -90,6 +90,25 @@
             text-align: center;
             color: white;
         }
+
+        /* Styling for the links */
+        header a,
+        .content-container a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background:  #673AB7; /* Darker purple for contrast */
+            color: white;
+            text-decoration: none;
+        }
+
+        header a:hover,
+        .content-container a:hover {
+            background:  #1DA3B8; /* Darker color on hover */
+        }
     </style>
 </head>
 
@@ -106,8 +125,7 @@
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Login</button>
-                <br>
-                <p style="align-self: center;">Forgot password, <a href="forgot_password.html">click here</a> to reset it.</p>
+                <a href="{% url 'forget' %}">Forget password? Click here.</a>
             </form>
         </div>
     </div>

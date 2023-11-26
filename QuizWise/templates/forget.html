@@ -3,19 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Quiz Wise Website</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-z5I4/mYQvQ1PCv1OR5WmNSxEbLAnNywTROexB4Y+RgR1G8+V9dz+EVtpQFVW5MjRFFQdZlaeqZRdA8S3WWYezW4A==" crossorigin="anonymous" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Wise Registration</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             background: linear-gradient(to right, #1DA3B8, #77AB59);
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
         header {
+            width: 100%;
             padding: 20px;
             display: flex;
             justify-content: space-between;
@@ -23,125 +27,133 @@
             background: linear-gradient(to right, #1DA3B8, #77AB59);
         }
 
-        header div,
-        nav,
-        header button {
-            margin: 0 10px;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-        }
-
-        nav li {
-            margin-right: 15px;
-        }
-
-        nav a {
+        header h1 {
+            margin: 0;
+            font-size: 36px;
             text-decoration: none;
             color: white;
         }
 
-        .introduction {
-            text-align: center;
-            margin-bottom: 20px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 20px;
-            border-radius: 10px;
+        header h1 a {
+            text-decoration: none;
+            color: inherit;
         }
 
-        .portfolio img {
+        header #login-button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #673AB7;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        header #login-button:hover {
+            background-color: #512DA8;
+        }
+
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
             width: 100%;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            transition: transform 0.3s ease-in-out;
+            position: relative;
         }
 
-        .portfolio img:hover {
-            transform: scale(1.1);
+        .gif-container {
+            position: absolute;
+            top: 40%;
+            left: 0;
+            transform: translateY(-60%);
+            z-index: 2;
         }
 
-        form {
+        .gif-container img {
+            width: 300px;
+            border-radius: 100%;
+        }
+
+        .content-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            max-width: 400px;
-            margin: auto;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+            margin-left: 20px;
         }
 
-        label {
-            margin-top: 10px;
+        .content-container img {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 50%;
+            margin-bottom: 20px;
         }
 
-        input,
-        textarea {
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            border: none;
+        .content-container form {
             width: 100%;
         }
 
-        button {
-            margin-top: 10px;
+        .content-container label {
+            margin: 10px 0;
+            font-size: 18px;
         }
 
-        .contact {
-            text-align: right;
-            margin-right: 20px;
+        .content-container input {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+            font-size: 18px;
+            box-sizing: border-box;
         }
 
-        .contact h2,
-        .contact p {
-            margin: 0;
-        }
-
-        .button-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #1DA3B8;
+        .content-container button {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background: #673AB7;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .content-container button:hover {
+            background: #155E70;
         }
 
         footer {
             text-align: center;
             padding: 20px;
-            background: #1DA3B8;
-            color: white;
+            background: #fff;
+            width: 100%;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 
 <body>
-
     <header>
-
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-
-            </ul>
-        </nav>
-        <div>
-            <a class="button-link" href="{% url 'login' %}">Already have an account? Log in here.</a>
-        </div>
+        <h1><a href="{% url 'index' %}">Quiz Wise Registration</a></h1>
+        <a id="login-button" href="{% url 'login' %}">Already have an account? Log in here.</a>
     </header>
 
     <div class="main-content">
-
-        <div class="introduction">
-            <h2>Quiz Wise</h2>
-            <p>Be ready. Be smart. Be noticed!</p>
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v8ZWVwrvMk30fQjBwX/giphy.gif" alt="Your GIF">
         </div>
 
-        <div class="contact">
-
-
-            <form>
+        <div class="content-container">
+            <form method="post">
+                {% csrf_token %}
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
 
@@ -154,24 +166,14 @@
                 <label for="message">Message:</label>
                 <textarea id="message" name="message" rows="4" required></textarea>
 
-                <button class="w3-button w3-black w3-right w3-section" type="submit" fdprocessedid="9486j">
-                    <i class="fa fa-paper-plane"></i> SEND MESSAGE
-                </button>
+                <button type="submit">Send Credentials</button>
             </form>
-            <div>
-                <h2>Contact</h2>
-                <p>Give us feedback!</p>
-                <p>Binghamton, US</p>
-                <p>Email: quizwise@mail.com</p>
-            </div>
         </div>
-
     </div>
 
     <footer>
-        <p>© 2023 My Quiz Website. All rights reserved.</p>
+        <p>&copy; 2023 Your Company Name. All Rights Reserved.</p>
     </footer>
-
 </body>
 
 </html>
