@@ -109,6 +109,28 @@
         .content-container a:hover {
             background:  #1DA3B8; /* Darker color on hover */
         }
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -124,8 +146,17 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
                 <button type="submit">Login</button>
-                <a href="{% url 'forget' %}">Forget password? Click here.</a>
+                <a href="{% url 'forgot' %}">Forget password? Click here.</a>
             </form>
         </div>
     </div>

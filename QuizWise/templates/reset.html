@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -137,9 +136,30 @@
             width: 100%;
             box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
         }
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
-
 <body>
     <header>
         <h1><a href="{% url 'index' %}">Quiz Wise Registration</a></h1>
@@ -152,21 +172,31 @@
         </div>
 
         <div class="content-container">
-            <form method="post">
+            <form method="post" action="{% url 'reset_password' %}">
                 {% csrf_token %}
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="last_name">Last Name:</label>
-                <input type="text" id="last_name" name="last_name" required>
-
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
 
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="4" required></textarea>
+                <label for="otp">OTP:</label>
+                <input type="text" id="otp" name="otp" required>
 
-                <button type="submit">Send Credentials</button>
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password" required>
+
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <button type="submit">Reset Password</button>
             </form>
         </div>
     </div>
@@ -175,5 +205,4 @@
         <p>&copy; 2023 Your Company Name. All Rights Reserved.</p>
     </footer>
 </body>
-
 </html>
