@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.pyc
+*/migrations/*
 
 # C extensions
 *.so
@@ -166,3 +167,5 @@ cython_debug/
 # Ignore Pipenv files
 Pipfile
 Pipfile.lock
+QuizCreator/__pycache__/models.cpython-312.pyc
+.gitignore
