@@ -23,7 +23,6 @@
             display: none;
         }
 
-         /* Form container styles */
          .form-container {
             margin: 50px auto;
             width: 50%;
@@ -37,18 +36,16 @@
             text-align: center;
         }
 
-        /* Form styles */
         form {
             display: flex;
             flex-direction: column;
         }
-        
+
         label {
             margin-bottom: 10px;
             font-weight: bold;
         }
 
-        textarea,
         select {
             padding: 10px;
             margin-bottom: 20px;
@@ -57,20 +54,34 @@
             width: 100%;
         }
 
+        textarea {
+        width: 96%; 
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: vertical;
+        height: 100px;
+        }
+
         button {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: #663399;
             color: white;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #E6549C;
         }
 
-        /* Additional styles for dynamic fields */
+        .button-container {
+        display: flex;
+        gap: 10px; 
+        }
+
         .field-container {
             display: none;
             margin-bottom: 20px;
@@ -161,7 +172,7 @@
                     <textarea id="question" name="question" required></textarea>
 
                     <!-- Question type selection -->
-                    <label for="type">Select Question Type:</label>
+                    <label for="type">Select Answer Choice Type:</label>
                     <select id="type" name="type">
                         <option value="" disabled selected>--- Please select a type ---</option>
                         {% for question_type in question_types %}
@@ -188,9 +199,14 @@
                         {% endif %}
                     </div>
 
-                    <!-- Add Field and Submit buttons -->
-                    <button type="button" id="add-field">Add Field</button>
-                    <button type="submit">Submit</button>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <button type="button" id="add-field">Add  Answer Options</button>
+                        </div>
+                        <div>
+                            <button type="submit">Submit Question</button>
+                        </div>
+                    </div>                                       
                 </form>
             </div>
         </div>
