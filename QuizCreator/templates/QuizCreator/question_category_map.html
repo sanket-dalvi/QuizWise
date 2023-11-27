@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <style>
+        /* Add your CSS styles here */
+
+        /* General styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .headerbuttons{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        textarea {
+        width: 96%; 
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: vertical;
+        height: 100px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Additional styles for dynamic fields */
+        .field-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .field-container.visible {
+            display: block;
+        }
+
+        .field-container label {
+            margin-bottom: 5px;
+        }
+
+        .field-container input {
+            margin-bottom: 10px;
+        }
+
+        #dynamic-fields {
+            display: grid;
+        }
+        
+        .note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .note p {
+            margin: 0;
+        }
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .category-filter {
+            display: flex;
+            align-items: center;
+        }
+
+        .category-filter label {
+            margin-right: 10px;
+        }
+
+        #category-select {
+            width: 200px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+        }
+
+        #search-input {
+            padding: 8px;
+            margin-right: 10px;
+            width: 250px;
+        }
+
+        #search-btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #search-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .questions-table {
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+
+        button {
+            padding: 6px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <div>
+        <!-- Include the navigation bar -->
+        {% include 'QuizCreator/navbar.html' %}
+    </div>
+
+
+    <div class="main-content">
+        <div class="content-container">
+            <div class="container">
+                <br>        
+                <div class="filters">
+                    <div class="category-filter">
+                        <label for="category-select">Select Category:</label>
+                        <select id="category-select" multiple>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button id="clear-category">Clear Selection</button>
+                    </div>
+        
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Search questions...">
+                        <button id="search-btn">Search</button>
+                    </div>
+                </div>
+        
+                <div class="questions-table">
+                    <!-- Table to display questions will be dynamically populated from backend -->
+                    <table id="questions-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>No</th>
+                                <th>Question</th>
+                                <th>Type</th>
+                                <th>Options</th>
+                                <th>Category</th>
+                                <th>Answer</th>
+                                <th>Creator</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for question in questions %}
+                                <tr>
+                                    <td><input type="checkbox" name="checkbox-group" value="question.id"></td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ question.question }}</td>
+                                    <td>{{ question.type.type_code }}</td>
+                                    <td>
+                                        {% for option in question.options.all %}
+                                            -{{ option.option }}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for category_map in question.categoryquestionmap_set.all %}
+                                            {{ category_map.category.name }}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ question.answer }}</td>
+                                    <td>{{ question.created_by.username }}</td>
+                                
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html' %}
+    </div>
+
+</body>
+
+</html>
