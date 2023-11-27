@@ -257,6 +257,7 @@
                     <table id="questions-table">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>No</th>
                                 <th>Question</th>
                                 <th>Type</th>
@@ -264,11 +265,13 @@
                                 <th>Category</th>
                                 <th>Answer</th>
                                 <th>Creator</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
                             {% for question in questions %}
                                 <tr>
+                                    <td><input type="checkbox" name="checkbox-group" value="question.id"></td>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ question.question }}</td>
                                     <td>{{ question.type.type_code }}</td>

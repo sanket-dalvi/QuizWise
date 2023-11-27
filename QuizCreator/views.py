@@ -25,6 +25,7 @@ def create_question(request):
 
         # Retrieve selected answer value in radio group
         selected_radio = request.POST.get('radio-group')
+        selected_checkbox = request.POST.get('checkbox-group')
 
         options_json = request.POST.get('options')
         options = json.loads(options_json) if options_json else []
@@ -57,6 +58,10 @@ def create_question(request):
             # If the question is a Free Text question, options list should be empty
             if question_type_code == 'FT':
                 options = []
+            elif question_type_code == 'RB':
+                answer = selected_radio if selected_radio else ''
+            elif question_type_code == 'CB':
+                answer = selected_checkbox if selected_checkbox else ''
 
         current_user = request.user
 
@@ -65,7 +70,7 @@ def create_question(request):
             question = Question.objects.create(
                 question=question_text,
                 type=QuestionType.objects.get(type_code=question_type_code),
-                answer=selected_radio if selected_radio else '',  # Modify this based on your answer logic
+                answer=answer,  # Modify this based on your answer logic
                 created_by=current_user,
             )
             
@@ -146,4 +151,14 @@ def view_questions(request):
 
 @examiner_required
 def map_question_category(request):
-    return render(request, "QuizCreator/question")
+    questions = Question.objects.select_related('type').prefetch_related(
+        Prefetch('options', queryset=QuestionOption.objects.all()),
+        Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+    ).all()
+    
+    current_user = request.user
+    categories = Category.objects.filter(
+        Q(created_by=current_user) | Q(visible_to_others=True)
+    )
+
+    return render(request, "QuizCreator/question_category_map.html", {'questions': questions, 'categories': categories})
