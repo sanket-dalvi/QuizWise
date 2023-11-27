@@ -14,7 +14,6 @@ def home(request):
 @examiner_required
 def create_question(request):
     if request.method == "POST":
-        category_id = request.POST.get('category')
         question_text = request.POST.get('question')
         question_type_code = request.POST.get('type')
         
@@ -29,7 +28,7 @@ def create_question(request):
         options = json.loads(options_json) if options_json else []
 
         # Check for empty fields
-        if not category_id or not question_text or not question_type_code:
+        if not question_text or not question_type_code:
             messages.error(request, "Please fill in all fields.")
             return redirect('create_question')
 
@@ -84,7 +83,7 @@ def create_question(request):
     categories = Category.objects.filter(
         Q(created_by=current_user) | Q(visible_to_others=True)
     )
-    return render(request, "QuizCreator/create_question.html", {'categories': categories, 'question_types': question_types})
+    return render(request, "QuizCreator/create_question.html", {'question_types': question_types})
 
 @examiner_required
 def create_question_category(request):

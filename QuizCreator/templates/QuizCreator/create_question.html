@@ -159,13 +159,6 @@
             <div class="form-container">
                 <form method="post">
                     {% csrf_token %}
-                    <!-- Category selection -->
-                    <label for="category">Select Question Category:</label>
-                    <select id="category" name="category">
-                        {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
 
                     <!-- Question text area -->
                     <label for="question">Enter Question:</label>
