@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <style>
+        /* Add your CSS styles here */
+
+        /* General styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navigation bar styles */
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            float: left;
+        }
+
+        .navbar ul li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar ul li a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .navbar ul li.dropdown {
+            display: inline-block;
+        }
+
+        .navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .navbar .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .navbar .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .navbar ul li.dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .navbar ul li:last-child {
+            float: right;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        textarea,
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Additional styles for dynamic fields */
+        .field-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .field-container.visible {
+            display: block;
+        }
+
+        .field-container label {
+            margin-bottom: 5px;
+        }
+
+        .field-container input {
+            margin-bottom: 10px;
+        }
+
+        #dynamic-fields {
+            display: grid;
+        }
+        
+        .note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .note p {
+            margin: 0;
+        }
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <nav class="navbar">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Quiz Menu</a>
+                <div class="dropdown-content">
+                    <a href="#">Create Quiz</a>
+                    <a href="#">Edit Quiz</a>
+                    <a href="#">View Quiz</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Question Menu</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'create_question' %}">Create Question</a>
+                    <a href="questions/Edit">Edit Question</a>
+                    <a href="questions">View Question</a>
+                    <a href="{% url 'create_question_category' %}">Create Question Category</a>
+                    <a href="questions/category/Edit">Edit Question Category</a>
+                    <a href="questions/categories">View Question Category</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Manage Examinee</a>
+                <div class="dropdown-content">
+                    <a href="#">Create Group</a>
+                    <a href="#">Add/Remove Examinee from Quiz</a>
+                </div>
+            </li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="content-container">
+            <form method="post">
+                {% csrf_token %}
+                <!-- Category selection -->
+                <label for="category">Question Category:</label>
+                <select id="category" name="category">
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Question text area -->
+                <label for="question">Question:</label>
+                <textarea id="question" name="question" required></textarea>
+
+                <!-- Question type selection -->
+                <label for="type">Question Type:</label>
+                <select id="type" name="type">
+                    <option value="" disabled selected>--- Please select a type ---</option>
+                    {% for question_type in question_types %}
+                        <option value="{{ question_type.type_code }}">{{ question_type.type_name }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Dynamic fields container -->
+                <div id="dynamic-fields">
+                    <!-- Additional fields based on question type will be added here -->
+                </div>
+
+                <!-- Hidden input to store options -->
+                <input type="hidden" name="options" id="options-input" value="">
+
+                <!-- Message display -->
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Add Field and Submit buttons -->
+                <button type="button" id="add-field">Add Field</button>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html' %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var options = [];
+
+            function updateOptions() {
+            
+                options = [];
+                document.querySelectorAll('#dynamic-fields label').forEach(function (label) {
+                    options.push(label.textContent.trim());
+                });
+                document.getElementById('options-input').value = JSON.stringify(options);
+            }
+
+            function addDeleteButton(div) {
+                var deleteButton = document.createElement('span');
+                deleteButton.textContent = ' ❌';
+                deleteButton.classList.add('delete-button');
+                deleteButton.addEventListener('click', function () {
+                    var label_to_delete = this.previousSibling;
+                    var valueToRemove = label_to_delete.textContent.trim();
+
+                    // Find the index of the value in the options array
+                    var optionIndex = options.indexOf(valueToRemove);
+                    if (optionIndex !== -1) {
+                        options.splice(optionIndex, 1); // Remove the element from the options array
+                        updateOptions();
+                    }
+
+                    label_to_delete.remove();
+                    this.remove();
+                });
+                div.appendChild(deleteButton);
+            }
+
+            document.getElementById('type').addEventListener('change', function () {
+                var type = this.value;
+                var dynamicFieldDiv = document.getElementById('dynamic-fields');
+                dynamicFieldDiv.innerHTML = ''; // Clear previous fields
+
+                if (type === 'RB' || type === 'CB') { // Radio Button type or Checkbox type
+                    var newOption = prompt("Enter Option Value");
+
+                    if (newOption !== null && newOption.trim() !== '') {
+                        div = document.createElement('div');
+                        var input = document.createElement('input');
+                        input.type = (type === 'RB') ? 'radio' : 'checkbox';
+                        input.name = (type === 'RB') ? 'radio-group' : 'checkbox-group';
+                        input.value = newOption.trim();
+
+                        var label = document.createElement('label');
+                        label.appendChild(input);
+                        label.appendChild(document.createTextNode(input.value));
+                        div.appendChild(label);
+                        addDeleteButton(div);
+                        dynamicFieldDiv.appendChild(div)
+                        updateOptions();
+                    }
+                } else if (type === 'FT') { // Free Text Question type
+                    var textarea = document.createElement('textarea');
+                    textarea.name = 'free-text-answer';
+                    textarea.placeholder = 'Enter your answer here';
+                    dynamicFieldDiv.appendChild(textarea);
+                }
+            });
+
+            document.getElementById('add-field').addEventListener('click', function () {
+                var type = document.getElementById('type').value;
+                var dynamicFieldDiv = document.getElementById('dynamic-fields');
+
+                if (type === 'RB' || type === 'CB') { // Radio Button type or Checkbox type
+                    var newOption = prompt("Enter Option Value");
+
+                    if (newOption !== null && newOption.trim() !== '') {
+                        div = document.createElement('div');
+                        var input = document.createElement('input');
+                        input.type = (type === 'RB') ? 'radio' : 'checkbox';
+                        input.name = (type === 'RB') ? 'radio-group' : 'checkbox-group';
+                        input.value = newOption.trim();
+
+                        var label = document.createElement('label');
+                        label.appendChild(input);
+                        label.appendChild(document.createTextNode(input.value));
+                       
+                        div.appendChild(label);
+                        addDeleteButton(div);
+                        dynamicFieldDiv.appendChild(div)
+                        updateOptions();
+                    }
+                }
+            });
+
+            // Initial options load
+            document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
+                addDeleteButton(label);
+            });
+        });
+    </script>
+</body>
+
+</html>

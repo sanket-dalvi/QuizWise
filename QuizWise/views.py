@@ -74,6 +74,11 @@ def forgot(request):
         user = User.objects.filter(Q(first_name__iexact=first_name) & Q(last_name__iexact=last_name) & Q(email__iexact=email)).first()
 
         if user:
+            # password_reset_link_data = PasswordReset.objects.filter(user = user)
+            # if password_reset_link_data:
+            #     messages.error(request, "Reset Link has been already sent to your email id. Please use ")
+            # else:
+
             # Generate a unique token for password reset
             token = uuid.uuid4().hex  # Using UUID for generating a secure token
 
@@ -108,7 +113,6 @@ def reset_password(request):
             # Reset password logic
             user = reset_data.user
             user.set_password(new_password)
-            print(user.password)
             user.save()
             reset_data.delete()  # Remove reset data once password is changed
             messages.success(request, 'Password reset successfully.')

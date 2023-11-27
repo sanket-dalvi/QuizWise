@@ -78,16 +78,86 @@
         .navbar ul li:last-child {
             float: right;
         }
+        /* Form container styles */
+        .form-container {
+            margin: 50px auto;
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .form-container h2 {
+            text-align: center;
+        }
+
+        /* Form styles */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div>
-        <!-- Include the header -->
         {% include 'header.html' %}
     </div>
 
-    <!-- Navigation bar -->
     <nav class="navbar">
         <ul>
             <li class="dropdown">
@@ -120,14 +190,36 @@
         </ul>
     </nav>
 
-    <!-- Main content for home page -->
     <div class="main-content">
-        <!-- Your home page content goes here -->
+        <div class="content-container">
+            <div class="form-container">
+                <h2>Create Question Category</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="category_name">Category Name:</label>
+                    <input type="text" id="category_name" name="category_name" required>
+        
+                    <label for="category_description">Category Description:</label>
+                    <textarea id="category_description" name="category_description" required></textarea>
+                    <label for="visible_to_others">Visible to Others:</label>
+                    <input type="checkbox" id="visible_to_others" name="visible_to_others">
+                    <div class="message">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div class="footer-content">
-        <!-- Include the footer -->
-        {% include 'footer.html'%}
+        {% include 'footer.html' %}
     </div>
 </body>
 
