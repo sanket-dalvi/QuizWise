@@ -23,9 +23,9 @@ def create_question(request):
         radio_options = request.POST.getlist('radio-group')
         checkbox_options = request.POST.getlist('checkbox-group')
 
-        # Retrieve selected answer value in radio group
+        # Retrieve selected answer values in radio group and checkbox group
         selected_radio = request.POST.get('radio-group')
-        selected_checkbox = request.POST.get('checkbox-group')
+        selected_checkboxes = request.POST.getlist('checkbox-group')
 
         options_json = request.POST.get('options')
         options = json.loads(options_json) if options_json else []
@@ -61,7 +61,7 @@ def create_question(request):
             elif question_type_code == 'RB':
                 answer = selected_radio if selected_radio else ''
             elif question_type_code == 'CB':
-                answer = selected_checkbox if selected_checkbox else ''
+                answer = selected_checkboxes if selected_checkboxes else []
 
         current_user = request.user
 
@@ -91,6 +91,7 @@ def create_question(request):
         Q(created_by=current_user) | Q(visible_to_others=True)
     )
     return render(request, "QuizCreator/create_question.html", {'question_types': question_types})
+
 
 @examiner_required
 def create_question_category(request):

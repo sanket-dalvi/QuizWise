@@ -8,9 +8,7 @@
     <title>Home</title>
     {% load static %}
     <style>
-        /* Add your CSS styles here */
 
-        /* General styles */
         body {
             margin: 0;
             padding: 0;
@@ -102,6 +100,10 @@
         .message {
             margin-top: 10px;
             color: #555;
+        }
+
+        .larger-checkbox {
+        transform: scale(1.5);
         }
 
         .alert-success {
@@ -271,7 +273,7 @@
                         <tbody>
                             {% for question in questions %}
                                 <tr>
-                                    <td><input type="checkbox" name="checkbox-group" value="question.id"></td>
+                                    <td><input type="checkbox" name="checkbox-group" value="question.id" class="larger-checkbox"></td>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ question.question }}</td>
                                     <td>{{ question.type.type_code }}</td>
