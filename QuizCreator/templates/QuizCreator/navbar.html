@@ -66,6 +66,7 @@
 <!-- Navigation bar -->
 <nav class="navbar">
     <ul>
+        <li><a href="{% url 'examiner_home' %}">Home</a></li>
         <li class="dropdown">
             <a href="#" class="dropbtn">Quiz Menu</a>
             <div class="dropdown-content">
@@ -77,9 +78,10 @@
         <li class="dropdown">
             <a href="#" class="dropbtn">Question Menu</a>
             <div class="dropdown-content">
-                <a href="#">Create Question</a>
+                <a href="{% url 'create_question' %}">Create Question</a>
                 <a href="#">Edit Question</a>
                 <a href="#">View Question</a>
+                <a href="{% url 'create_question_category' %}">Create Question Category</a>
             </div>
         </li>
         <li class="dropdown">
