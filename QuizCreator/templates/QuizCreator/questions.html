@@ -253,17 +253,16 @@
                 </div>
         
                 <div class="questions-table">
-                    <!-- Table to display questions will be dynamically populated from backend -->
                     <table id="questions-table">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Question</th>
-                                <th>Type</th>
-                                <th>Options</th>
-                                <th>Category</th>
-                                <th>Answer</th>
-                                <th>Creator</th>
+                                <th style="width: 5%;">No</th>
+                                <th style="width: 30%;">Question</th>
+                                <th style="width: 10%;">Answer Choice Type</th>
+                                <th style="width: 20%;">Options</th>
+                                <th style="width: 15%;">Category</th>
+                                <th style="width: 10%;">Answer</th>
+                                <th style="width: 15%;">Creator</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -271,11 +270,16 @@
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ question.question }}</td>
-                                    <td>{{ question.type.type_name }}</td>
+                                    <td>{{ question.type.type_code }}</td>
                                     <td>
-                                        {% for option in question.options.all %}
-                                            -{{ option.option }}<br>
-                                        {% endfor %}
+                                        <ul>
+                                            {% for option in question.options.all %}
+                                                <li {% if question.type.type_code == 'RB' %}style="list-style-type: circle;"{% endif %}
+                                                    {% if question.type.type_code == 'CB' %}style="list-style-type: square;"{% endif %}>
+                                                    {{ option.option }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
                                     </td>
                                     <td>
                                         {% for category_map in question.categoryquestionmap_set.all %}
