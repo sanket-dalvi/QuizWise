@@ -25,12 +25,6 @@
             display: none;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            max-width: 400px;
-            margin: 0 auto;
-        }
 
         label {
             margin-bottom: 10px;
@@ -161,7 +155,7 @@
             width: 250px;
         }
 
-        #search-btn {
+        #search-btn, #map-btn {
             padding: 8px 16px;
             background-color: #007bff;
             color: white;
@@ -233,67 +227,80 @@
 
     <div class="main-content">
         <div class="content-container">
-            <div class="container">
-                <br>        
-                <div class="filters">
-                    <div class="category-filter">
-                        <label for="category-select">Select Category:</label>
-                        <select id="category-select" multiple>
-                            {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
+            <form method="post">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="message">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                    {{ message }}
+                                </div>
                             {% endfor %}
-                        </select>
-                        <button id="clear-category">Clear Selection</button>
+                        {% endif %}
                     </div>
-        
-                    <div class="search-box">
-                        <input type="text" id="search-input" placeholder="Search questions...">
-                        <button id="search-btn">Search</button>
+                    <br>        
+                    <div class="filters">
+                        <div class="category-filter">
+                            <label for="category-select">Select Category:</label>
+                            <select id="category-select" name="category-select" multiple>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="clear-category">Clear Selection</button>
+                        </div>
+            
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Search questions...">
+                            <button id="search-btn">Search</button>
+                        </div>
                     </div>
-                </div>
-        
-                <div class="questions-table">
-                    <!-- Table to display questions will be dynamically populated from backend -->
-                    <table id="questions-table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>No</th>
-                                <th>Question</th>
-                                <th>Type</th>
-                                <th>Options</th>
-                                <th>Category</th>
-                                <th>Answer</th>
-                                <th>Creator</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for question in questions %}
+            
+                    <div class="questions-table">
+                        <!-- Table to display questions will be dynamically populated from backend -->
+                        <table id="questions-table">
+                            <thead>
                                 <tr>
-                                    <td><input type="checkbox" name="checkbox-group" value="question.id"></td>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ question.question }}</td>
-                                    <td>{{ question.type.type_code }}</td>
-                                    <td>
-                                        {% for option in question.options.all %}
-                                            -{{ option.option }}<br>
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% for category_map in question.categoryquestionmap_set.all %}
-                                            {{ category_map.category.name }}<br>
-                                        {% endfor %}
-                                    </td>
-                                    <td>{{ question.answer }}</td>
-                                    <td>{{ question.created_by.username }}</td>
-                                
+                                    <th></th>
+                                    <th>No</th>
+                                    <th>Question</th>
+                                    <th>Type</th>
+                                    <th>Options</th>
+                                    <th>Category</th>
+                                    <th>Answer</th>
+                                    <th>Creator</th>
+                                    
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {% for question in questions %}
+                                    <tr>
+                                        <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}"></td>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ question.question }}</td>
+                                        <td>{{ question.type.type_code }}</td>
+                                        <td>
+                                            {% for option in question.options.all %}
+                                                -{{ option.option }}<br>
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for category_map in question.categoryquestionmap_set.all %}
+                                                {{ category_map.category.name }}<br>
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ question.answer }}</td>
+                                        <td>{{ question.created_by.username }}</td>
+                                    
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="submit" id="map-btn">Map</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 

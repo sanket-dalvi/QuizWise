@@ -25,7 +25,7 @@ def create_question(request):
 
         # Retrieve selected answer value in radio group
         selected_radio = request.POST.get('radio-group')
-        selected_checkbox = request.POST.get('checkbox-group')
+        selected_checkbox = request.POST.getlist('checkbox-group')
 
         options_json = request.POST.get('options')
         options = json.loads(options_json) if options_json else []
@@ -61,7 +61,7 @@ def create_question(request):
             elif question_type_code == 'RB':
                 answer = selected_radio if selected_radio else ''
             elif question_type_code == 'CB':
-                answer = selected_checkbox if selected_checkbox else ''
+                answer = selected_checkbox if selected_checkbox else []
 
         current_user = request.user
 
@@ -151,6 +151,26 @@ def view_questions(request):
 
 @examiner_required
 def map_question_category(request):
+
+    if request.method == 'POST':
+        checkbox_values = request.POST.getlist('checkbox-group')  # Retrieve selected checkbox values
+
+        selected_categories = request.POST.getlist('category-select')  # Retrieve selected categories
+        # 'category-select' corresponds to the name attribute of your category <select> element
+
+        # Process the checkbox values and selected categories
+        for checkbox_value in checkbox_values:
+            question_id = int(checkbox_value)
+            # For each selected question, create or update CategoryQuestionMap records
+            for category_id in selected_categories:
+                category = Category.objects.filter(id=category_id).first()
+                question = Question.objects.filter(id=question_id).first()
+                CategoryQuestionMap.objects.update_or_create(
+                    question=question,
+                    category=category
+                )
+        messages.success(request, "Mapping Added Succesfully")
+
     questions = Question.objects.select_related('type').prefetch_related(
         Prefetch('options', queryset=QuestionOption.objects.all()),
         Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
