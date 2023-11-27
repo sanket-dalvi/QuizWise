@@ -32,3 +32,8 @@ class Question(models.Model):
     def __str__(self):
         return f"Question: {self.question[:50]}"
 
+
+class QuestionOption(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
+    option = models.CharField(max_length=255)
+

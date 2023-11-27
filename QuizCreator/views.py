@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
-from .models import Category, QuestionType
+from .models import Category, QuestionType, QuestionOption, Question
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 import json
@@ -14,9 +14,9 @@ def home(request):
 @examiner_required
 def create_question(request):
     if request.method == "POST":
-        category = request.POST.get('category')
-        question = request.POST.get('question')
-        question_type = request.POST.get('type')
+        category_id = request.POST.get('category')
+        question_text = request.POST.get('question')
+        question_type_code = request.POST.get('type')
         
         # Retrieve added options based on the naming convention
         radio_options = request.POST.getlist('radio-group')
@@ -27,33 +27,57 @@ def create_question(request):
 
         options_json = request.POST.get('options')
         options = json.loads(options_json) if options_json else []
-        print(options)
-        # Retrieve selected answer values in checkbox group
-        selected_checkboxes = request.POST.getlist('checkbox-group')
 
         # Check for empty fields
-        if not category or not question or not question_type:
+        if not category_id or not question_text or not question_type_code:
             messages.error(request, "Please fill in all fields.")
-            
+            return redirect('create_question')
 
         # Check if options are added for radio or checkbox
-        if question_type in ['RB', 'CB']:
-            if not radio_options and question_type == 'RB':
+        if question_type_code in ['RB', 'CB']:
+            if not radio_options and question_type_code == 'RB':
                 messages.error(request, "Please add options for the radio button.")
+                return redirect('create_question')
             
-            if not checkbox_options and question_type == 'CB':
+            if not checkbox_options and question_type_code == 'CB':
                 messages.error(request, "Please add options for the checkboxes.")
+                return redirect('create_question')
 
         # Check if a correct answer is selected for radio or checkbox
-        if question_type in ['RB', 'CB']:
-            if not selected_radio and question_type == 'RB':
+        if question_type_code in ['RB', 'CB']:
+            if not selected_radio and question_type_code == 'RB':
                 messages.error(request, "Please select a correct answer for the radio button.")
+                return redirect('create_question')
             
-            if not selected_checkboxes and question_type == 'CB':
-                messages.error(request, "Please select at least one correct answer for the checkboxes.")
+            if not options:
+                messages.error(request, "Please add options.")
+                return redirect('create_question')
 
-        print(radio_options)
-        print(selected_radio)
+            # If the question is a Free Text question, options list should be empty
+            if question_type_code == 'FT':
+                options = []
+
+        current_user = request.user
+
+        try:
+            # Creating the question object
+            question = Question.objects.create(
+                question=question_text,
+                type=QuestionType.objects.get(type_code=question_type_code),
+                answer=selected_radio if selected_radio else '',  # Modify this based on your answer logic
+                created_by=current_user,
+            )
+            
+            # Creating QuestionOption objects for the options
+            for option in options:
+                QuestionOption.objects.create(question=question, option=option)
+            
+            messages.success(request, "Question created successfully.")
+            return redirect('create_question')
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('create_question')
 
     current_user = request.user
     question_types = QuestionType.objects.all()
@@ -93,3 +117,9 @@ def create_question_category(request):
             return render(request, "QuizCreator/create_question_category.html")
 
     return render(request, "QuizCreator/create_question_category.html")
+
+
+@examiner_required
+def view_questions(request):
+    
+    return render(request, "questions.html")
