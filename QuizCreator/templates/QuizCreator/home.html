@@ -8,76 +8,73 @@
     <title>Home</title>
     {% load static %}
     <style>
-        /* Add your CSS styles here */
-
-        /* General styles */
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
 
-        /* Navigation bar styles */
-        .navbar {
+        .headerbuttons{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-content: space-evenly; 
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
             overflow: hidden;
+        }
+
+        .card-header {
             background-color: #333;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
         }
 
-        .navbar ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
+        .card-content {
+            padding: 20px;
+            height: 350px; 
+            overflow-y: auto; 
         }
 
-        .navbar ul li {
-            float: left;
+        .card-footer {
+            background-color: #eee;
+            padding: 10px;
+            text-align: center;
         }
 
-        .navbar ul li a {
-            display: block;
+        .quiz-details {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            padding: 10px;
             color: white;
             text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
         }
-
-        .navbar ul li a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .navbar ul li.dropdown {
-            display: inline-block;
-        }
-
-        .navbar .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        .navbar .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-        }
-
-        .navbar .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .navbar ul li.dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .navbar ul li:last-child {
-            float: right;
-        }
+ 
     </style>
 </head>
 
@@ -87,40 +84,118 @@
         {% include 'header.html' %}
     </div>
 
-    <!-- Navigation bar -->
-    <nav class="navbar">
-        <ul>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Quiz Menu</a>
-                <div class="dropdown-content">
-                    <a href="#">Create Quiz</a>
-                    <a href="#">Edit Quiz</a>
-                    <a href="#">View Quiz</a>
-                </div>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Question Menu</a>
-                <div class="dropdown-content">
-                    <a href="#">Create Question</a>
-                    <a href="#">Edit Question</a>
-                    <a href="#">View Question</a>
-                </div>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Manage Examinee</a>
-                <div class="dropdown-content">
-                    <a href="#">Create Group</a>
-                    <a href="#">Add/Remove Examinee from Quiz</a>
-                </div>
-            </li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-        </ul>
-    </nav>
-HEELLOOOo
-    <!-- Main content for home page -->
-    <div class="main-content">
-        <!-- Your home page content goes here -->
+    <div>
+        <!-- Include the navigation bar -->
+        {% include 'navbar.html' %}
     </div>
+    
+    <div class="card-container">
+        <div class="card">
+            <div class="card-header">Examiner Profile</div>
+            <div class="card-content">
+              <p><strong>Name:</strong> John Doe</p>
+              <p><strong>Email:</strong> john.doe@example.com</p>
+              <p><strong>Department:</strong> Computer Science</p>
+              <!-- Add more profile details as needed -->
+                <p><strong>Courses:</strong></p>
+                <ul>
+                    <li>INFO 501</li>
+                    <li>INFO 537</li>
+                    <li>INFO 550</li>
+                    <!-- Add more attempted quizzes as needed -->
+                </ul>
+            </div>
+            <div class="card-footer">
+                <img src="{% static 'edit_icon.png' %}" alt="Edit Profile" width="20" height="20">
+                Edit Profile
+            </div>
+          </div>
+          
+    
+        <div class="card">
+          <div class="card-header">Your Scores</div>
+          <div class="card-content">
+                <!-- Top score of the examinee -->
+            <p><strong>Top Score:</strong> 95</p>
+            <p><strong>Subject:</strong> Mathematics</p>
+
+            <!-- Information about failed quizzes -->
+            <div class="quiz-details">
+            <p><strong>Failed Quizzes:</strong></p>
+            <ul>
+                <li>English Quiz</li>
+                <!-- Add more failed quizzes as needed -->
+            </ul>
+            </div>
+          </div>
+          <div class="card-footer">Card 2 Footer</div>
+        </div>
+    
+        <div class="card">
+          <div class="card-header">Recent Quizzes</div>
+          <div class="card-content">
+            <!-- Information about total quizzes, attempted, and missed -->
+            <p><strong>Total Quizzes Assigned:</strong> 10</p>
+            <p><strong>Quizzes Attempted:</strong> 8</p>
+            <p><strong>Quizzes Missed:</strong> 2</p>
+
+            <!-- List of attempted quizzes -->
+            <div class="quiz-details">
+            <p><strong>Attempted Quizzes:</strong></p>
+            <ul>
+                <li>Math Quiz</li>
+                <li>Science Quiz</li>
+                <li>History Quiz</li>
+                <!-- Add more attempted quizzes as needed -->
+            </ul>
+            </div>
+            <!-- List of missed quizzes -->
+            <div class="quiz-details">
+            <p><strong>Missed Quizzes:</strong></p>
+            <ul>
+                <li>English Quiz</li>
+                <li>Geography Quiz</li>
+                <!-- Add more missed quizzes as needed -->
+            </ul>
+            </div>
+          </div>
+          <div class="card-footer">Card 3 Footer</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Upcoming Quizzes</div>
+            <div class="card-content">
+                 <!-- Quiz 1 details -->
+                <div class="quiz-details">
+                    <p><strong>Quiz Name:</strong> Mathematics Quiz</p>
+                    <p><strong>Examiner:</strong> Prof. Smith</p>
+                    <p><strong>Date:</strong> January 15, 2023</p>
+                    <p><strong>Time:</strong> 3:00 PM</p>
+                    <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> Mathematics Quiz</a></p>
+                </div>
+
+                <!-- Quiz 2 details -->
+                <div class="quiz-details">
+                    <p><strong>Quiz Name:</strong> Science Quiz</p>
+                    <p><strong>Examiner:</strong> Dr. Johnson</p>
+                    <p><strong>Date:</strong> January 20, 2023</p>
+                    <p><strong>Time:</strong> 4:30 PM</p>
+                    <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> Science Quiz</a></p>
+                </div>
+
+                <!-- Quiz 3 details -->
+                <div class="quiz-details">
+                    <p><strong>Quiz Name:</strong> History Quiz</p>
+                    <p><strong>Examiner:</strong> Prof. Davis</p>
+                    <p><strong>Date:</strong> January 25, 2023</p>
+                    <p><strong>Time:</strong> 2:00 PM</p>
+                    <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> History Quiz</a></p>
+                </div>
+            </div>
+            <div class="card-footer">Card 4 Footer</div>
+          </div>
+    </div>
+
 
     <div class="footer-content">
         <!-- Include the footer -->
