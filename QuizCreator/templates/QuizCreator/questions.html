@@ -263,7 +263,7 @@
 
     <div>
         <!-- Include the navigation bar -->
-        {% include 'navbar.html' %}
+        {% include 'QuizCreator/navbar.html' %}
     </div>
 
 
@@ -294,24 +294,34 @@
                     <table id="questions-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>Question</th>
                                 <th>Type</th>
+                                <th>Options</th>
                                 <th>Category</th>
-                                <th>Actions</th>
+                                <th>Answer</th>
+                                <th>Creator</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for question in questions %}
                                 <tr>
-                                    <td>{{ question.id }}</td>
+                                    <td>{{ forloop.counter }}</td>
                                     <td>{{ question.question }}</td>
-                                    <td>{{ question.type }}</td>
-                                    <td>{{ question.type.category }}</td>
+                                    <td>{{ question.type.type_name }}</td>
                                     <td>
-                                        <button>Edit</button>
-                                        <button>Delete</button>
+                                        {% for option in question.options.all %}
+                                            -{{ option.option }}<br>
+                                        {% endfor %}
                                     </td>
+                                    <td>
+                                        {% for category_map in question.categoryquestionmap_set.all %}
+                                            {{ category_map.category.name }}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ question.answer }}</td>
+                                    <td>{{ question.created_by.username }}</td>
+                                
                                 </tr>
                             {% endfor %}
                         </tbody>

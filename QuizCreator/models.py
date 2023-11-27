@@ -37,3 +37,8 @@ class QuestionOption(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
     option = models.CharField(max_length=255)
 
+
+class CategoryQuestionMap(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
