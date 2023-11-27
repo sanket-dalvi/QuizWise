@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Wise Registration</title>
     <style>
+        body, h1, h2, h3, p, form {
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -16,102 +21,53 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            margin-top: -10px;
+        }
+        
+        .loggeduser{
+            display: none;
         }
 
-        header {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to right, #1DA3B8, #77AB59);
+        .registerbutton{
+            display: none;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 36px;
-            text-decoration: none;
-            color: white;
-        }
-
-        header h1 a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        header #login-button {
-            display: inline-block;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            background-color: #673AB7;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        header #login-button:hover {
-            background-color: #512DA8;
-        }
-
+        
         .main-content {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 80vh;
-            width: 100%;
-            position: relative;
-        }
-
-        .gif-container {
-            position: absolute;
-            top: 40%;
-            left: 0;
-            transform: translateY(-60%);
-            z-index: 2;
-        }
-
-        .gif-container img {
-            width: 300px;
-            border-radius: 100%;
+            min-height: 75vh;
+            width: 200%;
+            margin-top: -20px; 
         }
 
         .content-container {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             padding: 40px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            width: 80%;
-            max-width: 600px;
-            margin-left: 20px;
-        }
-
-        .content-container img {
-            width: 100%;
-            max-width: 100%;
-            border-radius: 50%;
-            margin-bottom: 20px;
+            width: 80%; 
+            max-width: 600px; 
         }
 
         .content-container form {
+            display: flex;
+            flex-direction: column;
             width: 100%;
         }
 
-        .content-container label {
-            margin: 10px 0;
-            font-size: 18px;
-        }
-
         .content-container input {
-            margin-bottom: 20px;
+            height:40px;
+            margin: 10px 0;
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #ccc;
             width: 100%;
-            font-size: 18px;
+            font-size: 16px;
             box-sizing: border-box;
         }
 
@@ -121,22 +77,28 @@
             border: none;
             cursor: pointer;
             border-radius: 8px;
-            background: #673AB7;
+            background-color: #663399;
             color: white;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .content-container button:hover {
-            background: #155E70;
+            background-color: #E6549C; 
+        }
+
+        .header {
+            width: 100%;
+            display: grid;
         }
 
         footer {
+            font-size: small;
             text-align: center;
-            padding: 20px;
-            background: #fff;
-            width: 100%;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+            color: white;
+            margin-top: -30px;
+            margin-bottom: 50px;
         }
+
         .message {
             margin-top: 10px;
             color: #555;
@@ -159,20 +121,33 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
+        .loginlabel{
+            font-size: xx-large;
+            font-weight: 600;
+            border: 3px solid white; 
+            border-radius: 10px; 
+            padding: 8px; 
+            margin-top: -50px;
+        }
+
+        footer {
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            text-align: center;
+            color: white;
+            margin-top: -25px;
+            margin-bottom: 60px;
+        }
     </style>
 </head>
 
 <body>
-    <header>
-        <h1><a href="{% url 'index' %}">Quiz Wise Registration</a></h1>
-        <a id="login-button" href="{% url 'login' %}">Already have an account? Log in here.</a>
-    </header>
-
+    <div class="header">
+        {% include 'header.html' %}
+    </div>
+    <p class="loginlabel">Reset Your Credentials</p>
     <div class="main-content">
-        <div class="gif-container">
-            <img src="https://media.giphy.com/media/v8ZWVwrvMk30fQjBwX/giphy.gif" alt="Your GIF">
-        </div>
-
         <div class="content-container">
             <form method="post" action="forgot">
                 {% csrf_token %}
@@ -201,9 +176,9 @@
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2023 Your Company Name. All Rights Reserved.</p>
-    </footer>
+    <div class="footer-content">
+        {% include 'footer.html'%}
+    </div>
 </body>
 
 </html>
