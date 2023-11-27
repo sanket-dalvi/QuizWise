@@ -124,5 +124,12 @@ def create_question_category(request):
 
 @examiner_required
 def view_questions(request):
-    
-    return render(request, "questions.html")
+
+    questions = Question.objects.all()
+    current_user = request.user
+    question_types = QuestionType.objects.all()
+    categories = Category.objects.filter(
+        Q(created_by=current_user) | Q(visible_to_others=True)
+    )
+
+    return render(request, 'QuizCreator/questions.html', {'questions': questions, 'categories': categories})
