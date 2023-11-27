@@ -8,83 +8,41 @@
     <title>Home</title>
     {% load static %}
     <style>
-        /* Add your CSS styles here */
 
-        /* General styles */
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
 
-        /* Navigation bar styles */
-        .navbar {
-            overflow: hidden;
-            background-color: #333;
-        }
-
-        .navbar ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar ul li {
-            float: left;
-        }
-
-        .navbar ul li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-
-        .navbar ul li a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .navbar ul li.dropdown {
-            display: inline-block;
-        }
-
-        .navbar .dropdown-content {
+        .headerbuttons{
             display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
         }
 
-        .navbar .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
+        .registerbutton{
+            display: none;
         }
 
-        .navbar .dropdown-content a:hover {
-            background-color: #f1f1f1;
+         /* Form container styles */
+         .form-container {
+            margin: 50px auto;
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.3); 
         }
 
-        .navbar ul li.dropdown:hover .dropdown-content {
-            display: block;
+        .form-container h2 {
+            text-align: center;
         }
 
-        .navbar ul li:last-child {
-            float: right;
-        }
+        /* Form styles */
         form {
             display: flex;
             flex-direction: column;
-            max-width: 400px;
-            margin: 0 auto;
         }
-
+        
         label {
             margin-bottom: 10px;
             font-weight: bold;
@@ -165,6 +123,14 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -173,86 +139,60 @@
         {% include 'header.html' %}
     </div>
 
-    <nav class="navbar">
-        <ul>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Quiz Menu</a>
-                <div class="dropdown-content">
-                    <a href="#">Create Quiz</a>
-                    <a href="#">Edit Quiz</a>
-                    <a href="#">View Quiz</a>
-                </div>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Question Menu</a>
-                <div class="dropdown-content">
-                    <a href="{% url 'create_question' %}">Create Question</a>
-                    <a href="questions/Edit">Edit Question</a>
-                    <a href="questions">View Question</a>
-                    <a href="{% url 'create_question_category' %}">Create Question Category</a>
-                    <a href="questions/category/Edit">Edit Question Category</a>
-                    <a href="questions/categories">View Question Category</a>
-                </div>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="dropbtn">Manage Examinee</a>
-                <div class="dropdown-content">
-                    <a href="#">Create Group</a>
-                    <a href="#">Add/Remove Examinee from Quiz</a>
-                </div>
-            </li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-        </ul>
-    </nav>
+    <div>
+        {% include 'QuizCreator/navbar.html' %}
+    </div>
 
     <div class="main-content">
         <div class="content-container">
-            <form method="post">
-                {% csrf_token %}
-                <!-- Category selection -->
-                <label for="category">Question Category:</label>
-                <select id="category" name="category">
-                    {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-
-                <!-- Question text area -->
-                <label for="question">Question:</label>
-                <textarea id="question" name="question" required></textarea>
-
-                <!-- Question type selection -->
-                <label for="type">Question Type:</label>
-                <select id="type" name="type">
-                    <option value="" disabled selected>--- Please select a type ---</option>
-                    {% for question_type in question_types %}
-                        <option value="{{ question_type.type_code }}">{{ question_type.type_name }}</option>
-                    {% endfor %}
-                </select>
-
-                <!-- Dynamic fields container -->
-                <div id="dynamic-fields">
-                    <!-- Additional fields based on question type will be added here -->
-                </div>
-
-                <!-- Hidden input to store options -->
-                <input type="hidden" name="options" id="options-input" value="">
-
-                <!-- Message display -->
-                <div class="message">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                {{ message }}
-                            </div>
+            <div class="form-container">
+                <form method="post">
+                    {% csrf_token %}
+                    <!-- Category selection -->
+                    <label for="category">Select Question Category:</label>
+                    <select id="category" name="category">
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
                         {% endfor %}
-                    {% endif %}
-                </div>
+                    </select>
 
-                <!-- Add Field and Submit buttons -->
-                <button type="button" id="add-field">Add Field</button>
-                <button type="submit">Submit</button>
-            </form>
+                    <!-- Question text area -->
+                    <label for="question">Enter Question:</label>
+                    <textarea id="question" name="question" required></textarea>
+
+                    <!-- Question type selection -->
+                    <label for="type">Select Question Type:</label>
+                    <select id="type" name="type">
+                        <option value="" disabled selected>--- Please select a type ---</option>
+                        {% for question_type in question_types %}
+                            <option value="{{ question_type.type_code }}">{{ question_type.type_name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Dynamic fields container -->
+                    <div id="dynamic-fields">
+                        <!-- Additional fields based on question type will be added here -->
+                    </div>
+
+                    <!-- Hidden input to store options -->
+                    <input type="hidden" name="options" id="options-input" value="">
+
+                    <!-- Message display -->
+                    <div class="message">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <!-- Add Field and Submit buttons -->
+                    <button type="button" id="add-field">Add Field</button>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
 

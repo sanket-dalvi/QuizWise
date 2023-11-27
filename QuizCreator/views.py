@@ -6,9 +6,6 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 import json
 
-
-
-
 @examiner_required
 def home(request):
     return render(request, "QuizCreator/home.html")
