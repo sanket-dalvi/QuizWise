@@ -144,3 +144,7 @@ def view_questions(request):
     )
 
     return render(request, 'QuizCreator/questions.html', {'questions': questions, 'categories': categories})
+
+@examiner_required
+def map_question_category(request):
+    return render(request, "QuizCreator/question")
