@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
-from .models import Category, QuestionType, QuestionOption, Question
+from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 import json
+from django.db.models import Prefetch
+
 
 @examiner_required
 def home(request):
@@ -128,4 +130,20 @@ def view_questions(request):
         Q(created_by=current_user) | Q(visible_to_others=True)
     )
 
+@examiner_required
+def view_questions(request):
+    questions = Question.objects.select_related('type').prefetch_related(
+        Prefetch('options', queryset=QuestionOption.objects.all()),
+        Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+    ).all()
+    
+    current_user = request.user
+    categories = Category.objects.filter(
+        Q(created_by=current_user) | Q(visible_to_others=True)
+    )
+
     return render(request, 'QuizCreator/questions.html', {'questions': questions, 'categories': categories})
+
+@examiner_required
+def map_question_category(request):
+    return render(request, "QuizCreator/question")
