@@ -78,8 +78,17 @@
         }
 
         .button-container {
-        display: flex;
-        gap: 10px; 
+            display: flex;
+            align-self: center;
+        }
+
+        .button-container > div {
+            margin-right: 20px;
+        }
+
+        .button-container button {
+            width: 180px; 
+            padding: 10px; 
         }
 
         .field-container {
@@ -192,14 +201,14 @@
                         {% endif %}
                     </div>
 
-                    <div style="display: flex; justify-content: space-between;">
+                    <div class="button-container">
                         <div>
-                            <button type="button" id="add-field">Add  Answer Options</button>
+                            <button type="button" id="add-field">Add Answer Options</button>
                         </div>
                         <div>
                             <button type="submit">Submit Question</button>
                         </div>
-                    </div>                                       
+                    </div>                                     
                 </form>
             </div>
         </div>

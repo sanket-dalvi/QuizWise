@@ -23,7 +23,7 @@ def create_question(request):
         radio_options = request.POST.getlist('radio-group')
         checkbox_options = request.POST.getlist('checkbox-group')
 
-        # Retrieve selected answer value in radio group
+        # Retrieve selected answer values in radio group and checkbox group
         selected_radio = request.POST.get('radio-group')
         selected_checkbox = request.POST.getlist('checkbox-group')
 
@@ -91,6 +91,7 @@ def create_question(request):
         Q(created_by=current_user) | Q(visible_to_others=True)
     )
     return render(request, "QuizCreator/create_question.html", {'question_types': question_types})
+
 
 @examiner_required
 def create_question_category(request):
