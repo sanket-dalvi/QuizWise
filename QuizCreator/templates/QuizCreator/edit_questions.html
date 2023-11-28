@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Category Mapping</title>
+    <title>View Questions</title>
     {% load static %}
     <style>
+        /* Add your CSS styles here */
 
+        /* General styles */
         body {
             margin: 0;
             padding: 0;
@@ -22,7 +24,6 @@
         .registerbutton{
             display: none;
         }
-
 
         label {
             margin-bottom: 10px;
@@ -45,6 +46,20 @@
             border-radius: 5px;
             resize: vertical;
             height: 100px;
+        }
+
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
 
         /* Additional styles for dynamic fields */
@@ -108,6 +123,7 @@
         .container {
             width: 80%;
             margin: 0 auto;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -121,34 +137,15 @@
             margin-bottom: 20px;
         }
 
-        .mapbuttonatbottom {
-            display: grid;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .mapbuttonatbottom button {
-            height: 40px;
-            align-self: center;
-        }
-
         .category-filter {
             display: flex;
-            width: 47%;
+            width: 100%;
             align-items: center;
             justify-content: space-between;
             padding: 10px;
             background-color: #f4f4f4;
             border: 1px solid #ddd;
             border-radius: 5px;
-            padding-right: 10px;
-
         }
 
         .category-filter label {
@@ -187,7 +184,7 @@
             width: 250px;
         }
 
-        #search-btn, #map-btn {
+        #search-btn {
             padding: 8px 16px;
             background-color: #663399;
             color: white;
@@ -197,10 +194,6 @@
         }
 
         #search-btn:hover {
-            background-color: #E6549C;
-        }
-
-        #map-btn:hover {
             background-color: #E6549C;
         }
 
@@ -228,7 +221,6 @@
         td {
             background-color: #f2f2f2;
         }
-
 
         td:last-child {
             text-align: center;
@@ -279,92 +271,91 @@
         {% include 'QuizCreator/navbar.html' %}
     </div>
 
+
     <div class="main-content">
         <div class="content-container">
-            <form method="post">
-                {% csrf_token %}
-                <div class="container">
-                    <div class="message">
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <br>
-
-                    <div class="filters">
+            <div class="container">
+                <br>     
+                <br>   
+                <div class="filters">
+                    <form method="post">
+                        {% csrf_token %}
                         <div class="category-filter">
-                            <div>
-                                <label for="category-select">Select Category:</label>
-                            </div>
-                            <div>
-                                <select id="category-select" name="category-select" multiple>
-                                    {% for category in categories %}
-                                        <option value="{{ category.id }}">{{ category.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div>
-                                <button id="clear-category" type="reset">Clear Selection</button>
-                                <button type="submit" id="map-btn">Map</button>
-                            </div>
-                        </div>
-
-                        <div class="search-box">
-                            <input type="text" id="search-input" placeholder="Search questions...">
-                            <button id="search-btn" type="button">Search</button>
-                        </div>
-                    </div>
-
-                    <div class="questions-table">
-                        <!-- Table to display questions will be dynamically populated from backend -->
-                        <table id="questions-table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>No</th>
-                                    <th style="width: 25%;">Question</th>
-                                    <th>Answer Choice Type</th>
-                                    <th>Options</th>
-                                    <th style="width: 20%;">Category</th>
-                                    <th>Answer</th>
-                                    <th>Creator</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for question in questions %}
-                                    <tr>
-                                        <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ question.question }}</td>
-                                        <td>{{ question.type.type_code }}</td>
-                                        <td>
-                                            {% for option in question.options.all %}
-                                                -{{ option.option }}<br>
-                                            {% endfor %}
-                                        </td>
-                                        <td>
-                                            {% for category_map in question.categoryquestionmap_set.all %}
-                                                {{ category_map.category.name }}<br>
-                                            {% endfor %}
-                                        </td>
-                                        <td>{{ question.answer }}</td>
-                                        <td>{{ question.created_by.username }}</td>
-                                    </tr>
+                            <label for="category-select">Select Category:</label>
+                            <select id="category-select" name="category-select" multiple>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if category.id in selected_categories %}selected{% endif %}>{{ category.name }}</option>
                                 {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mapbuttonatbottom">
-                        <button type="submit" id="map-btn">Map</button>
+                            </select>
+                            <button id="search-by-category" type="submit">Search</button>
+                            <button id="clear-category" type="reset">Clear Selection</button>
+                        </div>
+                    </form>
+        
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Search questions...">
+                        <button id="search-btn">Search</button>
                     </div>
                 </div>
-            </form>
+        
+                <div class="questions-table">
+                    <table id="questions-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">No</th>
+                                <th style="width: 25%;">Question</th>
+                                <th style="width: 10%;">Answer Choice Type</th>
+                                <th style="width: 15%;">Options</th>
+                                <th style="width: 20%;">Category</th>
+                                <th style="width: 10%;">Answer</th>
+                                <th style="width: 10%;">Creator</th>
+                                <th style="width: 15%;">Edit</th>
+                                <th style="width: 15%;">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for question in questions %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ question.question }}</td>
+                                    <td>{{ question.type.type_code }}</td>
+                                    <td>
+                                        <ul>
+                                            {% for option in question.options.all %}
+                                                <li {% if question.type.type_code == 'RB' %}style="list-style-type: circle;"{% endif %}
+                                                    {% if question.type.type_code == 'CB' %}style="list-style-type: square;"{% endif %}>
+                                                    {{ option.option }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        {% for category_map in question.categoryquestionmap_set.all %}
+                                            {{ category_map.category.name }}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ question.answer }}</td>
+                                    <td>{{ question.created_by.username }}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="edit-button">
+                                                <img src="{% static 'edit.png' %}" alt="Edit Icon" style="height: 30px; width: 30px;">
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="delete-button">
+                                                <img src="{% static 'delete.png' %}" alt="Delete Icon" style="height: 30px; width: 30px;">
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -381,7 +372,7 @@
                 var tableRows = document.querySelectorAll('#questions-table tbody tr');
 
                 tableRows.forEach(function(row) {
-                    var questionText = row.children[2].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
+                    var questionText = row.children[1].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
                     if (questionText.indexOf(searchText) === -1) {
                         row.style.display = 'none';
                     } else {
@@ -391,45 +382,29 @@
             });
         }
 
+        var clearCategoryBtn = document.getElementById('clear-category');
+        if (clearCategoryBtn) {
+            clearCategoryBtn.addEventListener('click', function() { 
+                var categorySelect = document.getElementById('category-select');
+                if (categorySelect) {
+                    var options = categorySelect.options;
+                    for (var i = 0; i < options.length; i++) {
+                        options[i].removeAttribute('selected');
+                    }
+                }
+            });
+        }
+
         var searchInput = document.getElementById('search-input');
 
         searchInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById('search-btn').click(); // Simulate a click on the search button
+                event.preventDefault(); 
+                document.getElementById('search-btn').click(); 
             }
         });
-
     });
+
+
 </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
-
-        function hideMessage() {
-            document.querySelectorAll('.alert').forEach(function (alert) {
-                alert.style.display = 'none';
-            });
-        }
-
-        function showMessageForDuration(messageElement) {
-            messageElement.style.display = 'block';
-            setTimeout(function () {
-                messageElement.style.display = 'none';
-            }, 5000); // Hide the message after 5 seconds (5000 milliseconds)
-        }
-
-        // Initial options load
-        document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
-            addDeleteButton(label);
-        });
-
-        // Show messages for a duration when the page loads
-        document.querySelectorAll('.alert').forEach(function (messageElement) {
-            showMessageForDuration(messageElement);
-        });
-    });
-</script>
-
 </html>

@@ -17,11 +17,12 @@
         }
 
         .main-content {
-            background-image: url('{% static "class6.jpeg" %}');
+            background-color: white;
             background-size: cover;
             background-position: center;
-            color: white; /* Adjust text color based on your image */
-            padding: 20px; /* Adjust padding as needed */
+            justify-content: center;
+            color: black; 
+            padding: 20px; 
         }
 
         .headerbuttons{
@@ -32,21 +33,23 @@
             display: none;
         }
 
-        /* Form container styles */
         .form-container {
             margin: 50px auto;
-            width: 50%;
-            padding: 20px;
-            border: 1px solid #ccc;
+            width: 60%;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
             border-radius: 5px;
-            background-color: rgba(0, 0, 0, 0.3); 
+            margin-top: 15px;
+            margin-bottom: 14px;
         }
 
         .form-container h2 {
             text-align: center;
+            margin-top: -5px;
+            margin-bottom: 5px;
         }
 
-        /* Form styles */
         form {
             display: flex;
             flex-direction: column;
@@ -60,7 +63,7 @@
         input[type="text"],
         textarea {
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -83,9 +86,21 @@
         button:hover {
             background-color: #E6549C;
         }
+
         .message {
             margin-top: 10px;
             color: #555;
+        }
+
+        .addcategorybutton {
+            text-align: center;
+            margin-top: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .addcategorybutton button{
+            width: 25%;
         }
 
         .alert-success {
@@ -128,7 +143,7 @@
     <div class="main-content">
         <div class="content-container">
             <div class="form-container">
-                <h2>Create Question Category</h2>
+                <h2>Create Quiz Category</h2>
                 <form method="post">
                     {% csrf_token %}
                     <label for="category_name">Category Name:</label>
@@ -149,7 +164,10 @@
                             {% endfor %}
                         {% endif %}
                     </div>
-                    <button type="submit">Add Category</button>
+                    <div class="addcategorybutton">
+                        <button type="submit">Add Category</button>
+                        <button type="reset">Clear</button>
+                    </div>
                 </form>
             </div>
         </div>
