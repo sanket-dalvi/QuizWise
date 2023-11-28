@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>View Questions</title>
     {% load static %}
     <style>
         /* Add your CSS styles here */
@@ -46,14 +46,15 @@
         }
 
         textarea {
-        width: 96%; 
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        resize: vertical;
-        height: 100px;
+            width: 96%; 
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            height: 100px;
         }
+
 
         button {
             padding: 10px 20px;
@@ -104,6 +105,10 @@
             color: #555;
         }
 
+        .larger-checkbox {
+            transform: scale(1.5);
+        }
+
         .alert-success {
             background-color: #d4edda;
             border-color: #c3e6cb;
@@ -121,9 +126,11 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
         .container {
             width: 80%;
             margin: 0 auto;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -139,15 +146,38 @@
 
         .category-filter {
             display: flex;
+            width: 43%;
             align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         .category-filter label {
             margin-right: 10px;
+            font-weight: bold;
         }
 
-        #category-select {
+        .category-filter select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             width: 200px;
+        }
+
+        .category-filter button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+        }
+
+        .category-filter button:hover {
+            background-color: #E6549C;
         }
 
         .search-box {
@@ -163,14 +193,15 @@
 
         #search-btn {
             padding: 8px 16px;
-            background-color: #007bff;
+            background-color: #663399;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
 
         #search-btn:hover {
-            background-color: #0056b3;
+            background-color: #E6549C;
         }
 
         .questions-table {
@@ -210,6 +241,19 @@
             background-color: #ddd;
         }
 
+        #questions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #questions-table th,
+        #questions-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
         .footer-content{
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
@@ -226,7 +270,6 @@
     </div>
 
     <div>
-        <!-- Include the navigation bar -->
         {% include 'QuizCreator/navbar.html' %}
     </div>
 
@@ -234,7 +277,8 @@
     <div class="main-content">
         <div class="content-container">
             <div class="container">
-                <br>        
+                <br>     
+                <br>   
                 <div class="filters">
                     <div class="category-filter">
                         <label for="category-select">Select Category:</label>
