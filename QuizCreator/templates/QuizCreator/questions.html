@@ -139,7 +139,6 @@
 
         .category-filter {
             display: flex;
-            width: 43%;
             align-items: center;
             justify-content: space-between;
             padding: 10px;
@@ -375,6 +374,15 @@
                 }
             });
         }
+
+        var searchInput = document.getElementById('search-input');
+
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+                document.getElementById('search-btn').click(); // Simulate a click on the search button
+            }
+        });
     });
 
 
