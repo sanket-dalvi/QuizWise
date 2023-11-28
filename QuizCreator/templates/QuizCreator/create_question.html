@@ -34,6 +34,8 @@
 
         .form-container h2 {
             text-align: center;
+            margin-top: -5px;
+            margin-bottom: 5px;
         }
 
         form {
@@ -166,6 +168,7 @@
     <div class="main-content">
         <div class="content-container">
             <div class="form-container">
+                <h2>Create Question</h2>
                 <form method="post">
                     {% csrf_token %}
 
