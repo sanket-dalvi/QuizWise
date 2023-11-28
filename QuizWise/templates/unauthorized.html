@@ -1,1 +1,78 @@
-YOU ARE NOT AUTHORIZED TO PERFORM THIS ACTION
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthorized Access</title>
+    {% load static %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .loggeduser{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        .header-logo {
+            max-width: 14%;
+            height: auto;
+            margin: 20px auto 10px; 
+            display: block;
+        }
+
+        .main-content {
+            max-height: 500px; 
+            overflow-y: auto; 
+        }
+
+        .unauthorized-message {
+            margin: 10px auto; /* Updated margin */
+            max-width: 600px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <div class="main-content">
+        <img src="{% static 'access_denied.jpeg' %}" alt="Unauthorized Image" class="header-logo">
+
+        <div class="unauthorized-message">
+            <h2>Unauthorized Access</h2>
+            <p>This page is restricted, and you do not have the necessary permissions to access it.</p>
+            <p>Please login/register or go back to the <a href="/">home page</a>.</p>
+        </div>
+    
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html'%}
+    </div>
+</body>
+
+</html>
