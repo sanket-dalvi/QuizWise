@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
-from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap
+from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap, Quiz, QuizQuestion
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 import json
@@ -206,3 +206,65 @@ def map_question_category(request):
     )
 
     return render(request, "QuizCreator/question_category_map.html", {'questions': questions, 'categories': categories})
+
+
+
+@examiner_required
+def create_quiz(request):
+    if request.method == 'POST':
+        quiz_name = request.POST.get('quiz-name')
+        quiz_description = request.POST.get('quiz-description')
+        quiz_duration = request.POST.get('quiz-duration')
+        quiz_total_questions = request.POST.get('quiz-total-questions')
+        quiz_visible = request.POST.get('quiz-visible') == 'on'
+
+        # Creating a new Quiz instance and saving it to the database
+        new_quiz = Quiz(
+            name=quiz_name,
+            description=quiz_description,
+            duration=quiz_duration,
+            total_questions=quiz_total_questions,
+            visible=quiz_visible
+        )
+        new_quiz.save()
+        messages.success(request, 'Quiz created successfully!')
+
+    return render(request, "QuizCreator/create_quiz.html")
+
+
+@examiner_required
+def edit_quiz(request):
+    if request.method == 'POST':
+        selected_quiz_id = request.POST.get('select-quiz')
+
+        # Retrieve selected quiz details
+        selected_quiz = Quiz.objects.get(id=selected_quiz_id)
+
+        return render(request, 'QuizCreator/edit_quiz.html', {'selected_quiz': selected_quiz})
+
+    quizzes = Quiz.objects.all()
+    return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
+
+
+@examiner_required
+def update_quiz(request):
+    if request.method == 'POST':
+        quiz_id = request.POST.get('quiz-id')
+        selected_quiz = Quiz.objects.get(pk=quiz_id)
+
+        selected_quiz.name = request.POST.get('quiz-name')
+        selected_quiz.description = request.POST.get('quiz-description')
+        selected_quiz.duration = request.POST.get('quiz-duration')
+        selected_quiz.total_questions = request.POST.get('quiz-total-questions')
+        selected_quiz.visible = request.POST.get('quiz-visible') == 'on'
+        selected_quiz.save()
+
+        messages.success(request, 'Quiz details updated successfully.')
+        return redirect('your_redirect_url')  # Redirect to the desired URL after updating
+
+    quizzes = Quiz.objects.all()
+    return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
+
+@examiner_required
+def delete_quiz(request):
+    return redirect("edit_quiz")

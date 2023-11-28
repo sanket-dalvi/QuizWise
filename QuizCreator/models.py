@@ -42,3 +42,14 @@ class CategoryQuestionMap(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
+class Quiz(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    duration = models.IntegerField()
+    total_questions = models.IntegerField()
+    visible = models.BooleanField(default=True)
+ 
+class QuizQuestion(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
