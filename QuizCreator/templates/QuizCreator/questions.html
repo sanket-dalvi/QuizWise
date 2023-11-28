@@ -25,13 +25,6 @@
             display: none;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
         label {
             margin-bottom: 10px;
             font-weight: bold;
@@ -236,15 +229,19 @@
             <div class="container">
                 <br>        
                 <div class="filters">
-                    <div class="category-filter">
-                        <label for="category-select">Select Category:</label>
-                        <select id="category-select" multiple>
-                            {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <button id="clear-category">Clear Selection</button>
-                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="category-filter">
+                            <label for="category-select">Select Category:</label>
+                            <select id="category-select" name="category-select" multiple>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if category.id in selected_categories %}selected{% endif %}>{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="search-by-category" type="submit">Search</button>
+                            <button id="clear-category" type="reset">Clear Selection</button>
+                        </div>
+                    </form>
         
                     <div class="search-box">
                         <input type="text" id="search-input" placeholder="Search questions...">
@@ -301,7 +298,41 @@
     <div class="footer-content">
         {% include 'footer.html' %}
     </div>
-
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchBtn = document.getElementById('search-btn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function() {
+                var searchText = document.getElementById('search-input').value.toLowerCase();
+                var tableRows = document.querySelectorAll('#questions-table tbody tr');
 
+                tableRows.forEach(function(row) {
+                    var questionText = row.children[1].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
+                    if (questionText.indexOf(searchText) === -1) {
+                        row.style.display = 'none';
+                    } else {
+                        row.style.display = '';
+                    }
+                });
+            });
+        }
+
+        var clearCategoryBtn = document.getElementById('clear-category');
+        if (clearCategoryBtn) {
+            clearCategoryBtn.addEventListener('click', function() { 
+                var categorySelect = document.getElementById('category-select');
+                if (categorySelect) {
+                    // Reset the selected options in the category select element
+                    var options = categorySelect.options;
+                    for (var i = 0; i < options.length; i++) {
+                        options[i].removeAttribute('selected');
+                    }
+                }
+            });
+        }
+    });
+
+
+</script>
 </html>

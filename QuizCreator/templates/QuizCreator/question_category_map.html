@@ -255,7 +255,7 @@
             
                         <div class="search-box">
                             <input type="text" id="search-input" placeholder="Search questions...">
-                            <button id="search-btn">Search</button>
+                            <button id="search-btn" type="button">Search</button>
                         </div>
                     </div>
             
@@ -311,5 +311,34 @@
     </div>
 
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchBtn = document.getElementById('search-btn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function() {
+                var searchText = document.getElementById('search-input').value.toLowerCase();
+                var tableRows = document.querySelectorAll('#questions-table tbody tr');
 
+                tableRows.forEach(function(row) {
+                    var questionText = row.children[2].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
+                    if (questionText.indexOf(searchText) === -1) {
+                        row.style.display = 'none';
+                    } else {
+                        row.style.display = '';
+                    }
+                });
+            });
+        }
+
+        var searchInput = document.getElementById('search-input');
+
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+                document.getElementById('search-btn').click(); // Simulate a click on the search button
+            }
+        });
+
+    });
+</script>
 </html>
