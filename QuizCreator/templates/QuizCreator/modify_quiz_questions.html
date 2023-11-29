@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Questions</title>
+    {% load static %}
+    <style>
+        /* Add your CSS styles here */
+
+        /* General styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .headerbuttons{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        textarea {
+            width: 96%; 
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            height: 100px;
+        }
+
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Additional styles for dynamic fields */
+        .field-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .field-container.visible {
+            display: block;
+        }
+
+        .field-container label {
+            margin-bottom: 5px;
+        }
+
+        .field-container input {
+            margin-bottom: 10px;
+        }
+
+        #dynamic-fields {
+            display: grid;
+        }
+        
+        .note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .note p {
+            margin: 0;
+        }
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .larger-checkbox {
+            transform: scale(1.5);
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .category-filter {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .category-filter label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .category-filter select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .category-filter button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+        }
+
+        .category-filter button:hover {
+            background-color: #E6549C;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+        }
+
+        #search-input {
+            padding: 8px;
+            margin-right: 10px;
+            width: 250px;
+        }
+
+        #search-btn {
+            padding: 8px 16px;
+            background-color: #663399;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #search-btn:hover {
+            background-color: #E6549C;
+        }
+
+        .questions-table {
+            border: 2px solid #ccc;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #663399;
+            color: whitesmoke;
+        }
+
+        td {
+            background-color: #f2f2f2;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+
+        button {
+            padding: 6px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        #questions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #questions-table th,
+        #questions-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        .checked {
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <div>
+        {% include 'QuizCreator/navbar.html' %}
+    </div>
+
+
+    <div class="main-content">
+        <div class="content-container">
+            <div class="message">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="container">
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="select_quiz">
+                        <!-- Select Quiz Dropdown -->
+                        <h2>Modify Quiz Questions</h2>
+                        <div class="quiz-select">
+                            <label for="select-quiz">Select Quiz:</label>
+                            <select id="select-quiz" name="select-quiz" required>
+                                {% if not selected_quiz_id %}
+                                <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                {% endif %}
+                                <!-- Populate dropdown with quiz options -->
+                                {% for quiz in quizzes %}
+                                    <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Select</button>
+                        </div>
+                        <br>
+                </form>
+
+                {% if total_questions_added > 0 %}
+
+                <label name = "total_questions_added"> Total Questions in Quiz : {{ total_questions_added }}</label>
+                <button id="toggle-questions" name="show_quiz_questions">Show Quiz Questions</button>
+
+                {% endif %}
+                
+
+                    
+                <br>     
+                <br>
+                {% if selected_quiz_id %}   
+                    <div name = "questions" style="display: block;">
+                        <div class="filters">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="question_search_by_category">
+                                <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
+                                <div class="category-filter">
+                                    <label for="category-select">Select Category:</label>
+                                    <select id="category-select" name="category-select" multiple>
+                                        {% for category in categories %}
+                                            <option value="{{ category.id }}" {% if category.id in selected_categories %}selected{% endif %}>{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button id="search-by-category" type="submit">Search</button>
+                                    <button id="clear-category" type="reset">Clear Selection</button>
+                                </div>
+                            </form>
+                
+                            <div class="search-box">
+                                <input type="text" id="search-input" placeholder="Search questions...">
+                                <button id="search-btn">Search</button>
+                            </div>
+                        </div>
+                        
+                        <form method = "post">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="add_quiz_questions">
+                            <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
+                            <div class="questions-table">
+                                <table id="questions-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Select</th>
+                                            <th style="width: 5%;">No</th>
+                                            <th style="width: 30%;">Question</th>
+                                            <th style="width: 10%;">Answer Choice Type</th>
+                                            <th style="width: 20%;">Options</th>
+                                            <th style="width: 15%;">Category</th>
+                                            <th style="width: 10%;">Answer</th>
+                                            <th style="width: 15%;">Creator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for question in questions %}
+                                            <tr class = "{% if question.id in question_id_list %}checked{% endif %}">
+                                                <td>
+                                                    <input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox" {% if question.id in question_id_list %} checked {% endif %}>
+                                                </td>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ question.question }}</td>
+                                                <td>{{ question.type.type_code }}</td>
+                                                <td>
+                                                    <ul>
+                                                        {% for option in question.options.all %}
+                                                            <li {% if question.type.type_code == 'RB' %}style="list-style-type: circle;"{% endif %}
+                                                                {% if question.type.type_code == 'CB' %}style="list-style-type: square;"{% endif %}>
+                                                                {{ option.option }}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                                <td>
+                                                    {% for category_map in question.categoryquestionmap_set.all %}
+                                                        {{ category_map.category.name }}<br>
+                                                    {% endfor %}
+                                                </td>
+                                                <td>{{ question.answer }}</td>
+                                                <td>{{ question.created_by.username }}</td>
+                                            
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <button name="add_quiz_questions">Add Questions</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <form method="post" action="{% url 'delete_quiz_questions' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
+                        <div class="questions-table" name = "quiz_questions" style="display: none;">
+                            <button id="toggle-quiz-questions" type="button" >Go Back</button>
+                            <table id="questions-table">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th style="width: 5%;">No</th>
+                                        <th style="width: 30%;">Question</th>
+                                        <th style="width: 10%;">Answer Choice Type</th>
+                                        <th style="width: 20%;">Options</th>
+                                        <th style="width: 15%;">Category</th>
+                                        <th style="width: 10%;">Answer</th>
+                                        <th style="width: 15%;">Creator</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for question in quiz_questions %}
+                                        <tr>
+                                            <td><input type="checkbox" name="delete-checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ question.question }}</td>
+                                            <td>{{ question.type.type_code }}</td>
+                                            <td>
+                                                <ul>
+                                                    {% for option in question.options.all %}
+                                                        <li {% if question.type.type_code == 'RB' %}style="list-style-type: circle;"{% endif %}
+                                                            {% if question.type.type_code == 'CB' %}style="list-style-type: square;"{% endif %}>
+                                                            {{ option.option }}
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                {% for category_map in question.categoryquestionmap_set.all %}
+                                                    {{ category_map.category.name }}<br>
+                                                {% endfor %}
+                                            </td>
+                                            <td>{{ question.answer }}</td>
+                                            <td>{{ question.created_by.username }}</td>
+
+                                        
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <button type="submit">Delete Questions</button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div> 
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html' %}
+    </div>
+</body>
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+        var selectQuiz = document.getElementById('select-quiz');
+        var selectedQuizIdInput = document.querySelector('input[name="selected_quiz_id"]');
+
+        if (selectQuiz && selectedQuizIdInput) {
+            selectedQuizIdInput.value = selectQuiz.value;
+            // Listen for change event on select-quiz dropdown
+            selectQuiz.addEventListener('change', function() {
+                // Update the value of selected_quiz_id input when the dropdown value changes
+                selectedQuizIdInput.value = selectQuiz.value;
+            });
+        }
+
+        var toggleQuestionsBtn = document.getElementById('toggle-questions');
+        var questionsDiv = document.querySelector('div[name="questions"]');
+        var quizQuestionsDiv = document.querySelector('div[name="quiz_questions"]');
+        var toggleQuizQuestionsBtn = document.getElementById('toggle-quiz-questions');
+
+        if (toggleQuestionsBtn && toggleQuizQuestionsBtn && questionsDiv && quizQuestionsDiv) {
+            toggleQuestionsBtn.addEventListener('click', function() {
+                questionsDiv.style.display = 'none';
+                quizQuestionsDiv.style.display = 'block';
+            });
+
+            toggleQuizQuestionsBtn.addEventListener('click', function() {
+                quizQuestionsDiv.style.display = 'none';
+                questionsDiv.style.display = 'block';
+            });
+        }
+
+        var searchBtn = document.getElementById('search-btn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function() {
+                var searchText = document.getElementById('search-input').value.toLowerCase();
+                var tableRows = document.querySelectorAll('#questions-table tbody tr');
+
+                tableRows.forEach(function(row) {
+                    var questionText = row.children[2].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
+                    if (questionText.indexOf(searchText) === -1) {
+                        row.style.display = 'none';
+                    } else {
+                        row.style.display = '';
+                    }
+                });
+            });
+        }
+
+        var clearCategoryBtn = document.getElementById('clear-category');
+        if (clearCategoryBtn) {
+            clearCategoryBtn.addEventListener('click', function() { 
+                var categorySelect = document.getElementById('category-select');
+                if (categorySelect) {
+                    // Reset the selected options in the category select element
+                    var options = categorySelect.options;
+                    for (var i = 0; i < options.length; i++) {
+                        options[i].removeAttribute('selected');
+                    }
+                }
+            });
+        }
+
+        var searchInput = document.getElementById('search-input');
+
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+                document.getElementById('search-btn').click(); // Simulate a click on the search button
+            }
+        });
+    });
+
+
+</script>
+</html>

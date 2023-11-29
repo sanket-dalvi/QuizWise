@@ -332,9 +332,12 @@
                             <div class="quiz-select">
                                 <label for="select-quiz">Choose Quiz:</label>
                                 <select id="select-quiz" name="select-quiz">
+                                    {% if not selected_quiz %}
+                                    <option>-- Please Select a Quiz --</option>
+                                    {% endif %}
                                     <!-- Populate dropdown with quiz options -->
                                     {% for quiz in quizzes %}
-                                        <option value="{{ quiz.id }}">{{ quiz.name }}</option>
+                                        <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
                                     {% endfor %}
                                 </select>
                                 <button type="submit" value="Select">Select</button>
@@ -346,7 +349,7 @@
                 
                 <!-- Quiz Information Form -->
                 <!--<div class="form-container" id="quiz-info-form" style="display: {% if selected_quiz.id  %}block{% else %}none{% endif %};">-->
-                <div class="form-container" id="quiz-info-form" {% if selected_quiz.id %}style="display: block;"{% endif %}>
+                <div class="form-container" id="quiz-info-form" {% if selected_quiz.id %}style="display: block;"{% else %}style="display: none;" {% endif %}>
 
                     <h3 style="text-align: center;">Modify Quiz Details</h3>
                     <form method="post" class="edit-quiz-form" id="edit-quiz-form" action="{% url 'update_quiz' %}">

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
 from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap, Quiz, QuizQuestion
@@ -42,6 +42,8 @@ def create_question(request):
         selected_radio = request.POST.get('radio-group')
         selected_checkbox = request.POST.getlist('checkbox-group')
 
+        answer = request.POST.get("free-text-answer").strip()
+
         options_json = request.POST.get('options')
         options = json.loads(options_json) if options_json else []
 
@@ -69,7 +71,7 @@ def create_question(request):
             if not options:
                 messages.error(request, "Please add options.")
                 return redirect('create_question')
-
+            
             # If the question is a Free Text question, options list should be empty
             if question_type_code == 'FT':
                 options = []
@@ -140,16 +142,6 @@ def create_question_category(request):
 
     return render(request, "QuizCreator/create_question_category.html")
 
-
-@examiner_required
-def view_questions(request):
-
-    questions = Question.objects.all()
-    current_user = request.user
-    question_types = QuestionType.objects.all()
-    categories = Category.objects.filter(
-        Q(created_by=current_user) | Q(visible_to_others=True)
-    )
 
 
 @examiner_required
@@ -288,16 +280,18 @@ def create_quiz(request):
 
 @examiner_required
 def edit_quiz(request):
+
     quizzes = Quiz.objects.all()
+    selected_quiz = None
+
     if request.method == 'POST':
         selected_quiz_id = request.POST.get('select-quiz')
+        selected_quiz_id = int(selected_quiz_id)
 
         # Retrieve selected quiz details
         selected_quiz = Quiz.objects.get(id=selected_quiz_id)
 
-        return render(request, 'QuizCreator/edit_quiz.html', {'selected_quiz': selected_quiz, 'quizzes': quizzes})
-
-    return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
+    return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes, 'selected_quiz': selected_quiz})
 
 
 @examiner_required
@@ -314,7 +308,7 @@ def update_quiz(request):
         selected_quiz.save()
 
         messages.success(request, 'Quiz details updated successfully.')
-        return redirect('your_redirect_url')  # Redirect to the desired URL after updating
+        return redirect('edit_quiz')  # Redirect to the desired URL after updating
 
     quizzes = Quiz.objects.all()
     return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
@@ -322,3 +316,126 @@ def update_quiz(request):
 @examiner_required
 def delete_quiz(request):
     return redirect("edit_quiz")
+
+
+@examiner_required
+def add_quiz_questions(request):
+    total_questions_added = 0
+    quiz_questions = []
+    quizzes = Quiz.objects.all()
+    selected_quiz_id = None
+    current_user = request.user
+    categories = Category.objects.filter(
+        Q(created_by=current_user) | Q(visible_to_others=True)
+    )
+    questions = Question.objects.select_related('type').prefetch_related(
+        Prefetch('options', queryset=QuestionOption.objects.all()),
+        Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+    ).all()
+
+
+    if request.method == "POST":
+        form_type = request.POST.get("form_type")
+        if form_type == "add_quiz_questions":
+            quiz_id = request.POST.get("selected_quiz_id")
+            selected_questions = request.POST.getlist('checkbox-group')
+            try:
+
+                quiz = get_object_or_404(Quiz, pk=quiz_id)
+
+                for question_id in selected_questions:
+                    # Check if the mapping already exists
+                    existing_mapping = QuizQuestion.objects.filter(quiz=quiz, question_id=question_id).exists()
+                    if not existing_mapping:
+                        # If the mapping doesn't exist, create it
+                        question = get_object_or_404(Question, pk=question_id)
+                        quiz_question = QuizQuestion.objects.create(quiz=quiz, question=question)
+                        # Perform any additional operations if required
+                        
+                        # Save the quiz-question mapping
+                        quiz_question.save()
+                messages.success(request, "Questions Added Successfully")
+                quiz_question_objects = QuizQuestion.objects.filter(quiz = quiz)
+                total_questions_added = quiz_question_objects.count()
+                quiz_questions = Question.objects.select_related('type').prefetch_related(
+                    Prefetch('options', queryset=QuestionOption.objects.all()),
+                    Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+                ).filter(quizquestion__in=quiz_question_objects).all()
+                
+            except Quiz.DoesNotExist:
+                messages.error(request, "ERROR : Invalid Quiz Id")
+        elif form_type == "select_quiz":
+            quiz_id = request.POST.get("select-quiz")
+            selected_quiz_id = quiz_id
+            try:
+
+                quiz = get_object_or_404(Quiz, pk=quiz_id)
+                quiz_question_objects = QuizQuestion.objects.filter(quiz = quiz)
+                total_questions_added = quiz_question_objects.count()
+                quiz_questions = Question.objects.select_related('type').prefetch_related(
+                    Prefetch('options', queryset=QuestionOption.objects.all()),
+                    Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+                ).filter(quizquestion__in=quiz_question_objects).all()
+                
+            except Quiz.DoesNotExist:
+                messages.error(request, "ERROR : Invalid Quiz Id")
+            selected_quiz_id = int(selected_quiz_id)
+        elif form_type == "question_search_by_category":
+            quiz_id = request.POST.get("selected_quiz_id")
+            selected_quiz_id = quiz_id
+            selected_categories = request.POST.getlist('category-select')  # Retrieve selected categories
+            selected_categories = [int(cat_id) for cat_id in selected_categories]
+            if selected_categories :
+                questions = Question.objects.filter(categoryquestionmap__category_id__in=selected_categories).select_related('type').prefetch_related(
+                    Prefetch('options', queryset=QuestionOption.objects.all()),
+                    Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+                ).distinct()
+            else:
+                questions = Question.objects.select_related('type').prefetch_related(
+                    Prefetch('options', queryset=QuestionOption.objects.all()),
+                    Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+                ).all()
+            try:
+
+                quiz = get_object_or_404(Quiz, pk=quiz_id)
+                quiz_question_objects = QuizQuestion.objects.filter(quiz = quiz)
+                total_questions_added = quiz_question_objects.count()
+                quiz_questions = Question.objects.select_related('type').prefetch_related(
+                    Prefetch('options', queryset=QuestionOption.objects.all()),
+                    Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+                ).filter(quizquestion__in=quiz_question_objects).all()
+                
+            except Quiz.DoesNotExist:
+                messages.error(request, "ERROR : Invalid Quiz Id")
+            selected_quiz_id = int(selected_quiz_id)
+    question_id_list = []
+    for question in quiz_questions:
+        question_id_list.append(question.id)
+
+    return render(request, 'QuizCreator/modify_quiz_questions.html', {'quizzes': quizzes, 'categories' : categories, 'questions' : questions, 'quiz_questions': quiz_questions, 'total_questions_added' : total_questions_added, 'selected_quiz_id' : selected_quiz_id, 'question_id_list' : question_id_list})
+
+
+
+@examiner_required
+def delete_quiz_questions(request):
+
+    if request.method == "POST":
+        
+        question_ids = request.POST.getlist("delete-checkbox-group")
+        quiz_id = request.POST.get("selected_quiz_id")
+
+        try:
+            quiz = Quiz.objects.get(pk=quiz_id)
+            
+            for question_id in question_ids:
+
+                question = Question.objects.get(pk=question_id)
+
+                # Delete the quiz-question mapping if it exists
+                QuizQuestion.objects.filter(quiz=quiz, question=question).delete()
+            messages.success(request, "Questions Deleted")
+            
+        except (Quiz.DoesNotExist, Question.DoesNotExist) as e:
+            messages.error(request, "ERROR : Could Not Delete ")
+            
+        return redirect("add_quiz_questions")
