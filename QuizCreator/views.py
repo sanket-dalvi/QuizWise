@@ -436,3 +436,24 @@ def delete_quiz_questions(request):
             messages.error(request, "ERROR : Could Not Delete ")
             
         return redirect("add_quiz_questions")
+    
+
+@examiner_required
+def preview_quiz(request):
+    quizzes = Quiz.objects.all()
+
+    if request.method == "POST":
+        quiz_id = request.POST.get("select-quiz")
+        try:
+            quiz = get_object_or_404(Quiz, pk=quiz_id)
+            quiz_question_objects = QuizQuestion.objects.filter(quiz = quiz)
+            quiz_questions = Question.objects.select_related('type').prefetch_related(
+                Prefetch('options', queryset=QuestionOption.objects.all()),
+                Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
+            ).filter(quizquestion__in=quiz_question_objects).all()
+            
+        except Quiz.DoesNotExist:
+            messages.error(request, "ERROR : Invalid Quiz Id")
+        return render(request, "QuizCreator/show_preview.html", {'quiz' : quiz,'quiz_questions' : quiz_questions})
+        
+    return render(request, "QuizCreator/preview_quiz.html", {'quizzes' : quizzes})

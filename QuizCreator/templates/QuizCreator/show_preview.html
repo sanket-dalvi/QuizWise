@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .question {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .options {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .options label {
+            font-size: 16px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            font-size: 16px;
+        }
+        hr {
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .quiz-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .timer {
+            text-align: right;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz Preview</h1>
+    <div class="message">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="quiz-details">
+        <h2>{{ quiz.name }}</h2>
+        <p>{{ quiz.description }}</p>
+        <p>Total Questions: {{ quiz.total_questions }}</p>
+    </div>
+    <div class="timer" id="timer"></div>
+    <form method="post">
+        {% csrf_token %}
+        {% for question in quiz_questions %}
+            <div class="question">
+                <h3>Q.{{forloop.counter}}) {{ question.question }}</h3>
+                {% if question.type.type_code == 'RB' %}
+                    <div class="options">
+                        {% for option in question.options.all %}
+                            <input type="radio" id="option_{{ option.id }}" name="question_{{ question.id }}" value="{{ option.option }}">
+                            <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                        {% endfor %}
+                    </div>
+                {% elif question.type.type_code == 'CB' %}
+                    <div class="options">
+                        {% for option in question.options.all %}
+                            <input type="checkbox" id="option_{{ option.id }}" name="question_{{ question.id }}[]" value="{{ option.option }}">
+                            <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                        {% endfor %}
+                    </div>
+                {% elif question.type.type_code == 'FT' %}
+                    <textarea id="answer_{{ question.id }}" name="question_{{ question.id }}" rows="4" cols="50"></textarea>
+                {% endif %}
+                <p>Correct Answer: {{ question.answer }}</p>
+                <hr>
+            </div>
+        {% endfor %}
+        <input type="submit" value="Submit Quiz">
+    </form>
+
+    <script>
+        const durationInMinutes = {{ quiz.duration }}; // Duration in minutes
+        const timerDisplay = document.getElementById('timer');
+        let timer;
+
+        function startTimer(duration) {
+            let timerSeconds = duration * 60;
+            timer = setInterval(() => {
+                const minutes = Math.floor(timerSeconds / 60);
+                const seconds = timerSeconds % 60;
+                timerDisplay.textContent = `Time remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                
+                if (--timerSeconds < 0) {
+                    clearInterval(timer);
+                    timerDisplay.textContent = 'Time expired!';
+                    // Additional logic when time is up
+                }
+            }, 1000);
+        }
+
+        startTimer(durationInMinutes);
+
+        window.addEventListener('beforeunload', function (e) {
+            const confirmationMessage = 'Are you sure you want to leave? Your progress may be lost.';
+            e.returnValue = confirmationMessage;
+            return confirmationMessage;
+        });
+        
+        window.onblur = function() {
+            clearInterval(timer);
+            alert("Switching tabs is not allowed!");
+        };
+        
+        window.onfocus = function() {
+            startTimer(durationInMinutes);
+        };
+    </script>
+</body>
+</html>

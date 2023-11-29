@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Questions</title>
+    {% load static %}
+    <style>
+        /* Add your CSS styles here */
+
+        /* General styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .headerbuttons{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        textarea {
+            width: 96%; 
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            height: 100px;
+        }
+
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Additional styles for dynamic fields */
+        .field-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .field-container.visible {
+            display: block;
+        }
+
+        .field-container label {
+            margin-bottom: 5px;
+        }
+
+        .field-container input {
+            margin-bottom: 10px;
+        }
+
+        #dynamic-fields {
+            display: grid;
+        }
+        
+        .note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .note p {
+            margin: 0;
+        }
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .larger-checkbox {
+            transform: scale(1.5);
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .category-filter {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .category-filter label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .category-filter select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .category-filter button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+        }
+
+        .category-filter button:hover {
+            background-color: #E6549C;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+        }
+
+        #search-input {
+            padding: 8px;
+            margin-right: 10px;
+            width: 250px;
+        }
+
+        #search-btn {
+            padding: 8px 16px;
+            background-color: #663399;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #search-btn:hover {
+            background-color: #E6549C;
+        }
+
+        .questions-table {
+            border: 2px solid #ccc;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #663399;
+            color: whitesmoke;
+        }
+
+        td {
+            background-color: #f2f2f2;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+
+        button {
+            padding: 6px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        #questions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #questions-table th,
+        #questions-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+        .checked {
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <div>
+        {% include 'QuizCreator/navbar.html' %}
+    </div>
+
+
+    <div class="main-content">
+        <div class="content-container">
+            <div class="message">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="container">
+
+                <form method="post" target="_blank">
+                    {% csrf_token %}
+                        <!-- Select Quiz Dropdown -->
+                        <h2>PreView Quiz</h2>
+                        <div class="quiz-select">
+                            <label for="select-quiz">Select Quiz:</label>
+                            <select id="select-quiz" name="select-quiz" required>
+                                {% if not selected_quiz_id %}
+                                <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                {% endif %}
+                                <!-- Populate dropdown with quiz options -->
+                                {% for quiz in quizzes %}
+                                    <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Select</button>
+                        </div>
+                        <br>
+                </form>
+            </div> 
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html' %}
+    </div>
+</body>
+</html>
