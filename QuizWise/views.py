@@ -27,8 +27,7 @@ def register_user(request):
             elif role == 'examiner':
                 user.is_examiner = True
             user.save()
-            # Redirect to a success page
-            return render(request, 'success_page.html')  
+            return redirect('login')
     else:
         form = UserRegistrationForm(initial={'email': request.GET.get("email")})
     return render(request, 'register.html', {'form': form})
