@@ -14,6 +14,19 @@ from django.http import JsonResponse
 def home(request):
     return render(request, "QuizCreator/home.html")
 
+@examiner_required
+def profile(request):
+    return render(request, "QuizCreator/profile.html")
+
+
+@examiner_required
+def scores(request):
+    return render(request, "QuizCreator/scores.html")
+
+
+@examiner_required
+def quiz_history(request):
+    return render(request, "QuizCreator/quiz_history.html")
 
 @examiner_required
 def create_question(request):
@@ -129,16 +142,6 @@ def create_question_category(request):
 
     return render(request, "QuizCreator/create_question_category.html")
 
-
-@examiner_required
-def view_questions(request):
-
-    questions = Question.objects.all()
-    current_user = request.user
-    question_types = QuestionType.objects.all()
-    categories = Category.objects.filter(
-        Q(created_by=current_user) | Q(visible_to_others=True)
-    )
 
 
 @examiner_required

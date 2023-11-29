@@ -146,6 +146,11 @@
             margin-bottom: 10px;
         }
 
+        .mainsection{
+            height: 70vh;
+            overflow-x: auto;
+        }
+
         .footer-content{
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
@@ -165,54 +170,56 @@
         {% include 'QuizCreator/navbar.html' %}
     </div>
 
-    <div class="main-content">
-        <div class="content-container">
-            <div class="form-container">
-                <h2>Create Question</h2>
-                <form method="post">
-                    {% csrf_token %}
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="content-container">
+                <div class="form-container">
+                    <h2>Create Question</h2>
+                    <form method="post">
+                        {% csrf_token %}
 
-                    <!-- Question text area -->
-                    <label for="question">Enter Question:</label>
-                    <textarea id="question" name="question" required></textarea>
+                        <!-- Question text area -->
+                        <label for="question">Enter Question:</label>
+                        <textarea id="question" name="question" required></textarea>
 
-                    <!-- Question type selection -->
-                    <label for="type">Select Answer Choice Type:</label>
-                    <select id="type" name="type">
-                        <option value="" disabled selected>--- Please select a type ---</option>
-                        {% for question_type in question_types %}
-                            <option value="{{ question_type.type_code }}">{{ question_type.type_name }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <!-- Dynamic fields container -->
-                    <div id="dynamic-fields">
-                        <!-- Additional fields based on question type will be added here -->
-                    </div>
-
-                    <!-- Hidden input to store options -->
-                    <input type="hidden" name="options" id="options-input" value="">
-
-                    <!-- Message display -->
-                    <div class="message">
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                    {{ message }}
-                                </div>
+                        <!-- Question type selection -->
+                        <label for="type">Select Answer Choice Type:</label>
+                        <select id="type" name="type">
+                            <option value="" disabled selected>--- Please select a type ---</option>
+                            {% for question_type in question_types %}
+                                <option value="{{ question_type.type_code }}">{{ question_type.type_name }}</option>
                             {% endfor %}
-                        {% endif %}
-                    </div>
+                        </select>
 
-                    <div class="button-container">
-                        <div>
-                            <button type="button" id="add-field">Add Answer Options</button>
+                        <!-- Dynamic fields container -->
+                        <div id="dynamic-fields">
+                            <!-- Additional fields based on question type will be added here -->
                         </div>
-                        <div>
-                            <button type="submit">Submit Question</button>
+
+                        <!-- Hidden input to store options -->
+                        <input type="hidden" name="options" id="options-input" value="">
+
+                        <!-- Message display -->
+                        <div class="message">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
-                    </div>                                     
-                </form>
+
+                        <div class="button-container">
+                            <div>
+                                <button type="button" id="add-field">Add Answer Options</button>
+                            </div>
+                            <div>
+                                <button type="submit">Submit Question</button>
+                            </div>
+                        </div>                                     
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -242,10 +249,9 @@
                     var label_to_delete = this.previousSibling;
                     var valueToRemove = label_to_delete.textContent.trim();
 
-                    // Find the index of the value in the options array
                     var optionIndex = options.indexOf(valueToRemove);
                     if (optionIndex !== -1) {
-                        options.splice(optionIndex, 1); // Remove the element from the options array
+                        options.splice(optionIndex, 1); 
                         updateOptions();
                     }
 
@@ -333,7 +339,7 @@
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 5000); // Hide the message after 5 seconds (5000 milliseconds)
+            }, 3000); // Hide the message after 5 seconds
         }
 
         // Initial options load

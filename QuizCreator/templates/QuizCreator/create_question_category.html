@@ -68,6 +68,11 @@
             border-radius: 5px;
         }
 
+        
+        .larger-checkbox {
+            transform: scale(1.5);
+        }
+
         textarea {
             resize: vertical;
             height: 100px;
@@ -121,6 +126,11 @@
             margin-bottom: 10px;
         }
 
+        .mainsection{
+            height: 70vh;
+            overflow-x: auto;
+        }
+
         .footer-content{
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
@@ -140,35 +150,37 @@
         {% include 'QuizCreator/navbar.html' %}
     </div>
 
-    <div class="main-content">
-        <div class="content-container">
-            <div class="form-container">
-                <h2>Create Quiz Category</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    <label for="category_name">Category Name:</label>
-                    <input type="text" id="category_name" name="category_name" required>
-        
-                    <label for="category_description">Category Description:</label>
-                    <textarea id="category_description" name="category_description" required></textarea>
-                    <div class="categoryvisibility">
-                        <label for="visible_to_others">Visible to Others:</label>
-                        <input type="checkbox" id="visible_to_others" name="visible_to_others">
-                    </div>
-                    <div class="message">
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    <div class="addcategorybutton">
-                        <button type="submit">Add Category</button>
-                        <button type="reset">Clear</button>
-                    </div>
-                </form>
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="content-container">
+                <div class="form-container">
+                    <h2>Create Quiz Category</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <label for="category_name">Category Name:</label>
+                        <input type="text" id="category_name" name="category_name" required>
+            
+                        <label for="category_description">Category Description:</label>
+                        <textarea id="category_description" name="category_description" required></textarea>
+                        <div class="categoryvisibility">
+                            <label for="visible_to_others">Visible to Others:</label>
+                            <input type="checkbox" class="larger-checkbox" id="visible_to_others" name="visible_to_others">
+                        </div>
+                        <div class="message">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="addcategorybutton">
+                            <button type="submit">Add Category</button>
+                            <button type="reset">Clear</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -177,4 +189,32 @@
         {% include 'footer.html' %}
     </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Other code...
+
+        function hideMessage() {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                alert.style.display = 'none';
+            });
+        }
+
+        function showMessageForDuration(messageElement) {
+            messageElement.style.display = 'block';
+            setTimeout(function () {
+                messageElement.style.display = 'none';
+            }, 3000); // Hide the message after 5 seconds
+        }
+
+        // Initial options load
+        document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
+            addDeleteButton(label);
+        });
+
+        // Show messages for a duration when the page loads
+        document.querySelectorAll('.alert').forEach(function (messageElement) {
+            showMessageForDuration(messageElement);
+        });
+    });
+</script>
 </html>

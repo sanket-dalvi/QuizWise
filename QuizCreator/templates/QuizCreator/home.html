@@ -107,9 +107,10 @@
                     <!-- Add more attempted quizzes as needed -->
                 </ul>
             </div>
-            <div class="card-footer">
-                <img src="{% static 'edit_icon.png' %}" alt="Edit Profile" width="20" height="20">
-                Edit Profile
+            <div class="card-footer"> 
+                <a href="{% url 'profile' %}">
+                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
+                </a>
             </div>
           </div>
           
@@ -130,7 +131,10 @@
             </ul>
             </div>
           </div>
-          <div class="card-footer">Card 2 Footer</div>
+          <div class="card-footer">
+            <a href="{% url 'scores' %}">
+            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;"></a>
+          </div>
         </div>
     
         <div class="card">
@@ -161,7 +165,11 @@
             </ul>
             </div>
           </div>
-          <div class="card-footer">Card 3 Footer</div>
+          <div class="card-footer">
+            <a href="{% url 'quiz_history' %}">
+            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
+            </a>
+          </div>
         </div>
 
         <div class="card">
@@ -194,10 +202,13 @@
                     <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> History Quiz</a></p>
                 </div>
             </div>
-            <div class="card-footer">Card 4 Footer</div>
+            <div class="card-footer">
+                <a href="{% url 'quiz_history' %}">
+                <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
+                </a>
+            </div>
           </div>
     </div>
-
 
     <div class="footer-content">
         <!-- Include the footer -->

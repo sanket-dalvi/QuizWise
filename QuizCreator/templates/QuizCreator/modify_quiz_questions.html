@@ -8,9 +8,7 @@
     <title>View Questions</title>
     {% load static %}
     <style>
-        /* Add your CSS styles here */
 
-        /* General styles */
         body {
             margin: 0;
             padding: 0;
@@ -47,7 +45,6 @@
             resize: vertical;
             height: 100px;
         }
-
 
         button {
             padding: 10px 20px;
@@ -258,8 +255,75 @@
             color: white;
             text-align: center;
         }
+
         .checked {
-            color: #007bff;
+            color: blue;
+            font-weight: bold;
+        }
+
+        .category-filter{
+            width: 100%;
+        }
+
+        .form-container {
+            margin: 50px auto;
+            width: 98%;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+
+        .form-container button {
+            width: 25%;
+            align-self: center;
+        }
+
+        .container button:hover {
+            background-color: #E6549C;
+        }
+
+        .form-container button:hover {
+            background-color: #E6549C;
+        }
+
+        .quiz-select {
+            display: flex;
+            align-items: center;
+        }
+
+        .quiz-select label,
+        .quiz-select select,
+        .quiz-select button {
+            margin-right: 10px; /* Adjust as needed for spacing */
+        }
+
+        .mainsection{
+            height: 80vh;
+            overflow-x: auto;
         }
     </style>
 </head>
@@ -273,83 +337,135 @@
         {% include 'QuizCreator/navbar.html' %}
     </div>
 
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="content-container">
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
 
-    <div class="main-content">
-        <div class="content-container">
-            <div class="message">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-
-            <div class="container">
-
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="form_type" value="select_quiz">
-                        <!-- Select Quiz Dropdown -->
-                        <h2>Modify Quiz Questions</h2>
-                        <div class="quiz-select">
-                            <label for="select-quiz">Select Quiz:</label>
-                            <select id="select-quiz" name="select-quiz" required>
-                                {% if not selected_quiz_id %}
-                                <option value="" disabled selected>--- Please select a Quiz ---</option>
+                <div class="container">
+                    <div class="form-container">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="select_quiz">
+                            <!-- Select Quiz Dropdown -->
+                            <h2 style="margin-top: 10px;">Modify Quiz Questions</h2>
+                            <div class="quiz-select">
+                                <label style="margin-top: -15px;" for="select-quiz">Select Quiz:</label>
+                                <select style="margin-top: -5px;" id="select-quiz" name="select-quiz" required>
+                                    {% if not selected_quiz_id %}
+                                    <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                    {% endif %}
+                                    <!-- Populate dropdown with quiz options -->
+                                    {% for quiz in quizzes %}
+                                        <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button style="margin-top: -25px;" type="submit">Select</button>
+                                {% if total_questions_added > 0 %}
+                                    <button id="toggle-questions" type="button" name="show_quiz_questions" style="margin-top: -25px;">Show Quiz Questions</button>
                                 {% endif %}
-                                <!-- Populate dropdown with quiz options -->
-                                {% for quiz in quizzes %}
-                                    <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit">Select</button>
-                        </div>
-                        <br>
-                </form>
-
-                {% if total_questions_added > 0 %}
-
-                <label name = "total_questions_added"> Total Questions in Quiz : {{ total_questions_added }}</label>
-                <button id="toggle-questions" name="show_quiz_questions">Show Quiz Questions</button>
-
-                {% endif %}
-                
-
+                            </div>
+                            <br>
+                            {% if total_questions_added > 0 %}
+                                <label name="total_questions_added" style="margin-top: -15px;">Total Questions in Quiz: {{ total_questions_added }}</label>
+                            {% endif %}
+                        </form>
+                    </div>
+                       
+                    <br>     
+                    <br>
+                    {% if selected_quiz_id %}   
+                        <div name = "questions" style="display: block;">
+                            <div class="filters">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_type" value="question_search_by_category">
+                                    <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
+                                    <div class="category-filter">
+                                        <label for="category-select">Select Category:</label>
+                                        <select id="category-select" name="category-select" multiple>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}" {% if category.id in selected_categories %}selected{% endif %}>{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button id="search-by-category" type="submit">Search</button>
+                                        <button id="clear-category" type="reset">Clear Selection</button>
+                                    </div>
+                                </form>
                     
-                <br>     
-                <br>
-                {% if selected_quiz_id %}   
-                    <div name = "questions" style="display: block;">
-                        <div class="filters">
-                            <form method="post">
+                                <div class="search-box">
+                                    <input type="text" id="search-input" placeholder="Search questions...">
+                                    <button id="search-btn">Search</button>
+                                </div>
+                            </div>
+                            
+                            <form method = "post">
                                 {% csrf_token %}
-                                <input type="hidden" name="form_type" value="question_search_by_category">
+                                <input type="hidden" name="form_type" value="add_quiz_questions">
                                 <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
-                                <div class="category-filter">
-                                    <label for="category-select">Select Category:</label>
-                                    <select id="category-select" name="category-select" multiple>
-                                        {% for category in categories %}
-                                            <option value="{{ category.id }}" {% if category.id in selected_categories %}selected{% endif %}>{{ category.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <button id="search-by-category" type="submit">Search</button>
-                                    <button id="clear-category" type="reset">Clear Selection</button>
+                                <div class="questions-table">
+                                    <table id="questions-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Select</th>
+                                                <th style="width: 5%;">No</th>
+                                                <th style="width: 30%;">Question</th>
+                                                <th style="width: 10%;">Answer Choice Type</th>
+                                                <th style="width: 20%;">Options</th>
+                                                <th style="width: 15%;">Category</th>
+                                                <th style="width: 10%;">Answer</th>
+                                                <th style="width: 15%;">Creator</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for question in questions %}
+                                                <tr class = "{% if question.id in question_id_list %}checked{% endif %}">
+                                                    <td>
+                                                        <input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox" {% if question.id in question_id_list %} checked {% endif %}>
+                                                    </td>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td>{{ question.question }}</td>
+                                                    <td>{{ question.type.type_code }}</td>
+                                                    <td>
+                                                        <ul>
+                                                            {% for option in question.options.all %}
+                                                                <li {% if question.type.type_code == 'RB' %}style="list-style-type: circle;"{% endif %}
+                                                                    {% if question.type.type_code == 'CB' %}style="list-style-type: square;"{% endif %}>
+                                                                    {{ option.option }}
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </td>
+                                                    <td>
+                                                        {% for category_map in question.categoryquestionmap_set.all %}
+                                                            {{ category_map.category.name }}<br>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td>{{ question.answer }}</td>
+                                                    <td>{{ question.created_by.username }}</td>
+                                                
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <button name="add_quiz_questions">Add Questions</button>
                                 </div>
                             </form>
-                
-                            <div class="search-box">
-                                <input type="text" id="search-input" placeholder="Search questions...">
-                                <button id="search-btn">Search</button>
-                            </div>
+
                         </div>
-                        
-                        <form method = "post">
+                        <form method="post" action="{% url 'delete_quiz_questions' %}">
                             {% csrf_token %}
-                            <input type="hidden" name="form_type" value="add_quiz_questions">
                             <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
-                            <div class="questions-table">
+                            <div class="questions-table" name = "quiz_questions" style="display: none;">
+                                <button id="toggle-quiz-questions" type="button" >Go Back</button>
                                 <table id="questions-table">
                                     <thead>
                                         <tr>
@@ -364,11 +480,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for question in questions %}
-                                            <tr class = "{% if question.id in question_id_list %}checked{% endif %}">
-                                                <td>
-                                                    <input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox" {% if question.id in question_id_list %} checked {% endif %}>
-                                                </td>
+                                        {% for question in quiz_questions %}
+                                            <tr>
+                                                <td><input type="checkbox" name="delete-checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ question.question }}</td>
                                                 <td>{{ question.type.type_code }}</td>
@@ -389,69 +503,18 @@
                                                 </td>
                                                 <td>{{ question.answer }}</td>
                                                 <td>{{ question.created_by.username }}</td>
+
                                             
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                                <button name="add_quiz_questions">Add Questions</button>
+                                <button type="submit">Delete Questions</button>
                             </div>
                         </form>
-
-                    </div>
-                    <form method="post" action="{% url 'delete_quiz_questions' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
-                        <div class="questions-table" name = "quiz_questions" style="display: none;">
-                            <button id="toggle-quiz-questions" type="button" >Go Back</button>
-                            <table id="questions-table">
-                                <thead>
-                                    <tr>
-                                        <th>Select</th>
-                                        <th style="width: 5%;">No</th>
-                                        <th style="width: 30%;">Question</th>
-                                        <th style="width: 10%;">Answer Choice Type</th>
-                                        <th style="width: 20%;">Options</th>
-                                        <th style="width: 15%;">Category</th>
-                                        <th style="width: 10%;">Answer</th>
-                                        <th style="width: 15%;">Creator</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for question in quiz_questions %}
-                                        <tr>
-                                            <td><input type="checkbox" name="delete-checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ question.question }}</td>
-                                            <td>{{ question.type.type_code }}</td>
-                                            <td>
-                                                <ul>
-                                                    {% for option in question.options.all %}
-                                                        <li {% if question.type.type_code == 'RB' %}style="list-style-type: circle;"{% endif %}
-                                                            {% if question.type.type_code == 'CB' %}style="list-style-type: square;"{% endif %}>
-                                                            {{ option.option }}
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                {% for category_map in question.categoryquestionmap_set.all %}
-                                                    {{ category_map.category.name }}<br>
-                                                {% endfor %}
-                                            </td>
-                                            <td>{{ question.answer }}</td>
-                                            <td>{{ question.created_by.username }}</td>
-
-                                        
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <button type="submit">Delete Questions</button>
-                        </div>
-                    </form>
-                {% endif %}
-            </div> 
+                    {% endif %}
+                </div> 
+            </div>
         </div>
     </div>
 

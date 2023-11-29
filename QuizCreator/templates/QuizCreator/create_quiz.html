@@ -47,6 +47,53 @@
             height: 100px;
         }
 
+        .form-container {
+            margin: 50px auto;
+            width: 60%;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+            margin-bottom: 40px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .addquizbutton button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+
+        .addquizbutton button:hover {
+            background-color: #E6549C;
+        }
+
+        .addquizbutton {
+            text-align: center;
+            margin-top: 5px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .addquizbutton button{
+            width: 25%;
+        }
+
         /* Additional styles for dynamic fields */
         .field-container {
             display: none;
@@ -106,7 +153,7 @@
         }
 
         .container {
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
         }
 
@@ -119,87 +166,6 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-        }
-
-        .mapbuttonatbottom {
-            display: grid;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .mapbuttonatbottom button {
-            height: 40px;
-            align-self: center;
-        }
-
-        .category-filter {
-            display: flex;
-            width: 46%;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .category-filter label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .category-filter select {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 200px;
-        }
-
-        .category-filter button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #663399;
-            color: white;
-            cursor: pointer;
-        }
-
-        .category-filter button:hover {
-            background-color: #E6549C;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-        }
-
-        #search-input {
-            padding: 8px;
-            margin-right: 10px;
-            width: 250px;
-        }
-
-        #search-btn, #map-btn {
-            padding: 8px 16px;
-            background-color: #663399;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #search-btn:hover {
-            background-color: #E6549C;
-        }
-
-        #map-btn:hover {
-            background-color: #E6549C;
         }
 
         .questions-table {
@@ -252,6 +218,11 @@
             text-align: left;
         }
 
+        .mainsection{
+            height: 80vh;
+            overflow-x: auto;
+        }
+
         .footer-content{
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
@@ -263,7 +234,6 @@
 </head>
 
 <body>
-    <!-- Header and navigation bar -->
     <div>
         {% include 'header.html' %}
     </div>
@@ -271,51 +241,52 @@
     <div>
         {% include 'QuizCreator/navbar.html' %}
     </div>
-
-    <div class="main-content">
-        <div class="content-container">
-            <div class="message">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-
-            <br>
-            <form method="post">
-                {% csrf_token %}
-                <div class="container">
-                    <!-- Quiz Information Form -->
-                    <h2>Create a Quiz</h2>
-                    <div class="form-container">
-                        <label for="quiz-name">Quiz Name:</label>
-                        <input type="text" id="quiz-name" name="quiz-name" required><br><br>
-
-                        <label for="quiz-description">Description:</label>
-                        <textarea id="quiz-description" name="quiz-description" required></textarea><br><br>
-
-                        <label for="quiz-duration">Duration (in minutes):</label>
-                        <input type="number" id="quiz-duration" name="quiz-duration" required><br><br>
-
-                        <label for="quiz-total-questions">Total Questions:</label>
-                        <input type="number" id="quiz-total-questions" name="quiz-total-questions" required><br><br>
-
-                        <label for="quiz-visible">Visible:</label>
-                        <input type="checkbox" id="quiz-visible" name="quiz-visible" checked><br><br>
-
-                        <input type="submit" value="Create Quiz">
-                    </div>
-                
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="content-container">
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-            </form>
-            
+
+                <br>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="container">
+                            <!-- Quiz Information Form -->
+                            <h2>Create a new Quiz</h2>
+                            <label for="quiz-name">Quiz Name:</label>
+                            <input type="text" id="quiz-name" name="quiz-name" required><br><br>
+
+                            <label class="quiz-description" for="quiz-description">Description:</label>
+                            <textarea id="quiz-description" name="quiz-description" required></textarea><br><br>
+
+                            <label for="quiz-duration">Duration (in minutes):</label>
+                            <input type="number" id="quiz-duration" name="quiz-duration" required><br><br>
+
+                            <label for="quiz-total-questions">Total No of Questions:</label>
+                            <input type="number" id="quiz-total-questions" name="quiz-total-questions" required><br><br>
+
+                            <label for="quiz-visible">Visible to others:</label>
+                            <input type="checkbox" class="larger-checkbox" id="quiz-visible" name="quiz-visible" checked><br><br>
+                            
+                            <div class="addquizbutton">
+                                <button type="submit" value="Create Quiz">Create Quiz</button>
+                                <button type="reset">Clear</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer-content">
         {% include 'footer.html' %}
     </div>
@@ -349,5 +320,31 @@
         });
     </script>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
 
+        function hideMessage() {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                alert.style.display = 'none';
+            });
+        }
+
+        function showMessageForDuration(messageElement) {
+            messageElement.style.display = 'block';
+            setTimeout(function () {
+                messageElement.style.display = 'none';
+            }, 3000); // Hide the message after 3 seconds
+        }
+
+        // Initial options load
+        document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
+            addDeleteButton(label);
+        });
+
+        // Show messages for a duration when the page loads
+        document.querySelectorAll('.alert').forEach(function (messageElement) {
+            showMessageForDuration(messageElement);
+        });
+    });
+</script>
 </html>

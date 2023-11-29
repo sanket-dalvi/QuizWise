@@ -260,6 +260,11 @@
             text-align: left;
         }
 
+        .mainsection{
+            height: 80vh;
+            overflow-x: auto;
+        }
+
         .footer-content{
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
@@ -278,93 +283,94 @@
     <div>
         {% include 'QuizCreator/navbar.html' %}
     </div>
-
-    <div class="main-content">
-        <div class="content-container">
-            <form method="post">
-                {% csrf_token %}
-                <div class="container">
-                    <div class="message">
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <br>
-
-                    <div class="filters">
-                        <div class="category-filter">
-                            <div>
-                                <label for="category-select">Select Category:</label>
-                            </div>
-                            <div>
-                                <select id="category-select" name="category-select" multiple>
-                                    {% for category in categories %}
-                                        <option value="{{ category.id }}">{{ category.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div>
-                                <button id="clear-category" type="reset">Clear Selection</button>
-                                <button type="submit" id="map-btn">Map</button>
-                            </div>
-                        </div>
-
-                        <div class="search-box">
-                            <input type="text" id="search-input" placeholder="Search questions...">
-                            <button id="search-btn" type="button">Search</button>
-                        </div>
-                    </div>
-
-                    <div class="questions-table">
-                        <!-- Table to display questions will be dynamically populated from backend -->
-                        <table id="questions-table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>No</th>
-                                    <th style="width: 25%;">Question</th>
-                                    <th>Answer Choice Type</th>
-                                    <th>Options</th>
-                                    <th style="width: 20%;">Category</th>
-                                    <th>Answer</th>
-                                    <th>Creator</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for question in questions %}
-                                    <tr>
-                                        <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ question.question }}</td>
-                                        <td>{{ question.type.type_code }}</td>
-                                        <td>
-                                            {% for option in question.options.all %}
-                                                -{{ option.option }}<br>
-                                            {% endfor %}
-                                        </td>
-                                        <td>
-                                            {% for category_map in question.categoryquestionmap_set.all %}
-                                                {{ category_map.category.name }}<br>
-                                            {% endfor %}
-                                        </td>
-                                        <td>{{ question.answer }}</td>
-                                        <td>{{ question.created_by.username }}</td>
-                                    </tr>
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="content-container">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="message">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                        {{ message }}
+                                    </div>
                                 {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                            {% endif %}
+                        </div>
 
-                    <div class="mapbuttonatbottom">
-                        <button type="submit" id="map-btn">Map</button>
+                        <br>
+
+                        <div class="filters">
+                            <div class="category-filter">
+                                <div>
+                                    <label for="category-select">Select Category:</label>
+                                </div>
+                                <div>
+                                    <select id="category-select" name="category-select" multiple>
+                                        {% for category in categories %}
+                                            <option value="{{ category.id }}">{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div>
+                                    <button id="clear-category" type="reset">Clear Selection</button>
+                                    <button type="submit" id="map-btn">Map</button>
+                                </div>
+                            </div>
+
+                            <div class="search-box">
+                                <input type="text" id="search-input" placeholder="Search questions...">
+                                <button id="search-btn" type="button">Search</button>
+                            </div>
+                        </div>
+
+                        <div class="questions-table">
+                            <!-- Table to display questions will be dynamically populated from backend -->
+                            <table id="questions-table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>No</th>
+                                        <th style="width: 25%;">Question</th>
+                                        <th>Answer Choice Type</th>
+                                        <th>Options</th>
+                                        <th style="width: 20%;">Category</th>
+                                        <th>Answer</th>
+                                        <th>Creator</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for question in questions %}
+                                        <tr>
+                                            <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ question.question }}</td>
+                                            <td>{{ question.type.type_code }}</td>
+                                            <td>
+                                                {% for option in question.options.all %}
+                                                    -{{ option.option }}<br>
+                                                {% endfor %}
+                                            </td>
+                                            <td>
+                                                {% for category_map in question.categoryquestionmap_set.all %}
+                                                    {{ category_map.category.name }}<br>
+                                                {% endfor %}
+                                            </td>
+                                            <td>{{ question.answer }}</td>
+                                            <td>{{ question.created_by.username }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mapbuttonatbottom">
+                            <button type="submit" id="map-btn">Map</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 
