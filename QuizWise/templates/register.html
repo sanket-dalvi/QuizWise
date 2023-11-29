@@ -59,7 +59,7 @@
             width: 80%;
             max-width: 600px;
             margin-left: 20px;
-            height: 115vh;
+            height: 150%;
         }
 
         .content-container form {
@@ -126,7 +126,11 @@
             border: 3px solid white; 
             border-radius: 10px; 
             padding: 8px; 
-            margin-top: -30px;
+            margin-top: -60px;
+        }
+
+        form{
+            height: 100%;
         }
 
     </style>
@@ -162,5 +166,32 @@
         {% include 'footer.html'%}
     </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Other code...
 
+        function hideMessage() {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                alert.style.display = 'none';
+            });
+        }
+
+        function showMessageForDuration(messageElement) {
+            messageElement.style.display = 'block';
+            setTimeout(function () {
+                messageElement.style.display = 'none';
+            }, 3000); // Hide the message after 5 seconds
+        }
+
+        // Initial options load
+        document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
+            addDeleteButton(label);
+        });
+
+        // Show messages for a duration when the page loads
+        document.querySelectorAll('.alert').forEach(function (messageElement) {
+            showMessageForDuration(messageElement);
+        });
+    });
+</script>
 </html>

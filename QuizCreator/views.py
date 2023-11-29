@@ -14,6 +14,19 @@ from django.http import JsonResponse
 def home(request):
     return render(request, "QuizCreator/home.html")
 
+@examiner_required
+def profile(request):
+    return render(request, "QuizCreator/profile.html")
+
+
+@examiner_required
+def scores(request):
+    return render(request, "QuizCreator/scores.html")
+
+
+@examiner_required
+def quiz_history(request):
+    return render(request, "QuizCreator/quiz_history.html")
 
 @examiner_required
 def create_question(request):
@@ -275,15 +288,15 @@ def create_quiz(request):
 
 @examiner_required
 def edit_quiz(request):
+    quizzes = Quiz.objects.all()
     if request.method == 'POST':
         selected_quiz_id = request.POST.get('select-quiz')
 
         # Retrieve selected quiz details
         selected_quiz = Quiz.objects.get(id=selected_quiz_id)
 
-        return render(request, 'QuizCreator/edit_quiz.html', {'selected_quiz': selected_quiz})
+        return render(request, 'QuizCreator/edit_quiz.html', {'selected_quiz': selected_quiz, 'quizzes': quizzes})
 
-    quizzes = Quiz.objects.all()
     return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
 
 
