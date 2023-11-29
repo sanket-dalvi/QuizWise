@@ -88,6 +88,25 @@
             font-size: 18px;
             margin-bottom: 20px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 300px;
+            padding: 20px;
+            margin: 100px auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -107,7 +126,7 @@
         <p>Total Questions: {{ quiz.total_questions }}</p>
     </div>
     <div class="timer" id="timer"></div>
-    <form method="post">
+    <form method="post" id="quiz_form">
         {% csrf_token %}
         {% for question in quiz_questions %}
             <div class="question">
@@ -135,6 +154,21 @@
         {% endfor %}
         <input type="submit" value="Submit Quiz">
     </form>
+    
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <label for="unlockCode">Enter unlock code:</label>
+            <input type="text" id="unlockCode">
+            <button onclick="checkUnlockCode()">Unlock</button>
+        </div>
+    </div>
+
+    <div id="warningModal" class="modal">
+        <div class="modal-content">
+            <h1>Switching tabs is not allowed! This is your first and last warning, otherwise quiz will be locked.</h1><br>
+            <button onclick="unLockQuiz()">Unlock</button>
+        </div>
+    </div>
 
     <script>
         const durationInMinutes = {{ quiz.duration }}; // Duration in minutes
@@ -164,14 +198,62 @@
             return confirmationMessage;
         });
         
-        window.onblur = function() {
-            clearInterval(timer);
-            alert("Switching tabs is not allowed!");
-        };
         
-        window.onfocus = function() {
-            startTimer(durationInMinutes);
+        let warningCount = 0;
+
+        window.onblur = function() {
+            warningCount++;
+            if (warningCount === 1) {
+                blurBackground();
+                showWarningModal()
+            } else if (warningCount === 2) {
+                blurBackground();
+                showUnlockModal();
+            }
         };
+
+        function blurBackground() {
+            form = document.getElementById('quiz_form')
+            form.style.filter = "blur(5px)";
+        }
+
+        function unblurBackground() {
+            form = document.getElementById('quiz_form')
+            form.style.filter = "none";
+        }
+
+        function unLockQuiz() {
+            unblurBackground()
+            document.getElementById('warningModal').style.display = 'none';
+        }
+
+
+        function showUnlockModal() {
+            document.getElementById('customModal').style.display = 'block';
+        }
+
+        function showWarningModal() {
+            document.getElementById('warningModal').style.display = 'block';
+        }
+
+        function checkUnlockCode() {
+            const code = document.getElementById('unlockCode').value;
+            if (code) {
+                if(code == "UnLockMe"){
+                    document.getElementById('customModal').style.display = 'none';
+                    unblurBackground() 
+                    alert('Quiz unlocked!');
+                    warningCount = 0
+                    document.getElementById('unlockCode').value = ''
+                }else{
+                    alert('Invalid Code');
+                }
+                
+            } else {
+                alert('Please enter the unlock code.');
+            }
+        }
+
     </script>
 </body>
 </html>
