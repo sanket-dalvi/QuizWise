@@ -301,8 +301,11 @@
                         <label for="select-quiz">Select Quiz:</label>
                         <select id="select-quiz" name="select-quiz">
                             <!-- Populate dropdown with quiz options -->
+                            {% if not selected_quiz %}
+                            <option disabled selected>-- Please Select a Quiz --</option>
+                            {% endif %}
                             {% for quiz in quizzes %}
-                                <option value="{{ quiz.id }}">{{ quiz.name }}</option>
+                                <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %} selected {% endif %}>{{ quiz.name }}</option>
                             {% endfor %}
                         </select>
                         <input type="submit" value="Select">

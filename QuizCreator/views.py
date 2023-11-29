@@ -277,16 +277,18 @@ def create_quiz(request):
 
 @examiner_required
 def edit_quiz(request):
+
+    quizzes = Quiz.objects.all()
+    selected_quiz = None
+
     if request.method == 'POST':
         selected_quiz_id = request.POST.get('select-quiz')
+        selected_quiz_id = int(selected_quiz_id)
 
         # Retrieve selected quiz details
         selected_quiz = Quiz.objects.get(id=selected_quiz_id)
 
-        return render(request, 'QuizCreator/edit_quiz.html', {'selected_quiz': selected_quiz})
-
-    quizzes = Quiz.objects.all()
-    return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
+    return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes, 'selected_quiz': selected_quiz})
 
 
 @examiner_required
@@ -303,7 +305,7 @@ def update_quiz(request):
         selected_quiz.save()
 
         messages.success(request, 'Quiz details updated successfully.')
-        return redirect('your_redirect_url')  # Redirect to the desired URL after updating
+        return redirect('edit_quiz')  # Redirect to the desired URL after updating
 
     quizzes = Quiz.objects.all()
     return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
