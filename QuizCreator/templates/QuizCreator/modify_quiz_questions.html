@@ -363,12 +363,12 @@
                             <div class="quiz-select">
                                 <label style="margin-top: -15px;" for="select-quiz">Select Quiz:</label>
                                 <select style="margin-top: -5px;" id="select-quiz" name="select-quiz" required>
-                                    {% if not selected_quiz_id %}
+                                    {% if not selected_quiz.id %}
                                     <option value="" disabled selected>--- Please select a Quiz ---</option>
                                     {% endif %}
                                     <!-- Populate dropdown with quiz options -->
                                     {% for quiz in quizzes %}
-                                        <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
+                                        <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
                                     {% endfor %}
                                 </select>
                                 <button style="margin-top: -25px;" type="submit">Select</button>
@@ -379,19 +379,24 @@
                             <br>
                             {% if total_questions_added > 0 %}
                                 <label name="total_questions_added" style="margin-top: -15px;">Total Questions in Quiz: {{ total_questions_added }}</label>
+                                {% if selected_quiz.total_questions == total_questions_added %}
+                                    <button type="button"
+                                {% else %}
+                                    <span>Add {{ selected_quiz.id - total_questions_added }} more questions to make quiz visible to examinee or edit the quiz to update total questions. </span>
+                                {% endif %}
                             {% endif %}
                         </form>
                     </div>
                        
                     <br>     
                     <br>
-                    {% if selected_quiz_id %}   
+                    {% if selected_quiz %}   
                         <div name = "questions" style="display: block;">
                             <div class="filters">
                                 <form method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="form_type" value="question_search_by_category">
-                                    <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
+                                    <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz.id }}">
                                     <div class="category-filter">
                                         <label for="category-select">Select Category:</label>
                                         <select id="category-select" name="category-select" multiple>
@@ -413,7 +418,7 @@
                             <form method = "post">
                                 {% csrf_token %}
                                 <input type="hidden" name="form_type" value="add_quiz_questions">
-                                <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
+                                <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz.id }}">
                                 <div class="questions-table">
                                     <table id="questions-table">
                                         <thead>
@@ -467,7 +472,7 @@
                     {% endif %}
                     <form method="post" action="{% url 'delete_quiz_questions' %}">
                         {% csrf_token %}
-                        <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz_id }}">
+                        <input type="hidden" name="selected_quiz_id" value="{{ selected_quiz.id }}">
                         <div class="questions-table" name = "quiz_questions" style="display: none;">
                             <button id="toggle-quiz-questions" type="button" >Go Back</button>
                             <table id="questions-table">

@@ -45,6 +45,7 @@ def take_quiz(request, quiz_id):
     return render(request, "QuizParticipant/take_quiz.html")
 @examinee_required
 def profile(request):
+    
     return render(request, "QuizParticipant/profile.html")
 
 
