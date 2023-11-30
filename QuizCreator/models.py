@@ -48,7 +48,12 @@ class Quiz(models.Model):
     description = models.TextField()
     duration = models.IntegerField()
     total_questions = models.IntegerField()
-    visible = models.BooleanField(default=True)
+    passcode =  models.CharField(max_length=15, default="UnLockMe")
+    visible = models.BooleanField(default=False)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_quiz')
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='modified_quiz')
+    modified_at = models.DateTimeField(auto_now=True)
  
 class QuizQuestion(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)

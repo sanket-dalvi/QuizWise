@@ -208,7 +208,7 @@ def edit_questions(request):
                 Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
             ).all()
 
-        return render(request, 'QuizCreator/questions.html', {'questions': filtered_questions,  'categories': categories, 'selected_categories': selected_categories})
+        return render(request, 'QuizCreator/edit_questions.html', {'questions': filtered_questions,  'categories': categories, 'selected_categories': selected_categories})
     
     questions = Question.objects.select_related('type').prefetch_related(
         Prefetch('options', queryset=QuestionOption.objects.all()),
@@ -262,7 +262,7 @@ def create_quiz(request):
         quiz_description = request.POST.get('quiz-description')
         quiz_duration = request.POST.get('quiz-duration')
         quiz_total_questions = request.POST.get('quiz-total-questions')
-        quiz_visible = request.POST.get('quiz-visible') == 'on'
+        quiz_passcode = request.POST.get('passcode')
 
         # Creating a new Quiz instance and saving it to the database
         new_quiz = Quiz(
@@ -270,7 +270,7 @@ def create_quiz(request):
             description=quiz_description,
             duration=quiz_duration,
             total_questions=quiz_total_questions,
-            visible=quiz_visible
+            passcode=quiz_passcode
         )
         new_quiz.save()
         messages.success(request, 'Quiz created successfully!')

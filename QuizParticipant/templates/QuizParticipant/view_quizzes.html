@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .headerbuttons{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-content: space-evenly; 
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .card-content {
+            padding: 20px;
+            height: 350px; 
+            overflow-y: auto; 
+            background: #EAEAEA
+        }
+
+        .card-footer {
+            background-color: #663399;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .quiz-details {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+      
+    </style>
+</head>
+
+<body>
+    <div>
+        <!-- the header -->
+        {% include 'header.html' %}
+    </div>
+
+    <!-- Navigation bar -->
+    <div>
+        {% include 'QuizParticipant/navbar.html' %}
+    </div>
+
+    <div class="main-content">
+        <h2>Available Quizzes</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Quiz Name</th>
+                    <th>Description</th>
+                    <th>Total Questions</th>
+                    <th>Duration</th>
+                    <th>Created By</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.name }}</td>
+                        <td>{{ quiz.description }}</td>
+                        <td>{{ quiz.total_questions }}</td>
+                        <td>{{ quiz.duration }} mins</td>
+                        <td>{{ quiz.created_by.username }}</td>
+                        <td>
+                            <form id="quizForm{{ quiz.id }}" action="{% url 'take_quiz' quiz.id %}" method="post" target="_blank">
+                                {% csrf_token %}
+                                <input type="button" value="Take Quiz" onclick="startQuiz({{ quiz.id }})">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+
+    <div class="footer-content">
+        {% include 'footer.html' %}
+    </div>
+</body>
+<script>
+    function startQuiz(quizId) {
+        const confirmation = confirm("You are about to start a quiz. Once started, there's no way back. Are you sure?");
+        if (confirmation) {
+            document.getElementById(`quizForm${quizId}`).submit();
+        }
+    }
+</script>
+</html>

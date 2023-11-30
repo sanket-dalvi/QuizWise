@@ -158,7 +158,7 @@
     <div id="customModal" class="modal">
         <div class="modal-content">
             <label for="unlockCode">Enter unlock code:</label>
-            <input type="text" id="unlockCode">
+            <input type="password" id="unlockCode">
             <button onclick="checkUnlockCode()">Unlock</button>
         </div>
     </div>
@@ -239,7 +239,7 @@
         function checkUnlockCode() {
             const code = document.getElementById('unlockCode').value;
             if (code) {
-                if(code == "UnLockMe"){
+                if(code == "{{ quiz.passcode }}"){
                     document.getElementById('customModal').style.display = 'none';
                     unblurBackground() 
                     alert('Quiz unlocked!');

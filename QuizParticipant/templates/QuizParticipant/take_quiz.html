@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <style>
+      body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .question {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .options {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .options label {
+            font-size: 16px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            font-size: 16px;
+        }
+        hr {
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .quiz-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .timer {
+            text-align: right;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 300px;
+            padding: 20px;
+            margin: 100px auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-content">
+        <div class="quiz-details">
+            <h2>{{ quiz.name }}</h2>
+            <p>{{ quiz.description }}</p>
+            <p>Total Questions: {{ quiz.total_questions }}</p>
+        </div>
+        <div class="timer" id="timer"></div>
+        <form method="post" id="quiz_form">
+            {% csrf_token %}
+            {% for question in quiz_questions %}
+                <div class="question">
+                    <h3>Q.{{forloop.counter}}) {{ question.question }}</h3>
+                    {% if question.type.type_code == 'RB' %}
+                        <div class="options">
+                            {% for option in question.options.all %}
+                                <input type="radio" id="option_{{ option.id }}" name="question_{{ question.id }}" value="{{ option.option }}">
+                                <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                            {% endfor %}
+                        </div>
+                    {% elif question.type.type_code == 'CB' %}
+                        <div class="options">
+                            {% for option in question.options.all %}
+                                <input type="checkbox" id="option_{{ option.id }}" name="question_{{ question.id }}[]" value="{{ option.option }}">
+                                <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                            {% endfor %}
+                        </div>
+                    {% elif question.type.type_code == 'FT' %}
+                        <textarea id="answer_{{ question.id }}" name="question_{{ question.id }}" rows="4" cols="50"></textarea>
+                    {% endif %}
+                    
+                    <hr>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Submit Quiz">
+        </form>
+        
+        <div id="customModal" class="modal">
+            <div class="modal-content">
+                <label for="unlockCode">Enter unlock code:</label>
+                <input type="password" id="unlockCode">
+                <button onclick="checkUnlockCode()">Unlock</button>
+            </div>
+        </div>
+    
+        <div id="warningModal" class="modal">
+            <div class="modal-content">
+                <h1>Switching tabs is not allowed! This is your first and last warning, otherwise quiz will be locked.</h1><br>
+                <button onclick="unLockQuiz()">Unlock</button>
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+<script>
+    const durationInMinutes = {{ quiz.duration }}; // Duration in minutes
+    const timerDisplay = document.getElementById('timer');
+    let timer;
+
+    function startTimer(duration) {
+        let timerSeconds = duration * 60;
+        timer = setInterval(() => {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            timerDisplay.textContent = `Time remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (--timerSeconds < 0) {
+                clearInterval(timer);
+                timerDisplay.textContent = 'Time expired!';
+                // Additional logic when time is up
+            }
+        }, 1000);
+    }
+
+    startTimer(durationInMinutes);
+
+    window.addEventListener('beforeunload', function (e) {
+        const confirmationMessage = 'Are you sure you want to leave? Your progress may be lost.';
+        e.returnValue = confirmationMessage;
+        return confirmationMessage;
+    });
+    
+    
+    let warningCount = 0;
+
+    window.onblur = function() {
+        warningCount++;
+        if (warningCount === 1) {
+            blurBackground();
+            showWarningModal()
+        } else if (warningCount === 2) {
+            blurBackground();
+            showUnlockModal();
+        }
+    };
+
+    function blurBackground() {
+        form = document.getElementById('quiz_form')
+        form.style.filter = "blur(5px)";
+    }
+
+    function unblurBackground() {
+        form = document.getElementById('quiz_form')
+        form.style.filter = "none";
+    }
+
+    function unLockQuiz() {
+        unblurBackground()
+        document.getElementById('warningModal').style.display = 'none';
+    }
+
+
+    function showUnlockModal() {
+        document.getElementById('customModal').style.display = 'block';
+    }
+
+    function showWarningModal() {
+        document.getElementById('warningModal').style.display = 'block';
+    }
+
+    function checkUnlockCode() {
+        const code = document.getElementById('unlockCode').value;
+        if (code) {
+            if(code == "{{ quiz.passcode }}"){
+                document.getElementById('customModal').style.display = 'none';
+                unblurBackground() 
+                alert('Quiz unlocked!');
+                warningCount = 0
+                document.getElementById('unlockCode').value = ''
+            }else{
+                alert('Invalid Code');
+            }
+            
+        } else {
+            alert('Please enter the unlock code.');
+        }
+    }
+
+</script> 
+</html>
