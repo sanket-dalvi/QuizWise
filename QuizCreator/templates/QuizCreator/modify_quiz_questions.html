@@ -377,15 +377,20 @@
                                 {% endif %}
                             </div>
                             <br>
-                            {% if total_questions_added > 0 %}
-                                <label name="total_questions_added" style="margin-top: -15px;">Total Questions in Quiz: {{ total_questions_added }}</label>
-                                {% if selected_quiz.total_questions == total_questions_added %}
-                                    <button type="button"
-                                {% else %}
-                                    <span>Add {{ selected_quiz.id - total_questions_added }} more questions to make quiz visible to examinee or edit the quiz to update total questions. </span>
-                                {% endif %}
-                            {% endif %}
                         </form>
+                        {% if total_questions_added > 0 %}
+                            <label name="total_questions_added" style="margin-top: -15px;">Total Questions in Quiz: {{ total_questions_added }}</label>
+                            {% if remaining_questions == 0 %}
+                                <form method="post" action="{% url 'make_quiz_visible' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
+                                <button type="submit">Make Quiz Visible To Examinees</button>
+                                </form>
+                            {% else %}
+                                <span> Add {{ remaining_questions }} more questions to make quiz visible to examinee or edit the quiz to update total questions. </span>
+                            {% endif %}
+                        {% endif %}
+                        
                     </div>
                        
                     <br>     

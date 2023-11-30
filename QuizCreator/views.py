@@ -326,6 +326,7 @@ def add_quiz_questions(request):
     total_questions_added = 0
     quiz_questions = []
     quizzes = Quiz.objects.all()
+    remaining_questions = None
     selected_quiz = None
     current_user = request.user
     categories = Category.objects.filter(
@@ -360,6 +361,7 @@ def add_quiz_questions(request):
                 messages.success(request, "Questions Added Successfully")
                 quiz_question_objects = QuizQuestion.objects.filter(quiz = quiz)
                 total_questions_added = quiz_question_objects.count()
+                remaining_questions = quiz.total_questions - total_questions_added
                 quiz_questions = Question.objects.select_related('type').prefetch_related(
                     Prefetch('options', queryset=QuestionOption.objects.all()),
                     Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
@@ -375,6 +377,7 @@ def add_quiz_questions(request):
                 quiz = get_object_or_404(Quiz, pk=quiz_id)
                 quiz_question_objects = QuizQuestion.objects.filter(quiz = quiz)
                 total_questions_added = quiz_question_objects.count()
+                remaining_questions = quiz.total_questions - total_questions_added
                 quiz_questions = Question.objects.select_related('type').prefetch_related(
                     Prefetch('options', queryset=QuestionOption.objects.all()),
                     Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
@@ -403,6 +406,7 @@ def add_quiz_questions(request):
                 quiz = get_object_or_404(Quiz, pk=quiz_id)
                 quiz_question_objects = QuizQuestion.objects.filter(quiz = quiz)
                 total_questions_added = quiz_question_objects.count()
+                remaining_questions = quiz.total_questions - total_questions_added
                 quiz_questions = Question.objects.select_related('type').prefetch_related(
                     Prefetch('options', queryset=QuestionOption.objects.all()),
                     Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
@@ -415,9 +419,21 @@ def add_quiz_questions(request):
     for question in quiz_questions:
         question_id_list.append(question.id)
 
-    return render(request, 'QuizCreator/modify_quiz_questions.html', {'quizzes': quizzes, 'categories' : categories, 'questions' : questions, 'quiz_questions': quiz_questions, 'total_questions_added' : total_questions_added, 'selected_quiz' : selected_quiz, 'question_id_list' : question_id_list})
+    return render(request, 'QuizCreator/modify_quiz_questions.html', {'quizzes': quizzes, 'categories' : categories, 'questions' : questions, 'quiz_questions': quiz_questions, 'total_questions_added' : total_questions_added, 'selected_quiz' : selected_quiz, 'question_id_list' : question_id_list, 'remaining_questions' : remaining_questions})
 
+@examiner_required
+def make_quiz_visible(request):
+    if request.method == "POST":
+        quiz_id = request.POST.get('quiz_id')
+        try:
+            quiz = get_object_or_404(Quiz, pk=quiz_id)
+            quiz.visible = True
+            quiz.save()
+            messages.success(request, "Quiz Has Been Posted Successfully")
+        except Quiz.DoesNotExist:
+            messages.error(request, "Error: Could Not Made Quiz Available. Try Again")
 
+    return redirect('add_quiz_questions')
 
 @examiner_required
 def delete_quiz_questions(request):
