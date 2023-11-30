@@ -122,7 +122,7 @@
             <p>Total Questions: {{ quiz.total_questions }}</p>
         </div>
         <div class="timer" id="timer"></div>
-        <form method="post" id="quiz_form">
+        <form method="post" id="quiz_form" action="{% url 'submit_quiz' quiz.id %}">
             {% csrf_token %}
             {% for question in quiz_questions %}
                 <div class="question">
@@ -130,19 +130,19 @@
                     {% if question.type.type_code == 'RB' %}
                         <div class="options">
                             {% for option in question.options.all %}
-                                <input type="radio" id="option_{{ option.id }}" name="question_{{ question.id }}" value="{{ option.option }}">
+                                <input type="radio" id="option_{{ option.id }}" name="{{ question.id }}" value="{{ option.option }}">
                                 <label for="option_{{ option.id }}">{{ option.option }}</label><br>
                             {% endfor %}
                         </div>
                     {% elif question.type.type_code == 'CB' %}
                         <div class="options">
                             {% for option in question.options.all %}
-                                <input type="checkbox" id="option_{{ option.id }}" name="question_{{ question.id }}[]" value="{{ option.option }}">
+                                <input type="checkbox" id="option_{{ option.id }}" name="{{ question.id }}[]" value="{{ option.option }}">
                                 <label for="option_{{ option.id }}">{{ option.option }}</label><br>
                             {% endfor %}
                         </div>
                     {% elif question.type.type_code == 'FT' %}
-                        <textarea id="answer_{{ question.id }}" name="question_{{ question.id }}" rows="4" cols="50"></textarea>
+                        <textarea id="answer_{{ question.id }}" name="{{ question.id }}" rows="4" cols="50"></textarea>
                     {% endif %}
                     
                     <hr>
@@ -170,6 +170,21 @@
 
 </body>
 <script>
+    function submitForm() {
+        document.getElementById('quiz_form').submit();
+    }
+
+    function handleFormSubmission() {
+        clearInterval(timer);
+        submitForm();
+    }
+
+    // Logic to handle form submission on time expiration or button click
+    document.getElementById('quiz_form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        handleFormSubmission();
+    });
+
     const durationInMinutes = {{ quiz.duration }}; // Duration in minutes
     const timerDisplay = document.getElementById('timer');
     let timer;
@@ -184,6 +199,7 @@
             if (--timerSeconds < 0) {
                 clearInterval(timer);
                 timerDisplay.textContent = 'Time expired!';
+                handleFormSubmission()
                 
             }
         }, 1000);
