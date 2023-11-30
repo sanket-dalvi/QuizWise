@@ -217,6 +217,20 @@
     </div>
 
     <script>
+        function submitForm() {
+            window.close()
+        }
+
+        function handleFormSubmission() {
+            clearInterval(timer);
+            submitForm();
+        }
+
+        document.getElementById('quiz_form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            handleFormSubmission();
+        });
+
         const durationInMinutes = {{ quiz.duration }}; // Duration in minutes
         const timerDisplay = document.getElementById('timer');
         let timer;
@@ -237,12 +251,6 @@
         }
 
         startTimer(durationInMinutes);
-
-        window.addEventListener('beforeunload', function (e) {
-            const confirmationMessage = 'Are you sure you want to leave? Your progress may be lost.';
-            e.returnValue = confirmationMessage;
-            return confirmationMessage;
-        });
         
         
         let warningCount = 0;

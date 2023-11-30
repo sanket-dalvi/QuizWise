@@ -2,17 +2,104 @@ from django.shortcuts import render, redirect, get_object_or_404
 from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
 from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap, Quiz, QuizQuestion
+from QuizParticipant.models import UserQuizScore
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 import json
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Sum, F, FloatField
 from django.http import JsonResponse
+import statistics
+import matplotlib.pyplot as plt
+import base64
+from io import BytesIO
+import seaborn as sns
+import pandas as pd
+import random
 
 
 
 @examiner_required
 def home(request):
-    return render(request, "QuizCreator/home.html")
+    # Fetch the most recent quiz created by the logged-in user
+    context = get_quiz_metrics(request)
+
+    return render(request, "QuizCreator/home.html", context)
+
+def get_quiz_metrics(request, quiz=None):
+    current_user = request.user
+    
+    recent_quiz_score = UserQuizScore.objects.filter(
+        quiz__created_by=current_user
+    ).order_by('-timestamp').first()
+
+    # If there is a recent quiz score, fetch associated quiz details
+    if recent_quiz_score:
+        recent_quiz = quiz
+        if not quiz:
+            recent_quiz = recent_quiz_score.quiz
+
+        # Grouping scores by user and calculating total scores for each user
+        user_total_scores = UserQuizScore.objects.filter(quiz=recent_quiz).values('user').annotate(
+            total_score=Sum('score')
+        )
+
+        # Extracting total scores for mean, median, and mode calculations
+        total_scores = [user['total_score'] for user in user_total_scores]
+
+        # Calculating mean, median, and mode
+        mean_score = statistics.mean(total_scores)
+        median_score = statistics.median(total_scores)
+        mode_score = statistics.mode(total_scores)
+
+        # Calculating minimum and maximum total scores
+        min_score = min(user_total_scores, key=lambda x: x['total_score'])['total_score']
+        max_score = max(user_total_scores, key=lambda x: x['total_score'])['total_score']
+
+        recent_quiz_metrics = {
+            'quiz_name': recent_quiz.name,
+            'duration': recent_quiz.duration,
+            'total_questions': recent_quiz.total_questions,
+            'min': min_score,
+            'max': max_score,
+            'mean': mean_score,
+            'median': median_score,
+            'mode': mode_score
+        }
+        # Creating a pandas DataFrame for visualization
+        data = {
+            'Metrics': ['Min', 'Max', 'Mode', 'Median', 'Mean'],
+            'Scores': [min_score, max_score, mode_score, median_score, mean_score]
+        }
+        df = pd.DataFrame(data)
+
+        # Generating bar plot
+        plt.figure(figsize=(4, 2))
+        sns.barplot(x='Metrics', y='Scores', data=df, palette='viridis')
+        plt.title('Quiz Metrics')
+        plt.xlabel('Metrics')
+        plt.ylabel('Scores')
+        plt.tight_layout()
+
+        # Saving plot to BytesIO object
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        # Encoding the plot in base64 format to render in HTML
+        image_base64 = base64.b64encode(image_png).decode('utf-8')
+        img_tag = f'<img src="data:image/png;base64,{image_base64} alt="Quiz Metrics" style="width: 100%;"">'
+    else:
+        recent_quiz_metrics = None
+        img_tag = None
+
+    
+
+    context = {
+        'recent_quiz_metrics': recent_quiz_metrics,
+        'img_tag': img_tag  # Pass the img_tag to the context for rendering in HTML
+    }
+    return context
 
 @examiner_required
 def profile(request):
@@ -21,7 +108,60 @@ def profile(request):
 
 @examiner_required
 def scores(request):
-    return render(request, "QuizCreator/scores.html")
+
+    quizzes = Quiz.objects.all()
+
+    if request.method == 'POST':
+        selected_quiz_id = request.POST.get('select-quiz')
+        selected_quiz = Quiz.objects.filter(id=selected_quiz_id).first()
+        
+        # Fetch the user's score details for the selected quiz
+        user_quiz_scores = UserQuizScore.objects.filter(quiz=selected_quiz)
+        
+        # Fetch distinct users who attempted the quiz
+        distinct_users = user_quiz_scores.values_list('user', flat=True).distinct()
+
+        quiz_data = []
+        for user_id in distinct_users:
+            user_scores = user_quiz_scores.filter(user_id=user_id)
+            user_total_score = user_scores.aggregate(total_score=Sum('score'))['total_score'] or 0
+
+            total_questions = QuizQuestion.objects.filter(quiz=selected_quiz).count()
+
+            percentage = (
+                user_total_score * 100.0 / (total_questions * 1.0)
+            ) if total_questions > 0 else 0
+
+            user_data = {
+                'username': user_scores.first().user.username,
+                'email': user_scores.first().user.email,
+                'total_questions': total_questions,
+                'score': user_total_score,
+                'percentage': percentage
+            }
+            quiz_data.append(user_data)
+
+        quiz_data.sort(key=lambda data: data['score'], reverse=True)
+        context = {
+            'total_submissions' : len(quiz_data),
+            'quiz_data': quiz_data,
+            'selected_quiz': selected_quiz,
+            'quizzes' : quizzes,
+        }
+        if len(quiz_data) > 0:
+            metric_context = get_quiz_metrics(request, selected_quiz)
+            context.update(metric_context)
+
+        return render(request, "QuizCreator/scores.html", context)
+
+
+    context = {
+        'quiz_data': [],
+        'selected_quiz': None,
+        'quizzes' : quizzes,
+    }
+
+    return render(request, "QuizCreator/scores.html", context)
 
 
 @examiner_required
@@ -476,9 +616,20 @@ def preview_quiz(request):
                 Prefetch('options', queryset=QuestionOption.objects.all()),
                 Prefetch('categoryquestionmap_set', queryset=CategoryQuestionMap.objects.select_related('category'))
             ).filter(quizquestion__in=quiz_question_objects).all()
+
+            # Shuffle questions
+            shuffled_questions = list(quiz_questions)
+            random.shuffle(shuffled_questions)
+
+            # Shuffle options for each question
+            for question in shuffled_questions:
+                question_options = list(question.options.all())
+                random.shuffle(question_options)
+                question.options.set(question_options)
+            shuffled_questions = shuffled_questions[:quiz.total_questions]
             
         except Quiz.DoesNotExist:
             messages.error(request, "ERROR : Invalid Quiz Id")
-        return render(request, "QuizCreator/show_preview.html", {'quiz' : quiz,'quiz_questions' : quiz_questions})
+        return render(request, "QuizCreator/show_preview.html", {'quiz' : quiz,'quiz_questions' : shuffled_questions})
         
     return render(request, "QuizCreator/preview_quiz.html", {'quizzes' : quizzes})
