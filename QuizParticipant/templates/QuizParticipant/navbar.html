@@ -65,6 +65,7 @@
 </style>
 <nav class="navbar">
     <ul>
+        <li><a href="{% url 'examinee_home' %}">Home</a></li>
         <li class="dropdown">
             <a href="#" class="dropbtn">Quiz Menu</a>
             <div class="dropdown-content">
@@ -75,13 +76,6 @@
             <a href="#" class="dropbtn">Evaluation</a>
             <div class="dropdown-content">
                 <a href="#">View Scores</a>
-            </div>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropbtn">Manage Examinee</a>
-            <div class="dropdown-content">
-                <a href="#">Create Group</a>
-                <a href="#">Add/Remove Examinee from Quiz</a>
             </div>
         </li>
         <li><a href="{% url 'logout' %}">Logout</a></li>

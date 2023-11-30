@@ -94,9 +94,23 @@
 
     <div class="card-container">
         <div class="card">
-          <div class="card-header">Card 1 Header</div>
-          <div class="card-content">Card 1 Content</div>
-          <div class="card-footer">Card 1 Footer</div>
+            <div class="card-header">Examinee Profile</div>
+            <div class="card-content">
+              <p><strong>Name:</strong> John Doe</p>
+              <p><strong>Email:</strong> john.doe@example.com</p>
+              <p><strong>Department:</strong> Computer Science</p>
+                <p><strong>Courses:</strong></p>
+                <ul>
+                    <li>INFO 501</li>
+                    <li>INFO 537</li>
+                    <li>INFO 550</li>
+                </ul>
+            </div>
+            <div class="card-footer"> 
+                <a href="{% url 'profile' %}">
+                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
+                </a>
+            </div>
         </div>
     
         <div class="card">
@@ -115,7 +129,10 @@
             </ul>
             </div>
           </div>
-          <div class="card-footer">Card 2 Footer</div>
+          <div class="card-footer">
+            <a href="{% url 'scores' %}">
+            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;"></a>
+          </div>        
         </div>
     
         <div class="card">
@@ -146,7 +163,11 @@
             </ul>
             </div>
           </div>
-          <div class="card-footer">Card 3 Footer</div>
+          <div class="card-footer">
+            <a href="{% url 'quiz_history' %}">
+            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
+            </a>
+          </div>
         </div>
 
         <div class="card">
@@ -179,8 +200,12 @@
                     <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> History Quiz</a></p>
                 </div>
             </div>
-            <div class="card-footer">Card 4 Footer</div>
-          </div>
+            <div class="card-footer">
+                <a href="{% url 'quiz_history' %}">
+                <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
+                </a>
+              </div>          
+            </div>
     </div>
 
     <div class="footer-content">

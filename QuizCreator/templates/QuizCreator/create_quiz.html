@@ -47,6 +47,15 @@
             height: 100px;
         }
 
+        input {
+            width: 96%; 
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
         .form-container {
             margin: 50px auto;
             width: 60%;
@@ -244,6 +253,9 @@
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
+                <br>
+                <h1>Create a new Quiz</h1>
+
                 <div class="message">
                     {% if messages %}
                         {% for message in messages %}
@@ -260,7 +272,6 @@
                         {% csrf_token %}
                         <div class="container">
                             <!-- Quiz Information Form -->
-                            <h2>Create a new Quiz</h2>
                             <label for="quiz-name">Quiz Name:</label>
                             <input type="text" id="quiz-name" name="quiz-name" required><br><br>
 
