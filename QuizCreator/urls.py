@@ -18,5 +18,6 @@ urlpatterns = [
     path('quiz/modify_questions', views.add_quiz_questions, name="add_quiz_questions"),
     path('quiz/delete_questions', views.delete_quiz_questions, name="delete_quiz_questions"),
     path('questions/category/edit', views.edit_questions, name="edit_questions"),
+    path('quiz/make_quiz_visible', views.make_quiz_visible, name="make_quiz_visible"),
     
 ]
