@@ -369,6 +369,7 @@ def add_quiz_questions(request):
                 
             except Quiz.DoesNotExist:
                 messages.error(request, "ERROR : Invalid Quiz Id")
+            selected_quiz = get_object_or_404(Quiz, pk=quiz_id)
         elif form_type == "select_quiz":
             quiz_id = request.POST.get("select-quiz")
             selected_quiz_id = quiz_id
@@ -418,7 +419,9 @@ def add_quiz_questions(request):
     question_id_list = []
     for question in quiz_questions:
         question_id_list.append(question.id)
-
+    if remaining_questions:
+        if remaining_questions < 0:
+            remaining_questions = 0
     return render(request, 'QuizCreator/modify_quiz_questions.html', {'quizzes': quizzes, 'categories' : categories, 'questions' : questions, 'quiz_questions': quiz_questions, 'total_questions_added' : total_questions_added, 'selected_quiz' : selected_quiz, 'question_id_list' : question_id_list, 'remaining_questions' : remaining_questions})
 
 @examiner_required
