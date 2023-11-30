@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from QuizWise.auth_decorator import examinee_required
 from QuizCreator.models import Quiz, QuizQuestion, QuestionOption, Question, CategoryQuestionMap
 from .models import Submission, UserQuizStatus, UserQuizScore
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Sum
 import random
 from django.contrib import messages
 from difflib import SequenceMatcher
@@ -72,7 +72,44 @@ def profile(request):
 
 @examinee_required
 def scores(request):
-    return render(request, "QuizParticipant/scores.html")
+    user = request.user
+    
+    # Retrieve quizzes attempted by the user
+    attempted_quizzes = UserQuizScore.objects.filter(user=user).values_list('quiz', flat=True).distinct()
+    
+    # Fetch quiz objects for the attempted quizzes
+    quizzes = Quiz.objects.filter(id__in=attempted_quizzes)
+    
+    # Calculate total score for each quiz by the user and its percentage
+    quiz_score_dict = {}
+    for quiz in quizzes:
+        total_score = UserQuizScore.objects.filter(user=user, quiz=quiz).aggregate(total_score=Sum('score'))
+        quiz_score = total_score['total_score'] if total_score['total_score'] else 0
+        
+        # Calculate percentage
+        total_questions = quiz.total_questions
+        percentage = (quiz_score / (total_questions * 1.0)) * 100 if total_questions != 0 else 0
+        
+        quiz_score_dict[quiz.id] = {
+            'score': quiz_score,
+            'percentage': round(percentage, 2)  # Rounding off to two decimal places
+        }
+
+    # Prepare a list of dictionaries to include the quiz, its respective score, and percentage
+    quiz_data = []
+    for quiz in quizzes:
+        score_data = quiz_score_dict.get(quiz.id, {'score': 0, 'percentage': 0})
+        quiz_data.append({
+            'quiz': quiz,
+            'score': score_data['score'],
+            'percentage': score_data['percentage']
+        })
+
+    context = {
+        'quiz_data': quiz_data,
+    }
+
+    return render(request, "QuizParticipant/scores.html", context)
 
 
 @examinee_required

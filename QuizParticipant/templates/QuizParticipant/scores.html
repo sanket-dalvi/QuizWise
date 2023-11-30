@@ -160,18 +160,20 @@
                         <th>Total Questions</th>
                         <th>Duration</th>
                         <th>Created By</th>
-                        <th>Quiz Score</th> <!-- Add a new column for quiz scores -->
+                        <th>Quiz Score</th>
+                        <th>Percentage</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for quiz in quizzes %}
+                    {% for data in quiz_data %}
                         <tr>
-                            <td>{{ quiz.name }}</td>
-                            <td>{{ quiz.description }}</td>
-                            <td>{{ quiz.total_questions }}</td>
-                            <td>{{ quiz.duration }} mins</td>
-                            <td>{{ quiz.created_by.username }}</td>
-                            <td>{{ quiz_score_dict|default:"N/A" }}</td> <!-- Display the quiz score from context -->
+                            <td>{{ data.quiz.name }}</td>
+                            <td>{{ data.quiz.description }}</td>
+                            <td>{{ data.quiz.total_questions }}</td>
+                            <td>{{ data.quiz.duration }} mins</td>
+                            <td>{{ data.quiz.created_by.username }}</td>
+                            <td>{{ data.score }}</td>
+                            <td>{{ data.percentage }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

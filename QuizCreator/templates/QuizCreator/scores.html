@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scores</title>
     {% load static %}
-    <style>
+    <style> 
         .headerbuttons{
             display: none;
         }
@@ -171,7 +171,7 @@
                             <td>{{ quiz.total_questions }}</td>
                             <td>{{ quiz.duration }} mins</td>
                             <td>{{ quiz.created_by.username }}</td>
-                            <td>{{ quiz_score_dict|default:"N/A" }}</td> <!-- Display the quiz score from context -->
+                            <td>{{ quiz_score_dict[quiz.id]|default:"N/A" }}</td> <!-- Display the quiz score from context -->
                         </tr>
                     {% endfor %}
                 </tbody>
