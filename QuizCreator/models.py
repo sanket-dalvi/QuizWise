@@ -1,5 +1,7 @@
 from django.db import models
 from QuizWise.models import User
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 
 
 class Category(models.Model):
@@ -18,6 +20,19 @@ class QuestionType(models.Model):
 
     def __str__(self):
         return f"{self.type_name} ({self.type_code})"
+    
+@receiver(post_migrate)
+def add_initial_question_types(sender, **kwargs):
+    if sender.name == 'QuizCreator':  
+        QuestionType.objects.get_or_create(
+            type_code='RB', defaults={'type_name': 'Radio Button - Multiple Options With One Answer'}
+        )
+        QuestionType.objects.get_or_create(
+            type_code='CB', defaults={'type_name': 'Checkbox - Multiple Options With One or More Answers'}
+        )
+        QuestionType.objects.get_or_create(
+            type_code='FT', defaults={'type_name': 'Free Text Answer'}
+        )
 
 class Question(models.Model):
     id = models.AutoField(primary_key=True)

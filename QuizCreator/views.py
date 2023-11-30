@@ -270,7 +270,9 @@ def create_quiz(request):
             description=quiz_description,
             duration=quiz_duration,
             total_questions=quiz_total_questions,
-            passcode=quiz_passcode
+            passcode=quiz_passcode,
+            created_by = request.user,
+            modified_by = request.user
         )
         new_quiz.save()
         messages.success(request, 'Quiz created successfully!')
@@ -305,6 +307,7 @@ def update_quiz(request):
         selected_quiz.duration = request.POST.get('quiz-duration')
         selected_quiz.total_questions = request.POST.get('quiz-total-questions')
         selected_quiz.visible = request.POST.get('quiz-visible') == 'on'
+        selected_quiz.modified_by = request.user
         selected_quiz.save()
 
         messages.success(request, 'Quiz details updated successfully.')
@@ -323,7 +326,7 @@ def add_quiz_questions(request):
     total_questions_added = 0
     quiz_questions = []
     quizzes = Quiz.objects.all()
-    selected_quiz_id = None
+    selected_quiz = None
     current_user = request.user
     categories = Category.objects.filter(
         Q(created_by=current_user) | Q(visible_to_others=True)
@@ -379,7 +382,7 @@ def add_quiz_questions(request):
                 
             except Quiz.DoesNotExist:
                 messages.error(request, "ERROR : Invalid Quiz Id")
-            selected_quiz_id = int(selected_quiz_id)
+            selected_quiz = get_object_or_404(Quiz, pk=selected_quiz_id)
         elif form_type == "question_search_by_category":
             quiz_id = request.POST.get("selected_quiz_id")
             selected_quiz_id = quiz_id
@@ -407,12 +410,12 @@ def add_quiz_questions(request):
                 
             except Quiz.DoesNotExist:
                 messages.error(request, "ERROR : Invalid Quiz Id")
-            selected_quiz_id = int(selected_quiz_id)
+            selected_quiz = get_object_or_404(Quiz, pk=selected_quiz_id)
     question_id_list = []
     for question in quiz_questions:
         question_id_list.append(question.id)
 
-    return render(request, 'QuizCreator/modify_quiz_questions.html', {'quizzes': quizzes, 'categories' : categories, 'questions' : questions, 'quiz_questions': quiz_questions, 'total_questions_added' : total_questions_added, 'selected_quiz_id' : selected_quiz_id, 'question_id_list' : question_id_list})
+    return render(request, 'QuizCreator/modify_quiz_questions.html', {'quizzes': quizzes, 'categories' : categories, 'questions' : questions, 'quiz_questions': quiz_questions, 'total_questions_added' : total_questions_added, 'selected_quiz' : selected_quiz, 'question_id_list' : question_id_list})
 
 
 
