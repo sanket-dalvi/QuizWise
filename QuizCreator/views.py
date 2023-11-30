@@ -42,7 +42,7 @@ def create_question(request):
         selected_radio = request.POST.get('radio-group')
         selected_checkbox = request.POST.getlist('checkbox-group')
 
-        answer = request.POST.get("free-text-answer").strip()
+        answer = request.POST.get("free-text-answer")
 
         options_json = request.POST.get('options')
         options = json.loads(options_json) if options_json else []

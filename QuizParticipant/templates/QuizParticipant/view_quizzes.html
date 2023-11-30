@@ -60,9 +60,9 @@
         }
 
         .quiz-details {
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
 
         @media screen and (max-width: 600px) {
@@ -71,12 +71,55 @@
             }
         }
 
-        .footer-content{
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background-color: #333;
+            color: #fff;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .quiz-details {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             padding: 10px;
             color: white;
             text-align: center;
         }
+        
         .alert-success {
             background-color: #d4edda;
             border-color: #c3e6cb;
@@ -94,7 +137,13 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
-      
+
+        .mainsection {
+            height: 80vh;
+            overflow-x: auto;
+            width: 90%;
+            margin: auto;
+        }
     </style>
 </head>
 
@@ -117,39 +166,42 @@
             {% endfor %}
         {% endif %}
     </div>
+    <div class="mainsection">
 
-    <div class="main-content">
-        <h2>Available Quizzes</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Quiz Name</th>
-                    <th>Description</th>
-                    <th>Total Questions</th>
-                    <th>Duration</th>
-                    <th>Created By</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for quiz in quizzes %}
+        <div class="main-content">
+            <h2>Available Quizzes</h2>
+            <table border="1">
+                <thead>
                     <tr>
-                        <td>{{ quiz.name }}</td>
-                        <td>{{ quiz.description }}</td>
-                        <td>{{ quiz.total_questions }}</td>
-                        <td>{{ quiz.duration }} mins</td>
-                        <td>{{ quiz.created_by.username }}</td>
-                        <td>
-                            <form id="quizForm{{ quiz.id }}" action="{% url 'take_quiz' quiz.id %}" method="post" target="_blank">
-                                {% csrf_token %}
-                                <input type="button" value="Take Quiz" onclick="startQuiz({{ quiz.id }})">
-                            </form>
-                        </td>
+                        <th>Quiz Name</th>
+                        <th>Description</th>
+                        <th>Total Questions</th>
+                        <th>Duration</th>
+                        <th>Created By</th>
+                        <th>Action</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                        <tr>
+                            <td>{{ quiz.name }}</td>
+                            <td>{{ quiz.description }}</td>
+                            <td>{{ quiz.total_questions }}</td>
+                            <td>{{ quiz.duration }} mins</td>
+                            <td>{{ quiz.created_by.username }}</td>
+                            <td>
+                                <form id="quizForm{{ quiz.id }}" action="{% url 'take_quiz' quiz.id %}" method="post" target="_blank">
+                                    {% csrf_token %}
+                                    <input type="button" value="Take Quiz" onclick="startQuiz({{ quiz.id }})">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+    
     
 
     <div class="footer-content">
