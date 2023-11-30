@@ -1,0 +1,193 @@
+<!-- scores.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scores</title>
+    {% load static %}
+    <style>
+        .headerbuttons{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-content: space-evenly; 
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .card-content {
+            padding: 20px;
+            height: 350px; 
+            overflow-y: auto; 
+            background: #EAEAEA
+        }
+
+        .card-footer {
+            background-color: #663399;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .quiz-details {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background-color: #333;
+            color: #fff;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .quiz-details {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        input {
+            background-color: #663399;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        input:hover {
+            background-color: #E6549C;
+        }
+
+        .footer-content {
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .mainsection {
+            height: 80vh;
+            overflow-x: auto;
+            width: 90%;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <!-- Include the header -->
+        {% include 'header.html' %}
+    </div>
+
+    <!-- Include the navigation bar -->
+    <div>
+        {% include 'QuizParticipant/navbar.html' %}
+    </div>
+
+    <div class="mainsection">
+        <div class="main-content">
+            <h2>Quiz Scores</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Quiz Name</th>
+                        <th>Description</th>
+                        <th>Total Questions</th>
+                        <th>Duration</th>
+                        <th>Created By</th>
+                        <th>Quiz Score</th> <!-- Add a new column for quiz scores -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                        <tr>
+                            <td>{{ quiz.name }}</td>
+                            <td>{{ quiz.description }}</td>
+                            <td>{{ quiz.total_questions }}</td>
+                            <td>{{ quiz.duration }} mins</td>
+                            <td>{{ quiz.created_by.username }}</td>
+                            <td>{{ quiz_score_dict|default:"N/A" }}</td> <!-- Display the quiz score from context -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html' %}
+    </div>
+</body>
+
+<script>
+    // Your scripts here
+    // ...
+</script>
+
+</html>
