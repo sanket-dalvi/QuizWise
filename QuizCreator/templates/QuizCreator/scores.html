@@ -9,7 +9,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scores</title>
     {% load static %}
-    <style> 
+    <style>
+
+        .quiz-select {
+            display: flex;
+            align-items: center;
+        }
+
+        .quiz-select label,
+        .quiz-select select,
+        .quiz-select button {
+            margin-right: 10px; 
+        }
         .headerbuttons{
             display: none;
         }
@@ -135,22 +146,94 @@
             width: 90%;
             margin: auto;
         }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .quiz-select {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            margin-top: 15px;
+            margin-bottom: 10px;
+            height: 100%;
+        }
+
+        .quiz-select label {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .quiz-select select {
+            width: 40%;
+        }
+
+        .select-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #select-quiz {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 60vh;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #E6549C;
+        }
+
     </style>
 </head>
 
 <body>
     <div>
-        <!-- Include the header -->
         {% include 'header.html' %}
     </div>
 
-    <!-- Include the navigation bar -->
     <div>
         {% include 'QuizParticipant/navbar.html' %}
     </div>
 
     <div class="mainsection">
         <div class="main-content">
+            <div class="container">
+                <div class="quiz-select">
+                    <div class="select-container">
+                        <h3 for="select-quiz" style="margin-right: 10px;">Select Quiz:</h3>
+                        <select id="select-quiz" name="select-quiz" required>
+                            {% if not selected_quiz.id %}
+                            <option value="" disabled selected>--- Please select a Quiz ---</option>
+                            {% endif %}
+                            <!-- Populate dropdown with quiz options -->
+                            {% for quiz in quizzes %}
+                                <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Select</button>
+                    </div>
+                    {% if total_questions_added > 0 %}
+                        <button id="toggle-questions" type="button" name="show_quiz_questions">Show Quiz Questions</button>
+                    {% endif %}
+                </div>
+            </div>
+            
             <h2>Quiz Scores</h2>
             <table border="1">
                 <thead>
