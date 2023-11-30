@@ -325,6 +325,8 @@
             height: 80vh;
             overflow-x: auto;
         }
+      
+
     </style>
 </head>
 
@@ -357,6 +359,7 @@
                             <input type="hidden" name="form_type" value="select_quiz">
                             <!-- Select Quiz Dropdown -->
                             <h2 style="margin-top: 10px;">Modify Quiz Questions</h2>
+                            
                             <div class="quiz-select">
                                 <label style="margin-top: -15px;" for="select-quiz">Select Quiz:</label>
                                 <select style="margin-top: -5px;" id="select-quiz" name="select-quiz" required>
@@ -525,7 +528,6 @@
 <script>
     
     document.addEventListener('DOMContentLoaded', function() {
-
 
         var selectQuiz = document.getElementById('select-quiz');
         var selectedQuizIdInput = document.querySelector('input[name="selected_quiz_id"]');

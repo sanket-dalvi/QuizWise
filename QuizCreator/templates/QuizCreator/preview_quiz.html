@@ -172,71 +172,36 @@
             background-color: #E6549C;
         }
 
-        .search-box {
-            display: flex;
-            align-items: center;
-        }
-
-        #search-input {
-            padding: 8px;
-            margin-right: 10px;
-            width: 250px;
-        }
-
-        #search-btn {
-            padding: 8px 16px;
-            background-color: #663399;
-            color: white;
+        
+        .submitbutton button {
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
+            background-color: #663399;
+            color: white;
             cursor: pointer;
+            font-weight: bold; 
         }
 
-        #search-btn:hover {
+        .submitbutton button:hover {
             background-color: #E6549C;
         }
 
-        .questions-table {
-            border: 2px solid #ccc;
-            padding: 20px;
+        .submitbutton {
+            text-align: center;
+            margin-top: 5px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .submitbutton button{
+            width: 25%;
         }
 
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #663399;
-            color: whitesmoke;
-        }
-
-        td {
-            background-color: #f2f2f2;
-        }
-
-        td:last-child {
+        .container h2{
             text-align: center;
         }
 
-        button {
-            padding: 6px 10px;
-            margin-right: 5px;
-            cursor: pointer;
-            border: none;
-            background-color: #f2f2f2;
-            color: #333;
-        }
-
-        button:hover {
-            background-color: #ddd;
-        }
 
         #questions-table {
             width: 100%;
@@ -261,6 +226,27 @@
         .checked {
             color: #007bff;
         }
+
+        .container {
+            margin: 50px auto;
+            width: 60%;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-top: 70px;
+            margin-bottom: 40px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mainsection{
+            height: 70vh;
+            overflow-x: auto;
+        }
     </style>
 </head>
 
@@ -273,41 +259,43 @@
         {% include 'QuizCreator/navbar.html' %}
     </div>
 
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="content-container">
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
 
-    <div class="main-content">
-        <div class="content-container">
-            <div class="message">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
+                <div class="container">
+
+                    <form method="post" target="_blank">
+                        {% csrf_token %}
+                            <!-- Select Quiz Dropdown -->
+                            <h2>Preview Quiz</h2>
+                            <div class="quiz-select">
+                                <label for="select-quiz">Select Quiz:</label>
+                                <select id="select-quiz" name="select-quiz" required>
+                                    {% if not selected_quiz_id %}
+                                    <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                    {% endif %}
+                                    <!-- Populate dropdown with quiz options -->
+                                    {% for quiz in quizzes %}
+                                        <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="submitbutton">
+                                <button type="submit">Select</button></div>
+                            </div>
+                            <br>
+                    </form>
+                </div> 
             </div>
-
-            <div class="container">
-
-                <form method="post" target="_blank">
-                    {% csrf_token %}
-                        <!-- Select Quiz Dropdown -->
-                        <h2>PreView Quiz</h2>
-                        <div class="quiz-select">
-                            <label for="select-quiz">Select Quiz:</label>
-                            <select id="select-quiz" name="select-quiz" required>
-                                {% if not selected_quiz_id %}
-                                <option value="" disabled selected>--- Please select a Quiz ---</option>
-                                {% endif %}
-                                <!-- Populate dropdown with quiz options -->
-                                {% for quiz in quizzes %}
-                                    <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit">Select</button>
-                        </div>
-                        <br>
-                </form>
-            </div> 
         </div>
     </div>
 

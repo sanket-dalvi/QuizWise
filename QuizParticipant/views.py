@@ -43,3 +43,16 @@ def take_quiz(request, quiz_id):
         pass
 
     return render(request, "QuizParticipant/take_quiz.html")
+@examinee_required
+def profile(request):
+    return render(request, "QuizParticipant/profile.html")
+
+
+@examinee_required
+def scores(request):
+    return render(request, "QuizParticipant/scores.html")
+
+
+@examinee_required
+def quiz_history(request):
+    return render(request, "QuizParticipant/quiz_history.html")
