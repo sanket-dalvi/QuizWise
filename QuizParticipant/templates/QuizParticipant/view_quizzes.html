@@ -177,6 +177,7 @@
     <div class="mainsection">
 
         <div class="main-content">
+            {% if quizzes %}
             <h2>Available Quizzes</h2>
             <table border="1">
                 <thead>
@@ -207,6 +208,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% else %}
+                No Quizzes Available
+            {% endif %}
         </div>
     </div>
     

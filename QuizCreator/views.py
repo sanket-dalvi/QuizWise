@@ -358,6 +358,15 @@ def edit_questions(request):
 
     return render(request, 'QuizCreator/edit_questions.html', {'questions': questions, 'categories': categories})
 
+@examiner_required
+def delete_question(request, question_id):
+    try:
+        question = get_object_or_404(Question, pk=question_id)
+        question.delete()
+    except Question.DoesNotExist as e:
+        messages.error(f"ERROR :  Could Not Delete Question {str(e)}")
+    messages.success(request, "Question Has Been Deleted Successfully")
+    return redirect("edit_questions")
 
 @examiner_required
 def map_question_category(request):
