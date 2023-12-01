@@ -88,7 +88,7 @@ def get_quiz_metrics(request, quiz=None):
         buffer.close()
         # Encoding the plot in base64 format to render in HTML
         image_base64 = base64.b64encode(image_png).decode('utf-8')
-        img_tag = f'<img src="data:image/png;base64,{image_base64} alt="Quiz Metrics" style="width: 100%;"">'
+        img_tag = f'<img src="data:image/png;base64,{image_base64} alt="Quiz Metrics" style="width: 70%; display: block; margin: 0 auto;"">'
     else:
         recent_quiz_metrics = None
         img_tag = None

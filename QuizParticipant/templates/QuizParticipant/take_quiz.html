@@ -12,13 +12,23 @@
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 20px;
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            background-size: cover;
+            background-position: center;
+        }
+        .timer {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
         }
         h1 {
             text-align: center;
             margin-bottom: 30px;
+
         }
         .question {
-            background-color: white;
+            background-color: rgba(0, 0, 0, 0.1);
+            color: black;
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 8px;
@@ -54,12 +64,12 @@
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            background-color: #663399;
+            background-color: #007bff;
             color: white;
             cursor: pointer;
         }
         input[type="submit"]:hover {
-            background-color: #E6549C;
+            background-color: #0056b3;
         }
 
         .alert-success {
@@ -85,6 +95,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            background-color: rgba(256, 256, 256, 0.3);
         }
         .timer {
             text-align: right;
@@ -110,6 +121,36 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
+
+        .submitquizbutton button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+
+        button:hover {
+            background-color: #E6549C;
+        }
+
+        .submitquizbutton button {
+            text-align: center;
+            margin-top: 5px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        button{
+            width: 25%;
+        }
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.5); 
+        }
     </style>
 </head>
 
@@ -120,8 +161,9 @@
             <h2>{{ quiz.name }}</h2>
             <p>{{ quiz.description }}</p>
             <p>Total Questions: {{ quiz.total_questions }}</p>
+            <p>Duration: {{ quiz.duration }} minutes</p>
         </div>
-        <div class="timer" id="timer"></div>
+        <div class="timer" id="timer" style="text-align: center; color: white; font-weight: bolder; font-size: xx-large;"></div>
         <form method="post" id="quiz_form" action="{% url 'submit_quiz' quiz.id %}">
             {% csrf_token %}
             {% for question in quiz_questions %}
@@ -142,13 +184,15 @@
                             {% endfor %}
                         </div>
                     {% elif question.type.type_code == 'FT' %}
-                        <textarea id="answer_{{ question.id }}" name="{{ question.id }}" rows="4" cols="50"></textarea>
+                        <textarea id="answer_{{ question.id }}" name="{{ question.id }}" rows="4" cols="50" placeholder="Type your answer here...."></textarea>
                     {% endif %}
                     
                     <hr>
                 </div>
             {% endfor %}
-            <input type="submit" value="Submit Quiz">
+            <div class="submitquizbutton" style="align-content: center;">
+                <button type="submit" value="Submit Quiz">Submit Quiz</button>
+            </div>
         </form>
         
         <div id="customModal" class="modal">
