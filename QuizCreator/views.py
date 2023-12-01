@@ -3,6 +3,7 @@ from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
 from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap, Quiz, QuizQuestion
 from QuizParticipant.models import UserQuizScore
+from QuizWise.models import User
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 import json
@@ -108,7 +109,35 @@ def get_quiz_metrics(request, quiz=None):
 
 @examiner_required
 def profile(request):
-    return render(request, "QuizCreator/profile.html")
+
+    if request.method == "POST":
+        try:
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            contact = request.POST.get('contact')
+
+            user = get_object_or_404(User, pk=request.user.id)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.contact = contact
+            user.save()
+            messages.success(request, "User Details Updated Successfully")
+        except Exception as e:
+            messages.error(request, f"ERROR : {str(e)}")
+
+    user = get_object_or_404(User, pk=request.user.id)
+
+    context = {
+        "first_name" : user.first_name,
+        "last_name" : user.last_name,
+        "email" : user.email,
+        "contact" : user.contact
+    }
+    
+
+    return render(request, "QuizCreator/profile.html", context)
 
 
 @examiner_required
