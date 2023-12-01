@@ -24,7 +24,7 @@
         }
 
         .card-container {
-            display: grid;
+            display: flex;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
@@ -49,7 +49,7 @@
             padding: 20px;
             height: 350px; 
             overflow-y: auto; 
-            background: #EAEAEA
+            background: #f4f4f4
         }
 
         .card-footer {
@@ -77,6 +77,30 @@
             color: white;
             text-align: center;
         }
+
+        .profile-container {
+            display: flex;
+            align-items: center; /* Align items vertically in the center */
+            justify-content: space-evenly;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+
+        .profile-pic {
+            width: 130px; 
+            height: 130px; 
+            border-radius: 50%;
+            margin-right: auto; 
+            margin-left: auto; 
+        }
+
+        .fancy-note {
+            font-style: italic;
+            color: #555;
+            margin-left: 20px;
+            background: #f4f4f4;
+        }
       
     </style>
 </head>
@@ -93,25 +117,27 @@
     </div>
 
     <div class="card-container">
-        <div class="card">
+        <div class="card" style="width: 200%;">
             <div class="card-header">Examinee Profile</div>
-            <div class="card-content">
-              <p><strong>Name:</strong> Display Full name</p>
-              <p><strong>Email:</strong> Display email</p>
-              <p><strong>Department:</strong> Computer Science</p>
-                <p><strong>Courses:</strong></p>
-                <ul>
-                    <li>INFO 501</li>
-                </ul>
-            </div>
+                <div class="card-content">
+                    <div class="profile-container">
+                        <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
+                        <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."</p>
+                        <p class="fancy-note">- Nelson Mandela</p>   
+                    </div>  
+                    <p><strong>First Name:</strong> {{ first_name }} </p>
+                    <p><strong>Last Name:</strong> {{ last_name }}</p>
+                    <p><strong>Email:</strong> {{ email }} </p>
+                    <p><strong>Contact:</strong> {{ contact }} </p>  
+                </div>
             <div class="card-footer"> 
-                <a href="{% url 'examinee_profile' %}">
-                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
+                <a href="{% url 'examiner_profile' %}">
+                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;">
                 </a>
             </div>
-        </div>
+          </div>
     
-        <div class="card">
+        <div class="card" style="width: 200%;">
           <div class="card-header">Your Scores</div>
           <div class="card-content">
                 <!-- Top score of the examinee -->
@@ -129,81 +155,9 @@
           </div>
           <div class="card-footer">
             <a href="{% url 'scores' %}">
-            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;"></a>
+            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
           </div>        
         </div>
-    
-        <div class="card">
-          <div class="card-header">Recent Quizzes</div>
-          <div class="card-content">
-            <!-- Information about total quizzes, attempted, and missed -->
-            <p><strong>Total Quizzes Assigned:</strong> 10</p>
-            <p><strong>Quizzes Attempted:</strong> 8</p>
-            <p><strong>Quizzes Missed:</strong> 2</p>
-
-            <!-- List of attempted quizzes -->
-            <div class="quiz-details">
-            <p><strong>Attempted Quizzes:</strong></p>
-            <ul>
-                <li>Math Quiz</li>
-                <li>Science Quiz</li>
-                <li>History Quiz</li>
-                <!-- Add more attempted quizzes as needed -->
-            </ul>
-            </div>
-            <!-- List of missed quizzes -->
-            <div class="quiz-details">
-            <p><strong>Missed Quizzes:</strong></p>
-            <ul>
-                <li>English Quiz</li>
-                <li>Geography Quiz</li>
-                <!-- Add more missed quizzes as needed -->
-            </ul>
-            </div>
-          </div>
-          <div class="card-footer">
-            <a href="{% url 'quiz_history' %}">
-            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
-            </a>
-          </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">Upcoming Quizzes</div>
-            <div class="card-content">
-                 <!-- Quiz 1 details -->
-                <div class="quiz-details">
-                    <p><strong>Quiz Name:</strong> Mathematics Quiz</p>
-                    <p><strong>Examiner:</strong> Prof. Smith</p>
-                    <p><strong>Date:</strong> January 15, 2023</p>
-                    <p><strong>Time:</strong> 3:00 PM</p>
-                    <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> Mathematics Quiz</a></p>
-                </div>
-
-                <!-- Quiz 2 details -->
-                <div class="quiz-details">
-                    <p><strong>Quiz Name:</strong> Science Quiz</p>
-                    <p><strong>Examiner:</strong> Dr. Johnson</p>
-                    <p><strong>Date:</strong> January 20, 2023</p>
-                    <p><strong>Time:</strong> 4:30 PM</p>
-                    <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> Science Quiz</a></p>
-                </div>
-
-                <!-- Quiz 3 details -->
-                <div class="quiz-details">
-                    <p><strong>Quiz Name:</strong> History Quiz</p>
-                    <p><strong>Examiner:</strong> Prof. Davis</p>
-                    <p><strong>Date:</strong> January 25, 2023</p>
-                    <p><strong>Time:</strong> 2:00 PM</p>
-                    <p><strong>Go to quiz:</strong><a href="quiz1_link" target="_blank"> History Quiz</a></p>
-                </div>
-            </div>
-            <div class="card-footer">
-                <a href="{% url 'quiz_history' %}">
-                <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 10%;">
-                </a>
-              </div>          
-            </div>
     </div>
 
     <div class="footer-content">
