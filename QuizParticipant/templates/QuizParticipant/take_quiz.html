@@ -179,7 +179,7 @@
                     {% elif question.type.type_code == 'CB' %}
                         <div class="options">
                             {% for option in question.options.all %}
-                                <input type="checkbox" id="option_{{ option.id }}" name="{{ question.id }}[]" value="{{ option.option }}">
+                                <input type="checkbox" id="option_{{ option.id }}" name="{{ question.id }}" value="{{ option.option }}">
                                 <label for="option_{{ option.id }}">{{ option.option }}</label><br>
                             {% endfor %}
                         </div>

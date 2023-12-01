@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from QuizWise.auth_decorator import examinee_required
 from QuizCreator.models import Quiz, QuizQuestion, QuestionOption, Question, CategoryQuestionMap
 from .models import Submission, UserQuizStatus, UserQuizScore
-from django.db.models import Prefetch, Sum
+from django.db.models import Prefetch, Sum, Max
 import random
+from QuizWise.models import User
 from django.contrib import messages
 from difflib import SequenceMatcher
 
@@ -13,7 +14,44 @@ from difflib import SequenceMatcher
 
 @examinee_required
 def home(request):
-    return render(request, "QuizParticipant/home.html")
+    context = {}
+    # Fetch the most recent quiz created by the logged-in user
+    context['first_name'] = request.user.first_name
+    context['last_name'] = request.user.last_name
+    context['email'] = request.user.email
+    context['contact'] = request.user.contact
+
+    current_user = request.user
+    recent_quizzes = (
+    UserQuizScore.objects.filter(user=current_user)
+    .values('quiz')
+    .annotate(latest_timestamp=Max('timestamp'))
+    .order_by('-latest_timestamp')
+)
+    quiz_score_data = []
+
+    for quiz in recent_quizzes:
+        quiz_id = quiz['quiz']
+        quiz_info = Quiz.objects.get(id=quiz_id)
+
+        total_questions = quiz_info.total_questions
+        user_quiz_scores = UserQuizScore.objects.filter(user=current_user, quiz=quiz_id)
+        total_score = sum(score.score for score in user_quiz_scores)
+        percentage = (total_score / (total_questions * 1.0)) * 100 if total_questions != 0 else 0
+        
+        quiz_data = {
+            'quiz_name': quiz_info.name,
+            'quiz_total_questions': total_questions,
+            'total_score': total_score,
+            'percentage': round(percentage, 2)  
+        }
+        quiz_score_data.append(quiz_data)
+
+
+
+    context['quiz_scores'] = quiz_score_data
+
+    return render(request, "QuizParticipant/home.html", context)
 
 
 @examinee_required
@@ -66,10 +104,37 @@ def take_quiz(request, quiz_id):
         pass
 
     return render(request, "QuizParticipant/take_quiz.html")
+
 @examinee_required
 def profile(request):
     
-    return render(request, "QuizParticipant/profile.html")
+    if request.method == "POST":
+        try:
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            contact = request.POST.get('contact')
+
+            user = get_object_or_404(User, pk=request.user.id)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.contact = contact
+            user.save()
+            messages.success(request, "User Details Updated Successfully")
+        except Exception as e:
+            messages.error(request, f"ERROR : {str(e)}")
+
+    user = get_object_or_404(User, pk=request.user.id)
+
+    context = {
+        "first_name" : user.first_name,
+        "last_name" : user.last_name,
+        "email" : user.email,
+        "contact" : user.contact
+    }
+    
+    return render(request, "QuizParticipant/profile.html", context)
 
 
 @examinee_required
@@ -94,7 +159,7 @@ def scores(request):
         
         quiz_score_dict[quiz.id] = {
             'score': quiz_score,
-            'percentage': round(percentage, 2)  # Rounding off to two decimal places
+            'percentage': round(percentage, 2) 
         }
 
     # Prepare a list of dictionaries to include the quiz, its respective score, and percentage
@@ -142,19 +207,22 @@ def submit_quiz(request, quiz_id):
                     question_score = 1 if is_correct else 0
                 elif question.type.type_code == 'CB':
                     user_answer = request.POST.getlist(question_id)
-                    correct_answers = question.answer.split(', ')
+                    correct_answers = question.answer.replace("'","").replace("[","").replace("]","").split(', ')
                     is_correct = set(user_answer) == set(correct_answers)
                     if is_correct:
                         question_score = 1 
                     else:
-                        # Calculate the number of correct options selected by the user
-                        correct_selections = sum(answer in correct_answers for answer in user_answer)
-                        
-                        # Calculate the proportion of correct options selected
-                        proportion_correct = correct_selections / len(correct_answers)
-                        
-                        # Assign the partial score based on the proportion of correct options
-                        question_score = 0.5 if proportion_correct > 0 else 0  # Set minimum 0.5 for partial correctness
+                        total_correct_answers = len(correct_answers)
+                        user_correct_answers = 0
+                        for answer in correct_answers:
+                            if answer in user_answer:
+                                user_correct_answers += 1
+                        if user_correct_answers == 0:
+                            question_score = 0
+                        elif total_correct_answers/user_correct_answers >= 0.5:
+                            question_score = 0.5
+                        else:
+                            question_score = 0
                 elif question.type.type_code == 'FT':
                     user_answer = request.POST.get(question_id)
                     similarity_ratio = SequenceMatcher(None, user_answer, question.answer).ratio()
@@ -190,6 +258,6 @@ def submit_quiz(request, quiz_id):
             user_quiz_status.status = "Submitted"
             user_quiz_status.save()
 
-        messages.success(request, f"Quiz Submitted Successfully. Your score: {user_score}/{total_questions}")
+        messages.success(request, f"Quiz Submitted Successfully.")
 
     return redirect("view_quizzes")
