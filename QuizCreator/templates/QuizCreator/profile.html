@@ -146,6 +146,23 @@
             color: white;
             text-align: center;
         }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -161,44 +178,40 @@
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
                 <div class="form-container">
-                    <h1>Examiner Profile</h1>
-                    <br>
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" value="John Doe">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" value="john.doe@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="department">Department:</label>
-                        <input type="text" id="department" name="department" value="Computer Science">
-                    </div>
-                    <div class="form-group">
-                        <label>Courses:</label>
-                        <ul id="course-list">
-                            <li>
-                                <input type="text" value="INFO 501">
-                                <button class="delete-course-button" onclick="deleteCourse(this)">Delete</button>
-                            </li>
-                            <li>
-                                <input type="text" value="INFO 537">
-                                <button class="delete-course-button" onclick="deleteCourse(this)">Delete</button>
-                            </li>
-                            <li>
-                                <input type="text" value="INFO 550">
-                                <button class="delete-course-button" onclick="deleteCourse(this)">Delete</button>
-                            </li>
-                            <!-- Add more attempted quizzes as needed -->
-                        </ul>
-                    </div>
-                    <div class="form-buttons">
-                        <button class="add-course-button" onclick="addCourse()">Add Course</button>
-                        <button type="button" onclick="updateProfile()">Update</button>
+                    <form method="post">
+                        {% csrf_token %}
+                        <h1>Examiner Profile</h1>
+                        <br>
+                        <div class="form-group">
+                            <label for="first_name">First Name:</label>
+                            <input type="text" id="name" name="first_name" value="{{ first_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input type="text" id="name" name="last_name" value="{{ last_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" value="{{ email }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">Email:</label>
+                            <input type="number" id="contact" name="contact" value="{{ contact }}">
+                        </div>
+
+                        <button type="submit">Update</button>
                         <button type="reset" class="reset">Reset</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

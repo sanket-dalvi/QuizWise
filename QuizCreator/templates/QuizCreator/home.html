@@ -118,14 +118,16 @@
         <div class="card" style="width: 200%;">
             <div class="card-header">Examiner Profile</div>
             <div class="card-content">
-                <div class="profile-container">
-                    <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
-                    <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."</p>
-                    <p class="fancy-note">- Nelson Mandela</p>   
-                </div>
-                <p><strong>Name:</strong> John Doe</p>
-                <p><strong>Email:</strong> john.doe@example.com</p>
-                <p><strong>Contact:</strong> contact</p>                
+            <div class="profile-container">
+                <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
+                <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."</p>
+                <p class="fancy-note">- Nelson Mandela</p>   
+            </div>  
+            <p><strong>First Name:</strong> {{ first_name }} </p>
+              <p><strong>Last Name:</strong> {{ last_name }}</p>
+              <p><strong>Email:</strong> {{ email }} </p>
+              <p><strong>Contact:</strong> {{ contact }} </p>
+              
             </div>
             <div class="card-footer"> 
                 <a href="{% url 'examiner_profile' %}">

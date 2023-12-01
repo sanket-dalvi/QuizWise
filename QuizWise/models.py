@@ -77,3 +77,5 @@ class PasswordReset(models.Model):
 
     def __str__(self):
         return f"Token for {self.user.username}"
+    
+
