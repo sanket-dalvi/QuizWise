@@ -159,7 +159,7 @@ def scores(request):
         
         quiz_score_dict[quiz.id] = {
             'score': quiz_score,
-            'percentage': round(percentage, 2)  # Rounding off to two decimal places
+            'percentage': round(percentage, 2) 
         }
 
     # Prepare a list of dictionaries to include the quiz, its respective score, and percentage
