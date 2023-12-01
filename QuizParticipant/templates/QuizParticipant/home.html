@@ -138,18 +138,6 @@
         <div class="card" style="width: 200%;">
           <div class="card-header">Your Scores</div>
           <div class="card-content">
-<<<<<<< HEAD
-            <p><strong>Top Score:</strong> 95</p>
-            <p><strong>Subject:</strong> Mathematics</p>
-
-            <div class="quiz-details">
-            <p><strong>Failed Quizzes:</strong></p>
-            <ul>
-                <li>English Quiz</li>
-            </ul>
-            </div>
-          </div>
-=======
             {% for quiz_data in quiz_scores %}
                 <div class="quiz-score">
                     <h3>{{ quiz_data.quiz_name }}</h3>
@@ -160,7 +148,6 @@
                 <hr>
             {% endfor %}
         </div>
->>>>>>> ab8764b59c0785b33061e8cf71b430fcd31a5cd6
           <div class="card-footer">
             <a href="{% url 'scores' %}">
             <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
