@@ -142,19 +142,22 @@ def submit_quiz(request, quiz_id):
                     question_score = 1 if is_correct else 0
                 elif question.type.type_code == 'CB':
                     user_answer = request.POST.getlist(question_id)
-                    correct_answers = question.answer.split(', ')
+                    correct_answers = question.answer.replace("'","").replace("[","").replace("]","").split(', ')
                     is_correct = set(user_answer) == set(correct_answers)
                     if is_correct:
                         question_score = 1 
                     else:
-                        # Calculate the number of correct options selected by the user
-                        correct_selections = sum(answer in correct_answers for answer in user_answer)
-                        
-                        # Calculate the proportion of correct options selected
-                        proportion_correct = correct_selections / len(correct_answers)
-                        
-                        # Assign the partial score based on the proportion of correct options
-                        question_score = 0.5 if proportion_correct > 0 else 0  # Set minimum 0.5 for partial correctness
+                        total_correct_answers = len(correct_answers)
+                        user_correct_answers = 0
+                        for answer in correct_answers:
+                            if answer in user_answer:
+                                user_correct_answers += 1
+                        if user_correct_answers == 0:
+                            question_score = 0
+                        elif total_correct_answers/user_correct_answers >= 0.5:
+                            question_score = 0.5
+                        else:
+                            question_score = 0
                 elif question.type.type_code == 'FT':
                     user_answer = request.POST.get(question_id)
                     similarity_ratio = SequenceMatcher(None, user_answer, question.answer).ratio()
@@ -190,6 +193,6 @@ def submit_quiz(request, quiz_id):
             user_quiz_status.status = "Submitted"
             user_quiz_status.save()
 
-        messages.success(request, f"Quiz Submitted Successfully. Your score: {user_score}/{total_questions}")
+        messages.success(request, f"Quiz Submitted Successfully.")
 
     return redirect("view_quizzes")
