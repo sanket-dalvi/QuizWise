@@ -51,6 +51,8 @@ python manage.py collect static
 - Run Migrations:
  ```
   python manage.py makemigration
+  python manage.py makemigrations QuizCreator
+  python manage.py makemigrations QuizParticipant
   python manage.py migrate
   ```
 - Run server:
