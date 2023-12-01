@@ -330,7 +330,7 @@
                             <!-- Select Quiz Dropdown -->
                             <h2>Edit Quiz</h2>
                             <div class="quiz-select">
-                                <label for="select-quiz">Choose Quiz:</label>
+                                <label for="select-quiz" style="margin-top: -15px;">Choose Quiz:</label>
                                 <select id="select-quiz" name="select-quiz">
                                     {% if not selected_quiz %}
                                     <option>-- Please Select a Quiz --</option>
@@ -367,11 +367,7 @@
                 
                         <label for="quiz-total-questions">Total Questions:</label>
                         <input type="number" style="margin-bottom: -15px;" id="quiz-total-questions" name="quiz-total-questions" value="{{ selected_quiz.total_questions }}" required><br><br>
-                
-                        <div class="checkbox-container">
-                            <label for="quiz-visible">Visible:</label>
-                            <input type="checkbox" style="margin-left: -410px;" class="larger-checkbox" id="quiz-visible" name="quiz-visible" {% if selected_quiz.visible %}checked{% endif %}><br><br>
-                        </div>
+            
                         <div class="updatequizbutton">
                             <button type="submit" value="Update Quiz">Update Quiz</button>
                             <button type="reset" value="Update Quiz">Reset</button>
