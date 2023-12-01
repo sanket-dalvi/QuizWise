@@ -306,6 +306,15 @@
                             <button id="search-btn">Search</button>
                         </div>
                     </div>
+                    <div class="message">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
             
                     <div class="questions-table">
                         <table id="questions-table">
@@ -318,7 +327,6 @@
                                     <th style="width: 20%;">Category</th>
                                     <th style="width: 10%;">Answer</th>
                                     <th style="width: 10%;">Creator</th>
-                                    <th style="width: 15%;">Edit</th>
                                     <th style="width: 15%;">Delete</th>
                                 </tr>
                             </thead>
@@ -347,15 +355,11 @@
                                         <td>{{ question.created_by.username }}</td>
                                         <td>
                                             <div class="action-buttons">
-                                                <button class="edit-button">
-                                                    <img src="{% static 'edit.png' %}" alt="Edit Icon" style="height: 30px; width: 30px;">
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="action-buttons">
                                                 <button class="delete-button">
-                                                    <img src="{% static 'delete.png' %}" alt="Delete Icon" style="height: 30px; width: 30px;">
+                                                    <form method="post" id="delete_question_form" action="{% url 'delete_question' question.id %}">
+                                                        {% csrf_token %}
+                                                        <img src="{% static 'delete.png' %}" alt="Delete Icon" style="height: 30px; width: 30px;" onclick="submitForm()">
+                                                    </form>
                                                 </button>
                                             </div>
                                         </td>
@@ -373,6 +377,12 @@
         {% include 'footer.html' %}
     </div>
 </body>
+<script>
+    function submitForm() {
+        document.getElementById('delete_question_form').submit();
+    }
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var searchBtn = document.getElementById('search-btn');

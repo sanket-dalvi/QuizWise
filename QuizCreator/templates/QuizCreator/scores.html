@@ -208,7 +208,7 @@
     </div>
 
     <div>
-        {% include 'QuizParticipant/navbar.html' %}
+        {% include 'QuizCreator/navbar.html' %}
     </div>
 
     <div class="mainsection">
@@ -216,49 +216,73 @@
             <div class="container">
                 <div class="quiz-select">
                     <div class="select-container">
-                        <h3 for="select-quiz" style="margin-right: 10px;">Select Quiz:</h3>
-                        <select id="select-quiz" name="select-quiz" required>
-                            {% if not selected_quiz.id %}
-                            <option value="" disabled selected>--- Please select a Quiz ---</option>
-                            {% endif %}
-                            <!-- Populate dropdown with quiz options -->
-                            {% for quiz in quizzes %}
-                                <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit">Select</button>
+                        <form method="post">
+                            {% csrf_token %}
+                            <h3 for="select-quiz" style="margin-right: 10px;">Select Quiz:</h3>
+                            <select id="select-quiz" name="select-quiz" required>
+                                {% if not selected_quiz.id %}
+                                <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                {% endif %}
+                                <!-- Populate dropdown with quiz options -->
+                                {% for quiz in quizzes %}
+                                    <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Select</button>
+                        </form>
                     </div>
-                    {% if total_questions_added > 0 %}
-                        <button id="toggle-questions" type="button" name="show_quiz_questions">Show Quiz Questions</button>
-                    {% endif %}
+                    
                 </div>
             </div>
+            {% if selected_quiz %}
+            {% if total_submissions %}
+                <div name="quiz_metrics">
+                    <p><strong>Name:</strong> {{ recent_quiz_metrics.quiz_name }}</p>
+                    <p><strong>Duration:</strong> {{ recent_quiz_metrics.duration }}</p>
+                    <p><strong>Total Questions:</strong> {{ recent_quiz_metrics.total_questions }}</p>
+                    {{ img_tag|safe }}
+                    <p><strong>Top Score:</strong>{{ recent_quiz_metrics.max }}</p>
+                    <p><strong>Lowest Score:</strong> {{ recent_quiz_metrics.min }}</p>
+                    <p><strong>Mean:</strong> {{ recent_quiz_metrics.mean }}</p>
+                    <p><strong>Median:</strong> {{ recent_quiz_metrics.median }}</p>
+                    <p><strong>Mode:</strong> {{ recent_quiz_metrics.mode }}</p>
+                </div>
+                <div>
+                    <label>Total Submissions : {{ total_submissions }}</label>
+                </div>
             
-            <h2>Quiz Scores</h2>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Quiz Name</th>
-                        <th>Description</th>
-                        <th>Total Questions</th>
-                        <th>Duration</th>
-                        <th>Attempted By</th>
-                        <th>Quiz Score</th> <!-- Add a new column for quiz scores -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for quiz in quizzes %}
+                <h2>Quiz Scores</h2>
+                <table border="1">
+                    <thead>
                         <tr>
-                            <td>{{ quiz.name }}</td>
-                            <td>{{ quiz.description }}</td>
-                            <td>{{ quiz.total_questions }}</td>
-                            <td>{{ quiz.duration }} mins</td>
-                            <td>{{ quiz.created_by.username }}</td>
-                            <td>{{ quiz_score_dict[quiz.id]|default:"N/A" }}</td> <!-- Display the quiz score from context -->
+                            <th></th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Total Questions</th>
+                            <th>Score</th>
+                            <th>Percentage</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for data in quiz_data %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ data.username }}</td>
+                                <td>{{ data.email }}</td>
+                                <td>{{ data.total_questions }}</td>
+                                <td>{{ data.score }}</td>
+                                <td>{{ data.percentage }}</td>
+                            
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div>
+                    <h3>No Submissions Yet</h3>
+                </div>
+            {% endif %}
+            {% endif %}
 
         </div>
     </div>

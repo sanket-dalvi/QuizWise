@@ -116,20 +116,19 @@
           
     
         <div class="card">
-          <div class="card-header">Quiz Metrics</div>
+          <div class="card-header">Recent Quiz Metrics</div>
           <div class="card-content">
-                <!-- Top score of the examinee -->
-            <p><strong>Top Score:</strong> 95</p>
-            <p><strong>Subject:</strong> Mathematics</p>
+            <p><strong>Name:</strong> {{ recent_quiz_metrics.quiz_name }}</p>
+            <p><strong>Duration:</strong> {{ recent_quiz_metrics.duration }}</p>
+            <p><strong>Total Questions:</strong> {{ recent_quiz_metrics.total_questions }}</p>
+            {{ img_tag|safe }}
+            <p><strong>Top Score:</strong>{{ recent_quiz_metrics.max }}</p>
+            <p><strong>Lowest Score:</strong> {{ recent_quiz_metrics.min }}</p>
+            <p><strong>Mean:</strong> {{ recent_quiz_metrics.mean }}</p>
+            <p><strong>Median:</strong> {{ recent_quiz_metrics.median }}</p>
+            <p><strong>Mode:</strong> {{ recent_quiz_metrics.mode }}</p>
 
-            <!-- Information about failed quizzes -->
-            <div class="quiz-details">
-            <p><strong>Failed Quizzes:</strong></p>
-            <ul>
-                <li>English Quiz</li>
-                <!-- Add more failed quizzes as needed -->
-            </ul>
-            </div>
+            
           </div>
           <div class="card-footer">
             <a href="{% url 'examinee_scores' %}">

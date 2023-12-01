@@ -206,12 +206,6 @@
     }
 
     startTimer(durationInMinutes);
-
-    window.addEventListener('beforeunload', function (e) {
-        const confirmationMessage = 'Are you sure you want to leave? Your progress may be lost.';
-        e.returnValue = confirmationMessage;
-        return confirmationMessage;
-    });
     
     
     let warningCount = 0;

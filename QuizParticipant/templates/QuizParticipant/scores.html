@@ -151,6 +151,7 @@
 
     <div class="mainsection">
         <div class="main-content">
+            {% if quiz_data %}
             <h2>Quiz Scores</h2>
             <table border="1">
                 <thead>
@@ -178,7 +179,9 @@
                     {% endfor %}
                 </tbody>
             </table>
-
+            {% else %}
+                No Scores Available
+            {% endif %}
         </div>
     </div>
 

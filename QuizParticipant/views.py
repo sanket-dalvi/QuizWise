@@ -54,6 +54,8 @@ def take_quiz(request, quiz_id):
                 question_options = list(question.options.all())
                 random.shuffle(question_options)
                 question.options.set(question_options)
+                
+            shuffled_questions = shuffled_questions[:quiz.total_questions]
 
             return render(request, "QuizParticipant/take_quiz.html", {'quiz': quiz, 'quiz_questions': shuffled_questions})
         elif user_quiz_status.status == "Started":

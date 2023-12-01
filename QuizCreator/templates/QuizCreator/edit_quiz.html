@@ -331,9 +331,9 @@
                             <h2>Edit Quiz</h2>
                             <div class="quiz-select">
                                 <label for="select-quiz" style="margin-top: -15px;">Choose Quiz:</label>
-                                <select id="select-quiz" name="select-quiz">
+                                <select id="select-quiz" name="select-quiz" required>
                                     {% if not selected_quiz %}
-                                    <option>-- Please Select a Quiz --</option>
+                                    <option disabled selected value>-- Please Select a Quiz --</option>
                                     {% endif %}
                                     <!-- Populate dropdown with quiz options -->
                                     {% for quiz in quizzes %}
@@ -389,7 +389,7 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
+
 
         function hideMessage() {
             document.querySelectorAll('.alert').forEach(function (alert) {
