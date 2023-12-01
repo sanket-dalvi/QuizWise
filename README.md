@@ -46,7 +46,12 @@ QuizWise is not just a tool; it encapsulates a user-centric philosophy that plac
 pip install django
 pip install psycopg2
 pip install django-money
+pip install pipreqs
 python manage.py collect static
+```` 
+- Install modules from requirements.txt:
+```
+pipreqs . --force
 ```` 
 - Run Migrations:
  ```
