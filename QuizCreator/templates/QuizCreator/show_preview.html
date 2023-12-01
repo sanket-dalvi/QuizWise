@@ -190,7 +190,7 @@
                         {% endfor %}
                     </div>
                 {% elif question.type.type_code == 'FT' %}
-                    <textarea id="answer_{{ question.id }}" name="question_{{ question.id }}" rows="4" cols="50"></textarea>
+                    <textarea id="answer_{{ question.id }}" name="question_{{ question.id }}" rows="4" cols="50" placeholder="Type your answer here...."></textarea>
                 {% endif %}
                 <p style="color: white; font-weight: bold;">Correct Answer: {{ question.answer }}</p>
                 <hr>

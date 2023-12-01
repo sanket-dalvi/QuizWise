@@ -161,36 +161,40 @@
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
                 <div class="form-container">
-                    <h1>Examinee Profile</h1>
-                    <br>
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" placeholder="Full name">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" placeholder="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="department">Department:</label>
-                        <input type="text" id="department" name="department" placeholder="department name">
-                    </div>
-                    <div class="form-group">
-                        <label>Courses:</label>
-                        <ul id="course-list">
-                            <li>
-                                <input type="text" placeholder="course name">
-                                <button class="delete-course-button" onclick="deleteCourse(this)">Delete</button>
-                            </li>
-                            <!-- Add more attempted quizzes as needed -->
-                        </ul>
-                    </div>
-                    <div class="form-buttons">
-                        <button class="add-course-button" onclick="addCourse()">Add Course</button>
-                        <button type="button" onclick="updateProfile()">Update</button>
+                    <form method="post">
+                        {% csrf_token %}
+                        <h1>Examinee Profile</h1>
+                        <br>
+                        <div class="form-group">
+                            <label for="first_name">First Name:</label>
+                            <input type="text" id="name" name="first_name" value="{{ first_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input type="text" id="name" name="last_name" value="{{ last_name }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" value="{{ email }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">Email:</label>
+                            <input type="number" id="contact" name="contact" value="{{ contact }}">
+                        </div>
+
+                        <button type="submit">Update</button>
                         <button type="reset" class="reset">Reset</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
