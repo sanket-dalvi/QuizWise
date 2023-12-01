@@ -73,7 +73,7 @@
                 <a href="{% url 'create_quiz' %}">Create Quiz</a>
                 <a href="{% url 'edit_quiz' %}">Edit Quiz</a>
                 <a href="{% url 'preview_quiz' %}">PreView Quiz</a>
-                <a href="{% url 'add_quiz_questions' %}">Modify Quiz Questions</a>
+                <a href="{% url 'add_quiz_questions' %}">Add/Modify Quiz Questions</a>
             </div>
         </li>
         <li class="dropdown">
@@ -85,13 +85,6 @@
                 <a href="{% url 'create_question_category' %}">Create Question Category</a>
                 <a href="{% url 'map_question_category' %}">Map Question Category</a>
 
-            </div>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropbtn">Manage Examinee</a>
-            <div class="dropdown-content">
-                <a href="#">Create Group</a>
-                <a href="#">Add/Remove Examinee from Quiz</a>
             </div>
         </li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
