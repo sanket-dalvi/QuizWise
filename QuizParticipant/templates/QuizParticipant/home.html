@@ -131,7 +131,7 @@
                     <p><strong>Contact:</strong> {{ contact }} </p>  
                 </div>
             <div class="card-footer"> 
-                <a href="{% url 'examiner_profile' %}">
+                <a href="{% url 'examinee_profile' %}">
                     <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;">
                 </a>
             </div>
@@ -140,19 +140,16 @@
         <div class="card" style="width: 200%;">
           <div class="card-header">Your Scores</div>
           <div class="card-content">
-                <!-- Top score of the examinee -->
-            <p><strong>Top Score:</strong> 95</p>
-            <p><strong>Subject:</strong> Mathematics</p>
-
-            <!-- Information about failed quizzes -->
-            <div class="quiz-details">
-            <p><strong>Failed Quizzes:</strong></p>
-            <ul>
-                <li>English Quiz</li>
-                <!-- Add more failed quizzes as needed -->
-            </ul>
-            </div>
-          </div>
+            {% for quiz_data in quiz_scores %}
+                <div class="quiz-score">
+                    <h3>{{ quiz_data.quiz_name }}</h3>
+                    <p>Total Questions: {{ quiz_data.quiz_total_questions }}</p>
+                    <p>Total Score: {{ quiz_data.total_score }}</p>
+                    <p>Percentage: {{ quiz_data.percentage }}%</p>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
           <div class="card-footer">
             <a href="{% url 'scores' %}">
             <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
