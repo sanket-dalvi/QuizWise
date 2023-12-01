@@ -195,11 +195,11 @@ def create_question(request):
         # Check if options are added for radio or checkbox
         if question_type_code in ['RB', 'CB']:
             if not radio_options and question_type_code == 'RB':
-                messages.error(request, "Please add options for the radio button.")
+                messages.error(request, "Please select correct answer option for the radio button.")
                 return redirect('create_question')
             
             if not checkbox_options and question_type_code == 'CB':
-                messages.error(request, "Please add options for the checkboxes.")
+                messages.error(request, "Please select correct answer options for the checkboxes.")
                 return redirect('create_question')
 
         # Check if a correct answer is selected for radio or checkbox
