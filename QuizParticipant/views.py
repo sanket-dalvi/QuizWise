@@ -133,22 +133,35 @@ def submit_quiz(request, quiz_id):
             question_id = str(question.id)
             user_answer = None
             is_correct = False
+            question_score = 0
 
             if question_id in request.POST:
                 if question.type.type_code == 'RB':
                     user_answer = request.POST.get(question_id)
                     is_correct = user_answer == question.answer
+                    question_score = 1 if is_correct else 0
                 elif question.type.type_code == 'CB':
                     user_answer = request.POST.getlist(question_id)
                     correct_answers = question.answer.split(', ')
                     is_correct = set(user_answer) == set(correct_answers)
+                    if is_correct:
+                        question_score = 1 
+                    else:
+                        # Calculate the number of correct options selected by the user
+                        correct_selections = sum(answer in correct_answers for answer in user_answer)
+                        
+                        # Calculate the proportion of correct options selected
+                        proportion_correct = correct_selections / len(correct_answers)
+                        
+                        # Assign the partial score based on the proportion of correct options
+                        question_score = 0.5 if proportion_correct > 0 else 0  # Set minimum 0.5 for partial correctness
                 elif question.type.type_code == 'FT':
                     user_answer = request.POST.get(question_id)
                     similarity_ratio = SequenceMatcher(None, user_answer, question.answer).ratio()
                     is_correct = similarity_ratio >= 0.8
+                    question_score = 1 if is_correct else 0
 
                 # Calculate scores
-                question_score = 1 if is_correct else 0
                 user_score += question_score
                 total_questions += 1
 
