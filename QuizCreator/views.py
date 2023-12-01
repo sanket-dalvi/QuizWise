@@ -92,7 +92,6 @@ def get_quiz_metrics(request, quiz=None):
         buffer.seek(0)
         image_png = buffer.getvalue()
         buffer.close()
-        # Encoding the plot in base64 format to render in HTML
         image_base64 = base64.b64encode(image_png).decode('utf-8')
         img_tag = f'<img src="data:image/png;base64,{image_base64} alt="Quiz Metrics" style="width: 70%; display: block; margin: 0 auto;"">'
     else:
@@ -103,7 +102,7 @@ def get_quiz_metrics(request, quiz=None):
 
     context = {
         'recent_quiz_metrics': recent_quiz_metrics,
-        'img_tag': img_tag  # Pass the img_tag to the context for rendering in HTML
+        'img_tag': img_tag  
     }
     return context
 
@@ -261,7 +260,7 @@ def create_question(request):
             question = Question.objects.create(
                 question=question_text,
                 type=QuestionType.objects.get(type_code=question_type_code),
-                answer=answer,  # Modify this based on your answer logic
+                answer=answer,  
                 created_by=current_user,
             )
             
@@ -291,7 +290,7 @@ def create_question_category(request):
         description = request.POST.get("category_description")
         visible_to_others = request.POST.get("visible_to_others") == "on"
 
-        # Validation
+        
         if not name or not description:
             messages.error(request, "Please provide both name and description.")
             return render(request, "QuizCreator/create_question_category.html")
@@ -326,7 +325,7 @@ def view_questions(request):
         Q(created_by=current_user) | Q(visible_to_others=True)
     )
     if request.method == "POST":
-        selected_categories = request.POST.getlist('category-select')  # Retrieve selected categories
+        selected_categories = request.POST.getlist('category-select')  
         selected_categories = [int(cat_id) for cat_id in selected_categories]
         if selected_categories :
             filtered_questions = Question.objects.filter(categoryquestionmap__category_id__in=selected_categories).select_related('type').prefetch_related(
@@ -369,7 +368,7 @@ def edit_questions(request):
         Q(created_by=current_user) | Q(visible_to_others=True)
     )
     if request.method == "POST":
-        selected_categories = request.POST.getlist('category-select')  # Retrieve selected categories
+        selected_categories = request.POST.getlist('category-select') 
         selected_categories = [int(cat_id) for cat_id in selected_categories]
         if selected_categories :
             filtered_questions = Question.objects.filter(categoryquestionmap__category_id__in=selected_categories).select_related('type').prefetch_related(
@@ -406,12 +405,9 @@ def delete_question(request, question_id):
 def map_question_category(request):
 
     if request.method == 'POST':
-        checkbox_values = request.POST.getlist('checkbox-group')  # Retrieve selected checkbox values
+        checkbox_values = request.POST.getlist('checkbox-group')  
 
-        selected_categories = request.POST.getlist('category-select')  # Retrieve selected categories
-        # 'category-select' corresponds to the name attribute of your category <select> element
-
-        # Process the checkbox values and selected categories
+        selected_categories = request.POST.getlist('category-select')  
         for checkbox_value in checkbox_values:
             question_id = int(checkbox_value)
             # For each selected question, create or update CategoryQuestionMap records
@@ -495,7 +491,7 @@ def update_quiz(request):
         selected_quiz.save()
 
         messages.success(request, 'Quiz details updated successfully.')
-        return redirect('edit_quiz')  # Redirect to the desired URL after updating
+        return redirect('edit_quiz')  
 
     quizzes = Quiz.objects.all()
     return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
@@ -538,7 +534,7 @@ def add_quiz_questions(request):
                         # If the mapping doesn't exist, create it
                         question = get_object_or_404(Question, pk=question_id)
                         quiz_question = QuizQuestion.objects.create(quiz=quiz, question=question)
-                        # Perform any additional operations if required
+                      
                         
                         # Save the quiz-question mapping
                         quiz_question.save()
