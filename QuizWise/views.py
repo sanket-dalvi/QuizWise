@@ -53,7 +53,6 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    # Redirect to a specific page after logout 
     return redirect('login') 
 
 @examiner_required
@@ -102,18 +101,16 @@ def reset_password(request):
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Validation (You can add more validation steps as needed)
         if new_password != confirm_password:
             messages.error(request, 'Passwords do not match.')
             return redirect('forgot')
 
         try:
             reset_data = PasswordReset.objects.get(user__email=email, otp=otp, created_at__gte=timezone.now()-timezone.timedelta(minutes=15))
-            # Reset password logic
             user = reset_data.user
             user.set_password(new_password)
             user.save()
-            reset_data.delete()  # Remove reset data once password is changed
+            reset_data.delete()  
             messages.success(request, 'Password reset successfully.')
             return redirect('login')
         except PasswordReset.DoesNotExist:

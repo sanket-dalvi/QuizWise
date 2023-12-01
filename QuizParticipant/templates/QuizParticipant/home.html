@@ -80,7 +80,7 @@
 
         .profile-container {
             display: flex;
-            align-items: center; /* Align items vertically in the center */
+            align-items: center; 
             justify-content: space-evenly;
             padding: 20px;
             background: #f4f4f4;
@@ -107,11 +107,9 @@
 
 <body>
     <div>
-        <!-- the header -->
         {% include 'header.html' %}
     </div>
 
-    <!-- Navigation bar -->
     <div>
         {% include 'QuizParticipant/navbar.html' %}
     </div>
@@ -140,16 +138,13 @@
         <div class="card" style="width: 200%;">
           <div class="card-header">Your Scores</div>
           <div class="card-content">
-                <!-- Top score of the examinee -->
             <p><strong>Top Score:</strong> 95</p>
             <p><strong>Subject:</strong> Mathematics</p>
 
-            <!-- Information about failed quizzes -->
             <div class="quiz-details">
             <p><strong>Failed Quizzes:</strong></p>
             <ul>
                 <li>English Quiz</li>
-                <!-- Add more failed quizzes as needed -->
             </ul>
             </div>
           </div>
