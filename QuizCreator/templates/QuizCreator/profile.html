@@ -162,25 +162,26 @@
         <div class="main-content">
             <div class="content-container">
                 <div class="form-container">
+                    <form method="post">
                     <h1>Examiner Profile</h1>
                     <br>
                     <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" value="John Doe">
+                        <label for="first_name">First Name:</label>
+                        <input type="text" id="name" name="first_name" value="{{ first_name }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" value="john.doe@example.com">
+                        <input type="email" id="email" name="email" value="{{ email }}">
                     </div>
                     <div class="form-group">
                         <label for="department">Department:</label>
-                        <input type="text" id="department" name="department" value="Computer Science">
+                        <input type="text" id="department" name="department" value="{{ department }}">
                     </div>
                     <div class="form-group">
                         <label>Courses:</label>
                         <ul id="course-list">
                             <li>
-                                <input type="text" value="INFO 501">
+                                <input type="text" value="{{ course.}}">
                                 <button class="delete-course-button" onclick="deleteCourse(this)">Delete</button>
                             </li>
                             <li>
@@ -194,11 +195,8 @@
                             <!-- Add more attempted quizzes as needed -->
                         </ul>
                     </div>
-                    <div class="form-buttons">
-                        <button class="add-course-button" onclick="addCourse()">Add Course</button>
-                        <button type="button" onclick="updateProfile()">Update</button>
+                        <button type="submit">Update</button>
                         <button type="reset" class="reset">Reset</button>
-                    </div>
                 </div>
             </div>
         </div>

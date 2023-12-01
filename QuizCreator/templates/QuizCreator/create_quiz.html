@@ -280,10 +280,10 @@
                             <textarea id="quiz-description" name="quiz-description" required></textarea><br>
 
                             <label for="quiz-duration">Duration (in minutes):</label>
-                            <input type="number" id="quiz-duration" name="quiz-duration" required><br>
+                            <input type="number" id="quiz-duration" name="quiz-duration" min="5" pattern="\d+" title="Please enter a positive integer starting from 5" required><br>
 
                             <label for="quiz-total-questions">Total No of Questions:</label>
-                            <input type="number" id="quiz-total-questions" name="quiz-total-questions" required><br>
+                            <input type="number" id="quiz-total-questions" name="quiz-total-questions" min="5" max="100" pattern="\d+" title="Please enter a positive integer starting from 5" required><br>
 
                             <label for="passcode">Passcode:</label>
                             <input type="text" id="passcode" name="passcode" required><br>

@@ -20,8 +20,13 @@ import random
 
 @examiner_required
 def home(request):
+
     # Fetch the most recent quiz created by the logged-in user
     context = get_quiz_metrics(request)
+    context['first_name'] = request.user.first_name
+    context['last_name'] = request.user.last_name
+    context['email'] = request.user.email
+    context['contact'] = request.user.contact
 
     return render(request, "QuizCreator/home.html", context)
 
@@ -456,6 +461,7 @@ def update_quiz(request):
         selected_quiz.duration = request.POST.get('quiz-duration')
         selected_quiz.total_questions = request.POST.get('quiz-total-questions')
         selected_quiz.visible = request.POST.get('quiz-visible') == 'on'
+        selected_quiz.passcode = request.POSt.get('quiz-passcode')
         selected_quiz.modified_by = request.user
         selected_quiz.save()
 

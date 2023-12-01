@@ -95,17 +95,11 @@
         <div class="card">
             <div class="card-header">Examiner Profile</div>
             <div class="card-content">
-              <p><strong>Name:</strong> John Doe</p>
-              <p><strong>Email:</strong> john.doe@example.com</p>
-              <p><strong>Department:</strong> Computer Science</p>
-              <!-- Add more profile details as needed -->
-                <p><strong>Courses:</strong></p>
-                <ul>
-                    <li>INFO 501</li>
-                    <li>INFO 537</li>
-                    <li>INFO 550</li>
-                    <!-- Add more attempted quizzes as needed -->
-                </ul>
+              <p><strong>First Name:</strong> {{ first_name }} </p>
+              <p><strong>Last Name:</strong> {{ last_name }}</p>
+              <p><strong>Email:</strong> {{ email }} </p>
+              <p><strong>Contact:</strong> {{ contact }} </p>
+              
             </div>
             <div class="card-footer"> 
                 <a href="{% url 'examiner_profile' %}">

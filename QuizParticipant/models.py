@@ -19,5 +19,5 @@ class UserQuizScore(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    score = models.IntegerField()
+    score = models.FloatField()
     timestamp = models.DateTimeField(auto_now=True)
