@@ -18,6 +18,7 @@ urlpatterns = [
     path('quiz/preview', views.preview_quiz, name="preview_quiz"),
     path('quiz/modify_questions', views.add_quiz_questions, name="add_quiz_questions"),
     path('quiz/delete_questions', views.delete_quiz_questions, name="delete_quiz_questions"),
+    path('quiz/post_quiz', views.post_quiz, name="post_quiz"),
     path('questions/category/edit', views.edit_questions, name="edit_questions"),
     path('quiz/make_quiz_visible', views.make_quiz_visible, name="make_quiz_visible"),
     path('home/create_group', views.create_group, name="create_group"),

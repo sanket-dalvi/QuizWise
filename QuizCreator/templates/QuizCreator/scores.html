@@ -141,8 +141,6 @@
         }
 
         .mainsection {
-            height: 80vh;
-            overflow-x: auto;
             width: 90%;
             margin: auto;
         }
@@ -199,6 +197,40 @@
             background-color: #E6549C;
         }
 
+        .quiz-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .quiz-info-table th, .quiz-info-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .quiz-info-table td {
+            background-color: #f4f4f4 ;
+        }
+
+        .Participant-details td{
+            background-color: #f4f4f4 ;
+        }
+
+        .select-container{
+            display: inline;
+            margin: 10% auto;
+            margin-top: 5px;
+            margin-bottom: 5vh;
+            padding-left: 10px;
+            padding-right: 10px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            height: 20vh;
+            width: 100vh;
+        }
+
     </style>
 </head>
 
@@ -214,6 +246,8 @@
     <div class="mainsection">
         <div class="main-content">
             <div class="container">
+                <h1>View Scores</h1>
+                <br>
                 <div class="quiz-select">
                     <div class="select-container">
                         <form method="post">
@@ -221,9 +255,8 @@
                             <h3 for="select-quiz" style="margin-right: 10px;">Select Quiz:</h3>
                             <select id="select-quiz" name="select-quiz" required>
                                 {% if not selected_quiz.id %}
-                                <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                    <option value="" disabled selected>--- Please select a Quiz ---</option>
                                 {% endif %}
-                                <!-- Populate dropdown with quiz options -->
                                 {% for quiz in quizzes %}
                                     <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
                                 {% endfor %}
@@ -237,25 +270,40 @@
             {% if selected_quiz %}
             {% if total_submissions %}
                 <div name="quiz_metrics">
-                    <p><strong>Name:</strong> {{ recent_quiz_metrics.quiz_name }}</p>
-                    <p><strong>Duration:</strong> {{ recent_quiz_metrics.duration }}</p>
-                    <p><strong>Total Questions:</strong> {{ recent_quiz_metrics.total_questions }}</p>
+                    <h2>Quiz Metrics for {{recent_quiz_metrics.quiz_name}}</h2>
+                    <table class="quiz-info-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Duration</th>
+                                <th>Total Questions</th>
+                                <th>Top Score</th>
+                                <th>Lowest Score</th>
+                                <th>Mean</th>
+                                <th>Median</th>
+                                <th>Mode</th>
+                                <th>Total Submissions</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>{{ recent_quiz_metrics.quiz_name }}</td>
+                            <td>{{ recent_quiz_metrics.duration }}</td>
+                            <td>{{ recent_quiz_metrics.total_questions }}</td>
+                            <td>{{ recent_quiz_metrics.max }}</td>
+                            <td>{{ recent_quiz_metrics.min }}</td>
+                            <td>{{ recent_quiz_metrics.mean }}</td>
+                            <td>{{ recent_quiz_metrics.median }}</td>
+                            <td>{{ recent_quiz_metrics.mode }}</td>
+                            <td>{{ total_submissions }}</td>
+                        </tr>
+                    </table>
                     {{ img_tag|safe }}
-                    <p><strong>Top Score:</strong>{{ recent_quiz_metrics.max }}</p>
-                    <p><strong>Lowest Score:</strong> {{ recent_quiz_metrics.min }}</p>
-                    <p><strong>Mean:</strong> {{ recent_quiz_metrics.mean }}</p>
-                    <p><strong>Median:</strong> {{ recent_quiz_metrics.median }}</p>
-                    <p><strong>Mode:</strong> {{ recent_quiz_metrics.mode }}</p>
-                </div>
-                <div>
-                    <label>Total Submissions : {{ total_submissions }}</label>
-                </div>
-            
-                <h2>Quiz Scores</h2>
-                <table border="1">
+                </div>            
+                <h2>Quiz Participation</h2>
+                <table border="1" class="Participant-details">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Sr. No</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Total Questions</th>
@@ -271,7 +319,7 @@
                                 <td>{{ data.email }}</td>
                                 <td>{{ data.total_questions }}</td>
                                 <td>{{ data.score }}</td>
-                                <td>{{ data.percentage }}%</td>
+                                <td>{{ data.percentage|floatformat:2 }}%</td>
                             
                             </tr>
                         {% endfor %}

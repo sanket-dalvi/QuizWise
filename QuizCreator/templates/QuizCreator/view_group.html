@@ -109,7 +109,6 @@
             width: 25%;
         }
 
-        /* Additional styles for dynamic fields */
         .field-container {
             display: none;
             margin-bottom: 20px;
@@ -319,22 +318,31 @@
             </div>
             <div class="examinee_section">
                 <div class="container">
-                    <form method="post">
+                    <form id="select-group-form" method="post" action="{% url 'view_group' %}">
                         {% csrf_token %}
                         <label for="select-group" style="font-weight: bolder;">Select Group:</label>
-                        <select id="select-group" name="select-group" style="width: 50%;">
+                        <select id="select-group" name="select-group" style="width: 50%;" onchange="submitForm()">
                             {% for group in groups %}
-                                <option value="{{ group.id }}">{{ group.name }}</option>
+                                <option value="{{ group.id }}" {% if group_id == group.id %} selected {% endif %}>{{ group.name }}</option>
                             {% endfor %}
                         </select>
-                        <button id="select-group-button" type="button">Select</button>
+                        <button id="select-group-button" type="submit">Select</button>
                     </form>
                 </div>
 
-                <div class="container" id="examinee-container" style="display: none;">
+                <div class="container" id="examinee-container" {% if selected_group_id %}style="display: block;"{% else %}style="display: none;"{% endif %}>
                     <h2 style="text-align: center;">List of Examinees</h2>
                     <table id="examinee-table" border="1">
-                                           
+                        {% for examinee in examinees %}
+                                <tr class="{% if examinee.id in question_id_list %}checked{% endif %}">
+                                    <td>
+                                        <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}" class="larger-checkbox" {% if examinee.id in examinee_ids %} checked {% endif %}>
+                                    </td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ examinee.first_name }} {{ examinee.last_name }}</td>
+                                    <td>{{ examinee.email }}</td>
+                                </tr>
+                            {% endfor %}
                     </table>
                 </div>
             </div>
@@ -346,5 +354,9 @@
     </div>
 
 </body>
-
+<script>
+    function submitForm() {
+        document.getElementById("select-group-form").submit();
+    }
+</script>
 </html>

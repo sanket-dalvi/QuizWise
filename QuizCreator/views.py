@@ -18,11 +18,9 @@ import pandas as pd
 import random
 
 
-
 @examiner_required
 def home(request):
 
-    # Fetch the most recent quiz created by the logged-in user
     context = get_quiz_metrics(request)
     context['first_name'] = request.user.first_name
     context['last_name'] = request.user.last_name
@@ -97,8 +95,6 @@ def get_quiz_metrics(request, quiz=None):
     else:
         recent_quiz_metrics = None
         img_tag = None
-
-    
 
     context = {
         'recent_quiz_metrics': recent_quiz_metrics,
@@ -485,7 +481,7 @@ def update_quiz(request):
         selected_quiz.duration = request.POST.get('quiz-duration')
         selected_quiz.total_questions = request.POST.get('quiz-total-questions')
         selected_quiz.visible = request.POST.get('quiz-visible') == 'on'
-        selected_quiz.passcode = request.POSt.get('quiz-passcode')
+        selected_quiz.passcode = request.POST.get('quiz-passcode')
         selected_quiz.modified_by = request.user
         selected_quiz.save()
 
@@ -499,6 +495,11 @@ def update_quiz(request):
 def delete_quiz(request):
     return redirect("edit_quiz")
 
+@examiner_required
+def post_quiz(request):
+    quizzes = Quiz.objects.all()
+    groups = Groups.objects.all()
+    return render(request, 'QuizCreator/post_quiz.html', {'quizzes': quizzes, 'groups': groups})
 
 @examiner_required
 def add_quiz_questions(request):
@@ -737,8 +738,27 @@ def create_group(request):
     return render(request, 'QuizCreator/create_group.html')
 
 
+"""
+@examiner_required
+def view_group(request):
+    groups = Groups.objects.all()
+    return render(request, 'QuizCreator/view_group.html',  {'groups': groups})"""
+
 
 @examiner_required
 def view_group(request):
     groups = Groups.objects.all()
-    return render(request, 'QuizCreator/view_group.html',  {'groups': groups})
+    selected_group_id = None
+    examinees = []
+
+    if request.method == 'POST':
+        selected_group_id = request.POST.get('select-group')
+        selected_group = Groups.objects.get(id=selected_group_id)
+        # Assuming 'groups' is the ForeignKey field in the User model pointing to the Groups model
+        examinees = User.objects.filter(groups=selected_group)
+
+    return render(request, 'QuizCreator/view_group.html', {
+        'groups': groups,
+        'selected_group_id': selected_group_id,
+        'examinees': examinees,
+    })

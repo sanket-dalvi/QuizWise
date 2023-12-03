@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-top: 40px; /* Adjust the top margin as needed */
+            margin-bottom: 30px; /* Adjust the bottom margin as needed */
+        }
+
+        .headerbuttons {
+            display: none;
+        }
+
+        .registerbutton {
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        table {
+            width: 60%; 
+            margin: 0 auto; 
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #663399;
+            color: whitesmoke;
+            text-align: center;
+        }
+
+        td {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        
+        .mainsection {
+            height: 80vh;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        
+        .examinee_container{
+            margin: 3% auto; 
+            margin-bottom: 50px;
+            background-color: #f2f2f2;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 130vh;
+        }
+
+        .examinee_section {
+            margin: 10px; 
+        }
+
+        .add_examinee{
+            margin-bottom: 20px;
+        }
+
+        .larger-checkbox {
+            transform: scale(1.5);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+
+        button:hover {
+            background-color: #E6549C;
+        }
+
+        .main-content button {
+            width: 25%;
+            align-self: center;
+        }
+
+        form{
+            margin-top: 1%;
+        }
+
+        .container h2{
+            text-align: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+            margin: 10% auto;
+            margin-top: 5px;
+            margin-bottom: 5vh;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 160vh;
+        }
+
+        .form-container {
+            width: 100%;
+        }
+
+        .form-container form {
+            width: 100%;
+        }
+
+        .container button{
+            width: 15%;
+        }
+
+        label,select,button{
+            margin-top: 2%;
+        }
+
+        .header-title{
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <div>
+        {% include 'QuizCreator/navbar.html' %}
+    </div>
+
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="message">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="header-title">
+                <h1>Post Quiz</h1>
+            </div>
+            <div class="container">
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="form-type" value="select-group">
+                        <label for="select-group" style="font-weight: bolder;">Choose Group:</label>
+                        <select id="select-group" name="select-group" style="width: 40%;">
+                            {% if not selected_quiz %}
+                                <option disabled selected value>-- Please Select a Group --</option>
+                            {% endif %}
+                            {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button id="select-group-button" type="button" style="width: 30%;">Select group</button>
+                    </form>
+                </div>
+                <div class="form-container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="form-type" value="select-quiz">
+                        <label for="select-quiz" style="margin-top: -15px; font-weight: bolder;">Choose Quiz:</label>
+                        <select id="select-quiz" name="select-quiz" required style="width: 40%;">
+                            {% if not selected_quiz %}
+                                <option disabled selected value>-- Please Select a Quiz --</option>
+                            {% endif %}
+                            {% for quiz in quizzes %}
+                                <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" value="Select" style="width: 30%;">Select Quiz</button>
+                    </form>
+                </div>
+                <div class="form-container">
+                    <form method="post" action="{% url 'make_quiz_visible' %}">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
+                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: 85%;">Post quiz to group</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html'%}
+    </div>
+
+</body>
+</html>
