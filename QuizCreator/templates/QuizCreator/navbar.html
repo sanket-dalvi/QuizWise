@@ -84,7 +84,14 @@
                 <a href="{% url 'view_questions'%}">View Question</a>
                 <a href="{% url 'create_question_category' %}">Create Question Category</a>
                 <a href="{% url 'map_question_category' %}">Map Question Category</a>
-
+            </div>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">Manage Examinees</a>
+            <div class="dropdown-content">
+                <a href="{% url 'create_group' %}">Create Group</a>
+                <a href="{% url 'view_group'%}">View Group</a>
+                <a href="{% url 'add_examinee_to_group'%}">Add Examinee to Group</a>
             </div>
         </li>
         <li><a href="{% url 'logout' %}">Logout</a></li>

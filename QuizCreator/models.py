@@ -73,3 +73,14 @@ class Quiz(models.Model):
 class QuizQuestion(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+
+class Groups(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    total_students = models.IntegerField()
+
+class GroupExamineeMapping(models.Model):
+    group = models.ForeignKey(Groups, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

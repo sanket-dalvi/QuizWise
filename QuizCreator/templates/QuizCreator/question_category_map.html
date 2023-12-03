@@ -328,11 +328,10 @@
                         </div>
 
                         <div class="questions-table">
-                            <!-- Table to display questions will be dynamically populated from backend -->
                             <table id="questions-table">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
                                         <th>No</th>
                                         <th style="width: 25%;">Question</th>
                                         <th>Answer Choice Type</th>
@@ -389,7 +388,7 @@
                 var tableRows = document.querySelectorAll('#questions-table tbody tr');
 
                 tableRows.forEach(function(row) {
-                    var questionText = row.children[2].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
+                    var questionText = row.children[2].textContent.toLowerCase(); 
                     if (questionText.indexOf(searchText) === -1) {
                         row.style.display = 'none';
                     } else {
@@ -403,8 +402,8 @@
 
         searchInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById('search-btn').click(); // Simulate a click on the search button
+                event.preventDefault(); 
+                document.getElementById('search-btn').click(); 
             }
         });
 
@@ -413,7 +412,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
 
         function hideMessage() {
             document.querySelectorAll('.alert').forEach(function (alert) {
@@ -425,18 +423,39 @@
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 3000); // Hide the message after 3 seconds (5000 milliseconds)
+            }, 3000); 
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });
 
-        // Show messages for a duration when the page loads
         document.querySelectorAll('.alert').forEach(function (messageElement) {
             showMessageForDuration(messageElement);
         });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectAllCheckbox = document.getElementById('select-all-checkbox');
+        var checkboxes = document.querySelectorAll('#questions-table tbody input[type="checkbox"]');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                if (!checkbox.checked) {
+                    selectAllCheckbox.checked = false;
+                }
+            });
+        });
+
+
     });
 </script>
 

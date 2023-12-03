@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-top: 40px; /* Adjust the top margin as needed */
+            margin-bottom: 30px; /* Adjust the bottom margin as needed */
+        }
+
+        .headerbuttons {
+            display: none;
+        }
+
+        .registerbutton {
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        table {
+            width: 60%; 
+            margin: 0 auto; 
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #663399;
+            color: whitesmoke;
+            text-align: center;
+        }
+
+        td {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        
+        .mainsection {
+            height: 80vh;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            margin-right: 10px;
+        }
+        
+        .examinee_container{
+            margin: 3% auto; 
+            margin-bottom: 50px;
+            background-color: #f2f2f2;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 130vh;
+        }
+
+        .examinee_section {
+            margin: 10px; 
+        }
+
+        .add_examinee{
+            margin-bottom: 20px;
+        }
+
+        .larger-checkbox {
+            transform: scale(1.5);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+
+        button:hover {
+            background-color: #E6549C;
+        }
+
+        .main-content button {
+            width: 25%;
+            align-self: center;
+        }
+
+        .container h2{
+            text-align: center;
+        }
+
+        .container {
+            margin: 10% auto;
+            margin-top: 5px;
+            margin-bottom: 5vh;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            height: 10vh;
+            width: 125vh;
+        }
+
+        .container button{
+            width: 15%;
+        }
+
+        label,select,button{
+            margin-top: 2%;
+        }
+
+        .header-title{
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <div>
+        {% include 'QuizCreator/navbar.html' %}
+    </div>
+
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="message">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="header-title">
+                <h1>Add Examinees to Group</h1>
+            </div>
+            <div class="examinee_section">
+                <div class="container">
+                    <form method="post" action="{% url 'add_examinee_to_group' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="form-type" value="select-group">
+                        <label for="select-group" style="font-weight: bolder;">Select Group:</label>
+                        <select id="select-group" name="select-group" style="width: 50%;">
+                            {% for group in groups %}
+                                <option value="{{ group.id }}" {% if group_id == group.id %} selected {% endif %}>{{ group.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button id="select-group-button" type="submit">Select</button>
+                    </form>
+                </div>
+                {% if group_id %}
+                <div class="examinee_container">
+                    <h2>List of Examinees</h2>
+                    <form method="post" action="{% url 'add_examinee_to_group' %}" id="add-examinee-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="form-type" value="add-examinees">
+                        <input type="hidden" name="selected-group" id="selected-group" value="{{ group_id }}">
+                        <table border="1">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
+                                <th>Sr.No</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for examinee in examinees %}
+                                <tr class="{% if examinee.id in question_id_list %}checked{% endif %}">
+                                    <td>
+                                        <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}" class="larger-checkbox" {% if examinee.id in examinee_ids %} checked {% endif %}>
+                                    </td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ examinee.first_name }} {{ examinee.last_name }}</td>
+                                    <td>{{ examinee.email }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="add_examinee">
+                        <button type="submit" id="add-examinee-button">Add Examinees</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html'%}
+    </div>
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectAllCheckbox = document.getElementById('select-all-checkbox');
+        var checkboxes = document.querySelectorAll('.examinee_section tbody input[type="checkbox"]');
+        var selectGroupButton = document.getElementById('select-group-button');
+        var addExamineeButton = document.getElementById('add-examinee-button');
+
+        selectAllCheckbox.addEventListener('change', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                if (!checkbox.checked) {
+                    selectAllCheckbox.checked = false;
+                }
+            });
+        });
+
+        selectGroupButton.addEventListener('click', function () {
+            var selectedGroupId = document.getElementById('select-group').value;
+            selectedGroupInput.value = selectedGroupId;  
+            console.log('Selected Group ID:', selectedGroupId);
+        });
+
+        addExamineeButton.addEventListener('click', function () {
+            var selectedExaminees = [];
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedExaminees.push(checkbox.value);
+                }
+            });
+            console.log('Selected Examinees:', selectedExaminees);
+            selectedGroupInput.value = selectedGroupId;  
+            document.getElementById('add-examinee-form').submit();  
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        function hideMessage() {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                alert.style.display = 'none';
+            });
+        }
+
+        function showMessageForDuration(messageElement) {
+            messageElement.style.display = 'block';
+            setTimeout(function () {
+                messageElement.style.display = 'none';
+            }, 3000); 
+        }
+
+        document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
+            addDeleteButton(label);
+        });
+
+        // Show messages for a duration when the page loads
+        document.querySelectorAll('.alert').forEach(function (messageElement) {
+            showMessageForDuration(messageElement);
+        });
+    });
+</script>
+
+</html>

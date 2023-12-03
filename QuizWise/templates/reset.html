@@ -158,17 +158,23 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
+        .footer-content{
+            margin-top: 30px;
+            color: black;
+            text-align: center;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1><a href="{% url 'index' %}">Quiz Wise Registration</a></h1>
-        <a id="login-button" href="{% url 'login' %}">Already have an account? Log in here.</a>
+        <h1 style="margin-left: 50px;"><a href="{% url 'index' %}">Click here to go back to Home</a></h1>
+        <a id="login-button" href="{% url 'login' %}" style="margin-right: 50px;">Already have an account? Log in here.</a>
     </header>
 
     <div class="main-content">
         <div class="gif-container">
-            <img src="https://media.giphy.com/media/v8ZWVwrvMk30fQjBwX/giphy.gif" alt="Your GIF">
         </div>
 
         <div class="content-container">
@@ -201,8 +207,8 @@
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2023 Your Company Name. All Rights Reserved.</p>
-    </footer>
+    <div class="footer-content">
+        {% include 'footer.html'%}
+    </div>
 </body>
 </html>

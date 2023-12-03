@@ -79,6 +79,15 @@
             background-color: #E6549C;
         }
 
+        .Upload-file-container {
+            text-align: center;
+            margin-top: 20px; 
+        }
+
+        .Upload-file-container div {
+            margin-top: 10px; 
+        }
+
         .button-container {
             display: flex;
             align-self: center;
@@ -219,7 +228,16 @@
                             <div>
                                 <button type="submit">Submit Question</button>
                             </div>
-                        </div>                                     
+                        </div>  
+                        <div class="Upload-file-container">
+                            <div>
+                                <input type="file" id="fileInput" accept=".xls, .xlsx, .txt" onchange="displayFileName(this)">
+                                <br>
+                                <div class="file-name" id="fileNameDisplay"></div>
+                                <br>
+                                <button type="button" id="uploadButton" onclick="uploadFile()">Upload File</button>
+                            </div>
+                        </div>                                  
                     </form>
                 </div>
             </div>
@@ -266,9 +284,9 @@
             document.getElementById('type').addEventListener('change', function () {
                 var type = this.value;
                 var dynamicFieldDiv = document.getElementById('dynamic-fields');
-                dynamicFieldDiv.innerHTML = ''; // Clear previous fields
+                dynamicFieldDiv.innerHTML = ''; 
 
-                if (type === 'RB' || type === 'CB') { // Radio Button type or Checkbox type
+                if (type === 'RB' || type === 'CB') { 
                     var newOption = prompt("Enter Option Value");
 
                     if (newOption !== null && newOption.trim() !== '') {
@@ -354,6 +372,28 @@
             showMessageForDuration(messageElement);
         });
     });
+</script>
+<script>
+    function displayFileName(input) {
+        const fileDisplay = document.getElementById('fileNameDisplay');
+        if (input.files.length > 0) {
+            fileDisplay.textContent = 'File Selected: ' + input.files[0].name;
+        } else {
+            fileDisplay.textContent = ''; // Clear the text if no file is chosen
+        }
+    }
+
+    function uploadFile() {
+        // Add your file upload logic here
+        alert('File uploaded!');
+
+        // Clear the file selected message
+        const fileDisplay = document.getElementById('fileNameDisplay');
+        fileDisplay.textContent = '';
+
+        // Reset file input
+        document.getElementById('fileInput').value = '';
+    }
 </script>
 
 </html>

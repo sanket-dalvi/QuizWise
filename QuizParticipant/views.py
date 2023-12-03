@@ -10,8 +10,6 @@ from difflib import SequenceMatcher
 
 
 
-
-
 @examinee_required
 def home(request):
     context = {}
@@ -47,9 +45,19 @@ def home(request):
         }
         quiz_score_data.append(quiz_data)
 
-
-
     context['quiz_scores'] = quiz_score_data
+
+    user = request.user
+    quiz_list = Quiz.objects.filter(visible = True)
+    quizzes = []
+    for quiz in quiz_list:
+        user_quiz_status, created = UserQuizStatus.objects.get_or_create(
+            user = user,
+            quiz = quiz
+        )
+        if user_quiz_status.status == "Active":
+            quizzes.append(quiz) 
+    context['quizzes'] = quizzes
 
     return render(request, "QuizParticipant/home.html", context)
 

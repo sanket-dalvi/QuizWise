@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Category Mapping</title>
+    {% load static %}
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .headerbuttons{
+            display: none;
+        }
+
+        .registerbutton{
+            display: none;
+        }
+
+        .header-title{
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        textarea {
+            width: 96%; 
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            height: 100px;
+        }
+
+        input {
+            width: 96%; 
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        .form-container {
+            margin: 50px auto;
+            width: 60%;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+            margin-bottom: 40px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: inline-block;
+            width: 70%;
+            margin-left: 150px;
+        }
+
+        .addgroupbutton button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+
+        .addgroupbutton button:hover {
+            background-color: #E6549C;
+        }
+
+        .addgroupbutton {
+            text-align: center;
+            margin-top: 5px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .addgroupbutton button{
+            width: 25%;
+        }
+
+        /* Additional styles for dynamic fields */
+        .field-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .field-container.visible {
+            display: block;
+        }
+
+        .field-container label {
+            margin-bottom: 5px;
+        }
+
+        .field-container input {
+            margin-bottom: 10px;
+        }
+
+        #dynamic-fields {
+            display: grid;
+        }
+        
+        .note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .note p {
+            margin: 0;
+        }
+
+        .message {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .larger-checkbox {
+            transform: scale(1.5);
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .questions-table {
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+
+        .examinee_section {
+            margin: 10px; 
+        }
+
+        button {
+            padding: 6px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        #questions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #questions-table th,
+        #questions-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .mainsection{
+            height: 80vh;
+            overflow-x: auto;
+        }
+
+        .container {
+            margin: 10% auto;
+            margin-top: 5px;
+            margin-bottom: 5vh;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            height: 10vh;
+            width: 100vh;
+        }
+
+        .container button{
+            width: 15%;
+        }
+
+        label,select,button{
+            margin-top: 2%;
+        }
+
+        label, select, button {
+            margin-top: 2%;
+            display: inline-block;
+        }
+
+        select {
+            width: 50%;
+        }
+
+        button {
+            width: auto; 
+            margin-left: 10px; 
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #663399;
+            color: white;
+            cursor: pointer;
+            font-weight: bold; 
+        }
+
+        button:hover {
+            background-color: #E6549C;
+        }
+
+
+        .footer-content{
+            background: linear-gradient(to right, #1DA3B8, #77AB59);
+            font-size: small;
+            padding: 10px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        {% include 'header.html' %}
+    </div>
+
+    <div>
+        {% include 'QuizCreator/navbar.html' %}
+    </div>
+
+    <div class="mainsection">
+        <div class="main-content">
+            <div class="header-title">
+                <h1>View Group</h1>
+            </div>
+            <div class="examinee_section">
+                <div class="container">
+                    <form method="post">
+                        {% csrf_token %}
+                        <label for="select-group" style="font-weight: bolder;">Select Group:</label>
+                        <select id="select-group" name="select-group" style="width: 50%;">
+                            {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button id="select-group-button" type="button">Select</button>
+                    </form>
+                </div>
+
+                <div class="container" id="examinee-container" style="display: none;">
+                    <h2 style="text-align: center;">List of Examinees</h2>
+                    <table id="examinee-table" border="1">
+                                           
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-content">
+        {% include 'footer.html' %}
+    </div>
+
+</body>
+
+</html>

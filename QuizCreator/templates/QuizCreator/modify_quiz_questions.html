@@ -385,7 +385,7 @@
                                     <form method="post" action="{% url 'make_quiz_visible' %}">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
-                                    <button type="submit">Make Quiz Visible To Examinees</button>
+                                    <button type="submit">Post Quiz To Examinees</button>
                                     </form>
                                 {% endif %}
                             {% else %}
@@ -430,7 +430,7 @@
                                     <table id="questions-table">
                                         <thead>
                                             <tr>
-                                                <th>Select</th>
+                                                <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
                                                 <th style="width: 5%;">No</th>
                                                 <th style="width: 30%;">Question</th>
                                                 <th style="width: 10%;">Answer Choice Type</th>
@@ -650,5 +650,24 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectAllCheckbox = document.getElementById('select-all-checkbox');
+        var checkboxes = document.querySelectorAll('#questions-table tbody input[type="checkbox"]');
 
+        selectAllCheckbox.addEventListener('change', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                if (!checkbox.checked) {
+                    selectAllCheckbox.checked = false;
+                }
+            });
+        });
+    });
+</script>
 </html>

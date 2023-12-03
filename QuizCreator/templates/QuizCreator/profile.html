@@ -117,7 +117,7 @@
             justify-content: center;
         }
 
-        .form-buttons button {
+        .form-container button {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -127,16 +127,8 @@
             margin-right: 10px;
         }
 
-        .form-buttons button:hover {
+        .form-container button:hover {
             background-color: #E6549C;
-        }
-
-        .form-buttons button.reset {
-            background-color: #663399;
-        }
-
-        .form-buttons button.reset:hover {
-            background-color: lightgreen;
         }
 
         .footer-content{
@@ -163,6 +155,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
     </style>
 </head>
 
@@ -205,7 +198,7 @@
                             <input type="email" id="email" name="email" value="{{ email }}">
                         </div>
                         <div class="form-group">
-                            <label for="contact">Email:</label>
+                            <label for="contact">Contact:</label>
                             <input type="number" id="contact" name="contact" value="{{ contact }}">
                         </div>
 
@@ -218,7 +211,6 @@
     </div>
 
     <div class="footer-content">
-        <!-- Include the footer -->
         {% include 'footer.html'%}
     </div>
 
@@ -239,7 +231,6 @@
         }
 
         function updateProfile() {
-            // Implement logic to update the profile details
             alert('Profile updated!');
         }
     </script>

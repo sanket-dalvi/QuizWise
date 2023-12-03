@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
-from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap, Quiz, QuizQuestion
+from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap, Quiz, QuizQuestion, Groups, GroupExamineeMapping
 from QuizParticipant.models import UserQuizScore
 from QuizWise.models import User
 from django.db.models import Q
@@ -433,7 +433,6 @@ def map_question_category(request):
     return render(request, "QuizCreator/question_category_map.html", {'questions': questions, 'categories': categories})
 
 
-
 @examiner_required
 def create_quiz(request):
     if request.method == 'POST':
@@ -673,3 +672,73 @@ def preview_quiz(request):
         return render(request, "QuizCreator/show_preview.html", {'quiz' : quiz,'quiz_questions' : shuffled_questions})
         
     return render(request, "QuizCreator/preview_quiz.html", {'quizzes' : quizzes})
+
+
+
+@examiner_required
+def add_examinee_to_group(request):
+    group_id = None
+    # If the request method is not POST, render the form template
+    groups = Groups.objects.all()
+    examinees = User.objects.filter(is_examinee=True)
+
+    if request.method == 'POST':
+        form_type = request.POST.get('form-type')
+        if form_type == 'select-group' :
+            group_id = int(request.POST.get('select-group'))
+            group = Groups.objects.get(id=group_id)
+            group_examinees = GroupExamineeMapping.objects.filter(group=group)
+            examinee_ids = []
+
+            for examinee in group_examinees:
+                examinee_ids.append(examinee.id)
+            
+            return render(request, 'QuizCreator/add_examinee_to_group.html', {'group_id': group_id, 'examinees' : examinees, 'groups': groups, 'examinee_ids': examinee_ids})
+
+        elif form_type == 'add-examinees':
+            group_id = request.POST.get('selected-group')
+            selected_examinees = request.POST.getlist('checkbox-group')
+            group = Groups.objects.get(id=group_id)
+            # Create GroupExamineeMapping instances for each selected examinee
+            for examinee_id in selected_examinees:
+                examinee = User.objects.get(id=examinee_id)
+                GroupExamineeMapping.objects.create(group=group, user=examinee)
+                
+            # Add a success message
+            messages.success(request, 'Examinees added to the group successfully!')
+            return render(request, 'QuizCreator/add_examinee_to_group.html', {'examinees' : examinees, 'groups': groups})
+
+    return render(request, 'QuizCreator/add_examinee_to_group.html', {'group_id': group_id, 'examinees': examinees, 'groups': groups})
+
+
+@examiner_required
+def create_group(request):
+    if request.method == 'POST':
+        group_name = request.POST.get('group-name')
+        group_description = request.POST.get('group-description')
+        total_students = request.POST.get('total-students')
+
+        # Create a new group instance
+        new_group = Groups(
+            name=group_name,
+            description=group_description,
+            total_students=total_students
+        )
+        # Save the group to the database
+        new_group.save()
+
+        # Optionally, you can add a success message using Django's messages framework
+        messages.success(request, 'Group created successfully!')
+
+        # Redirect to a different page or template if needed
+        return redirect('create_group')
+
+    # If the request method is not POST, render the form template
+    return render(request, 'QuizCreator/create_group.html')
+
+
+
+@examiner_required
+def view_group(request):
+    groups = Groups.objects.all()
+    return render(request, 'QuizCreator/view_group.html',  {'groups': groups})
