@@ -88,8 +88,8 @@ DATABASES = {
     #     "ENGINE": "django.db.backends.postgresql",
     #     "NAME": "QuizWise",
     #     "USER": "postgres",
-    #     "PASSWORD":"PostgreSQLService@24/7",
-    #     #"PASSWORD":"1996", # alisha's postgres password
+    #     #"PASSWORD":"PostgreSQLService@24/7",
+    #     "PASSWORD":"1996", # alisha's postgres password
     #     #"PASSWORD":"", # animesh's postgres password 
     #     "HOST":"localhost",
     #     "PORT":"5432",

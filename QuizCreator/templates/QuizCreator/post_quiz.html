@@ -135,6 +135,7 @@
 
         .form-container {
             width: 100%;
+            margin-top: 20px;
         }
 
         .form-container form {
@@ -213,7 +214,7 @@
                 {% endif %}
             </div>
             <div class="header-title">
-                <h1>Post Quiz</h1>
+            <h1>Post Quiz</h1>
             </div>
             <div class="container">
                 <div class="form-container">
@@ -238,8 +239,7 @@
                         {% csrf_token %}
                         {% if group_examinees %}
                         <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
-                        <input type="hidden" value="{{ selected_group.id }}" name="group_id">
-                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: 85%;">Post quiz to group</button>
+                        <label for="select-group" style="font-weight: bolder;">Choose Quiz:</label>
                         <select id="select-quiz" name="select-quiz" required style="width: 40%;">
                             {% if not selected_quiz %}
                                 <option disabled selected value>-- Please Select a Quiz --</option>
@@ -249,7 +249,7 @@
                             {% endfor %}
                         </select>
     
-                        <table border="1" class="Participant-details">
+                        <table border="1" class="Participant-details" style="margin-left: -35%;">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
@@ -271,8 +271,9 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: -110%;">Post quiz to group</button>
                         {% else %}
-                        No Examinees In This Group
+                            No Examinees In This Group
                         {% endif %}
                     </form>
                 </div>
@@ -285,4 +286,71 @@
     </div>
 
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var selectAllCheckbox = document.getElementById('select-all-checkbox');
+    var checkboxes = document.querySelectorAll('.Participant-details tbody input[type="checkbox"]');
+    var selectGroupButton = document.getElementById('select-group-button');
+    var addExamineeButton = document.getElementById('add-examinee-button');
+
+    selectAllCheckbox.addEventListener('change', function () {
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    });
+
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            if (!checkbox.checked) {
+                selectAllCheckbox.checked = false;
+            }
+        });
+    });
+
+    selectGroupButton.addEventListener('click', function () {
+        var selectedGroupId = document.getElementById('select-group').value;
+        selectedGroupInput.value = selectedGroupId;
+        console.log('Selected Group ID:', selectedGroupId);
+    });
+
+    addExamineeButton.addEventListener('click', function () {
+        var selectedExaminees = [];
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                selectedExaminees.push(checkbox.value);
+            }
+        });
+        console.log('Selected Examinees:', selectedExaminees);
+        selectedGroupInput.value = selectedGroupId;
+        document.getElementById('add-examinee-form').submit();
+    });
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        function hideMessage() {
+            document.querySelectorAll('.alert').forEach(function (alert) {
+                alert.style.display = 'none';
+            });
+        }
+
+        function showMessageForDuration(messageElement) {
+            messageElement.style.display = 'block';
+            setTimeout(function () {
+                messageElement.style.display = 'none';
+            }, 3000); 
+        }
+
+        document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
+            addDeleteButton(label);
+        });
+
+        // Show messages for a duration when the page loads
+        document.querySelectorAll('.alert').forEach(function (messageElement) {
+            showMessageForDuration(messageElement);
+        });
+    });
+</script>
+
 </html>

@@ -772,7 +772,7 @@ def add_examinee_to_group(request):
                 GroupExamineeMapping.objects.get_or_create(group=group, user=examinee)
                 
             # Add a success message
-            messages.success(request, 'Examinees added to the group successfully!')
+            messages.success(request, 'Group updated successfully!')
             return render(request, 'QuizCreator/add_examinee_to_group.html', {'examinees' : examinees, 'groups': groups})
 
     return render(request, 'QuizCreator/add_examinee_to_group.html', {'group_id': group_id, 'examinees': examinees, 'groups': groups})
@@ -788,6 +788,7 @@ def create_group(request):
         new_group = Group(
             name=group_name,
             description=group_description,
+            created_by = request.user
         )
         # Save the group to the database
         new_group.save()
@@ -800,13 +801,6 @@ def create_group(request):
 
     # If the request method is not POST, render the form template
     return render(request, 'QuizCreator/create_group.html')
-
-
-"""
-@examiner_required
-def view_group(request):
-    groups = Groups.objects.all()
-    return render(request, 'QuizCreator/view_group.html',  {'groups': groups})"""
 
 
 @examiner_required

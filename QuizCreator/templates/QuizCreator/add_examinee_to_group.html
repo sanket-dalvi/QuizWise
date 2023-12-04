@@ -205,6 +205,7 @@
                         <input type="hidden" name="form-type" value="select-group">
                         <label for="select-group" style="font-weight: bolder;">Select Group:</label>
                         <select id="select-group" name="select-group" style="width: 50%;">
+                            <option disabled selected value>-- Please Select a Group --</option>
                             {% for group in groups %}
                                 <option value="{{ group.id }}" {% if group_id == group.id %} selected {% endif %}>{{ group.name }}</option>
                             {% endfor %}

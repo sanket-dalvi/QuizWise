@@ -8,9 +8,7 @@
     <title>View Questions</title>
     {% load static %}
     <style>
-        /* Add your CSS styles here */
 
-        /* General styles */
         body {
             margin: 0;
             padding: 0;
@@ -62,7 +60,6 @@
             background-color: #0056b3;
         }
 
-        /* Additional styles for dynamic fields */
         .field-container {
             display: none;
             margin-bottom: 20px;
@@ -173,7 +170,7 @@
         }
 
         
-        .submitbutton button {
+        button {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -183,19 +180,16 @@
             font-weight: bold; 
         }
 
-        .submitbutton button:hover {
+        button:hover {
             background-color: #E6549C;
         }
 
-        .submitbutton {
+        button {
             text-align: center;
             margin-top: 5px;
             padding-left: 20px;
             padding-right: 20px;
-        }
-
-        .submitbutton button{
-            width: 25%;
+            width: 20%;
         }
 
         .container h2{
@@ -262,6 +256,7 @@
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
+                <h1 style="margin-top: 30px;">Preview Quiz</h1>
                 <div class="message">
                     {% if messages %}
                         {% for message in messages %}
@@ -272,15 +267,13 @@
                     {% endif %}
                 </div>
 
-                <div class="container">
-
+                <div class="container" style="margin-top: 2%; text-align: center;">
                     <form method="post" target="_blank">
                         {% csrf_token %}
                             <!-- Select Quiz Dropdown -->
-                            <h2>Preview Quiz</h2>
-                            <div class="quiz-select">
+                            <div class="quiz-select" style="margin-top: 3%;">
                                 <label for="select-quiz">Select Quiz:</label>
-                                <select id="select-quiz" name="select-quiz" required>
+                                <select id="select-quiz" name="select-quiz" required style="width: 50%;">
                                     {% if not selected_quiz_id %}
                                     <option value="" disabled selected>--- Please select a Quiz ---</option>
                                     {% endif %}
@@ -289,8 +282,7 @@
                                         <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
                                     {% endfor %}
                                 </select>
-                                <div class="submitbutton">
-                                <button type="submit">Select</button></div>
+                                <button type="submit" class="submitbutton">Select</button>
                             </div>
                             <br>
                     </form>
