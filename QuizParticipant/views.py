@@ -22,10 +22,10 @@ def home(request):
     current_user = request.user
     recent_quizzes = (
     UserQuizScore.objects.filter(user=current_user)
-    .values('quiz')
-    .annotate(latest_timestamp=Max('timestamp'))
-    .order_by('-latest_timestamp')
-)
+            .values('quiz')
+            .annotate(latest_timestamp=Max('timestamp'))
+            .order_by('-latest_timestamp')
+        )
     quiz_score_data = []
 
     for quiz in recent_quizzes:
@@ -47,17 +47,9 @@ def home(request):
 
     context['quiz_scores'] = quiz_score_data
 
-    user = request.user
-    quiz_list = Quiz.objects.filter(visible = True)
-    quizzes = []
-    for quiz in quiz_list:
-        user_quiz_status, created = UserQuizStatus.objects.get_or_create(
-            user = user,
-            quiz = quiz
-        )
-        if user_quiz_status.status == "Active":
-            quizzes.append(quiz) 
-    context['quizzes'] = quizzes
+    available_quizzes = UserQuizStatus.objects.filter(user=current_user, status='Active').values('quiz').annotate(latest_timestamp=Max('timestamp')).order_by('-latest_timestamp')
+    
+    context['quizzes'] = available_quizzes
 
     return render(request, "QuizParticipant/home.html", context)
 

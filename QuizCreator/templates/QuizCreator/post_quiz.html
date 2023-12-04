@@ -185,6 +185,10 @@
             color: white;
             text-align: center;
         }
+
+        .Participant-details td{
+            background-color: #f4f4f4 ;
+        }
     </style>
 </head>
 
@@ -218,21 +222,24 @@
                         <input type="hidden" name="form-type" value="select-group">
                         <label for="select-group" style="font-weight: bolder;">Choose Group:</label>
                         <select id="select-group" name="select-group" style="width: 40%;">
-                            {% if not selected_quiz %}
+                            {% if not selected_group %}
                                 <option disabled selected value>-- Please Select a Group --</option>
                             {% endif %}
                             {% for group in groups %}
-                                <option value="{{ group.id }}">{{ group.name }}</option>
+                                <option value="{{ group.id }}" {% if selected_group.id == group.id %} selected {% endif %}>{{ group.name }}</option>
                             {% endfor %}
                         </select>
-                        <button id="select-group-button" type="button" style="width: 30%;">Select group</button>
+                        <button id="select-group-button" type="submit" style="width: 30%;">Select group</button>
                     </form>
                 </div>
+    
                 <div class="form-container">
-                    <form method="post">
+                    <form method="post" action="{% url 'post_quiz' %}">
                         {% csrf_token %}
-                        <input type="hidden" name="form-type" value="select-quiz">
-                        <label for="select-quiz" style="margin-top: -15px; font-weight: bolder;">Choose Quiz:</label>
+                        {% if group_examinees %}
+                        <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
+                        <input type="hidden" value="{{ selected_group.id }}" name="group_id">
+                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: 85%;">Post quiz to group</button>
                         <select id="select-quiz" name="select-quiz" required style="width: 40%;">
                             {% if not selected_quiz %}
                                 <option disabled selected value>-- Please Select a Quiz --</option>
@@ -241,14 +248,32 @@
                                 <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
                             {% endfor %}
                         </select>
-                        <button type="submit" value="Select" style="width: 30%;">Select Quiz</button>
-                    </form>
-                </div>
-                <div class="form-container">
-                    <form method="post" action="{% url 'make_quiz_visible' %}">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
-                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: 85%;">Post quiz to group</button>
+    
+                        <table border="1" class="Participant-details">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
+                                    <th>Sr. No</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for examinee in group_examinees %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}" class="larger-checkbox" {% if examinee.id in examinee_id_list %} checked {% endif %}>
+                                        </td>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ examinee.username }}</td>
+                                        <td>{{ examinee.email }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        No Examinees In This Group
+                        {% endif %}
                     </form>
                 </div>
             </div>

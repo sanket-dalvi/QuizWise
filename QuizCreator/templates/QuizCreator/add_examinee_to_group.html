@@ -230,7 +230,7 @@
                         </thead>
                         <tbody>
                             {% for examinee in examinees %}
-                                <tr class="{% if examinee.id in question_id_list %}checked{% endif %}">
+                                <tr>
                                     <td>
                                         <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}" class="larger-checkbox" {% if examinee.id in examinee_ids %} checked {% endif %}>
                                     </td>
