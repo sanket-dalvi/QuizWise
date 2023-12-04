@@ -312,6 +312,7 @@
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
+                <h1 style="margin-top: 30px;">Edit Quiz</h1>
                 <div class="message">
                     {% if messages %}
                         {% for message in messages %}
@@ -327,11 +328,9 @@
                     <form method="post">
                         {% csrf_token %}
                         <div class="container">
-                            <!-- Select Quiz Dropdown -->
-                            <h2>Edit Quiz</h2>
-                            <div class="quiz-select">
-                                <label for="select-quiz" style="margin-top: -15px;">Choose Quiz:</label>
-                                <select id="select-quiz" name="select-quiz" required>
+                            <div class="quiz-select" style="margin-top: 10px;">
+                                <label for="select-quiz" style="margin-top: 10px;">Choose Quiz:</label>
+                                <select id="select-quiz" name="select-quiz" required style="margin-top: 20px;">
                                     {% if not selected_quiz %}
                                     <option disabled selected value>-- Please Select a Quiz --</option>
                                     {% endif %}
@@ -340,7 +339,7 @@
                                         <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
                                     {% endfor %}
                                 </select>
-                                <button type="submit" value="Select">Select</button>
+                                <button type="submit" value="Select" style="margin-top: 0px;">Select</button>
                             </div>
                             <br>
                         </div>

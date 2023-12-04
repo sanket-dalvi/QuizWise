@@ -342,6 +342,7 @@
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
+                <h1 style="margin-top: 40px; margin-bottom: 40px;">Add / Modify Quiz Questions</h1>
                 <div class="message">
                     {% if messages %}
                         {% for message in messages %}
@@ -356,11 +357,8 @@
                     <div class="form-container">
                         <form method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="form_type" value="select_quiz">
-                            <!-- Select Quiz Dropdown -->
-                            <h2 style="margin-top: 10px;">Add / Modify Quiz Questions</h2>
-                            
-                            <div class="quiz-select">
+                            <input type="hidden" name="form_type" value="select_quiz">                           
+                            <div class="quiz-select" style="margin-top: 3%;">
                                 <label style="margin-top: -15px;" for="select-quiz">Select Quiz:</label>
                                 <select style="margin-top: -5px;" id="select-quiz" name="select-quiz" required>
                                     {% if not selected_quiz.id %}
