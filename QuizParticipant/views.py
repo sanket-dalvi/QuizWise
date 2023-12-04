@@ -225,7 +225,8 @@ def submit_quiz(request, quiz_id):
                             question_score = 0
                 elif question.type.type_code == 'FT':
                     user_answer = request.POST.get(question_id)
-                    similarity_ratio = SequenceMatcher(None, user_answer, question.answer).ratio()
+                    
+                    similarity_ratio = SequenceMatcher(None, str(user_answer).lower(), question.answer.lower()).ratio()
                     is_correct = similarity_ratio >= 0.8
                     question_score = 1 if is_correct else 0
 

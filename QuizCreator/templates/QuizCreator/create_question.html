@@ -230,13 +230,12 @@
                             </div>
                         </div>  
                         <div class="Upload-file-container">
-                            <div>
-                                <input type="file" id="fileInput" accept=".xls, .xlsx, .txt" onchange="displayFileName(this)">
-                                <br>
-                                <div class="file-name" id="fileNameDisplay"></div>
-                                <br>
-                                <button type="button" id="uploadButton" onclick="uploadFile()">Upload File</button>
-                            </div>
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit">Upload</button>
+                                <a href="{% url 'question_file_download' %}">Download Template File</a>
+                            </form>
                         </div>                                  
                     </form>
                 </div>

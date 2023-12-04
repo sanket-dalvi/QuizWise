@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegistrationForm, UserLoginForm
 from .auth_decorator  import examinee_required, examiner_required
 from django.contrib import messages
-from .email_utils import send_custom_email
+from .email_utils import EmailSender
 from django.contrib import messages
 from .models import User, PasswordReset
 from django.db.models import Q
@@ -85,7 +85,8 @@ def forgot(request):
             
             # Send an email to the user with the reset link containing the token
             reset_link = f"http://localhost:8000/reset_password/?token={token}"  # Replace with your domain
-            send_custom_email("QuizWise - Password Reset", f"Please follow this link to reset your password: {reset_link}", [email])
+            email_sender = EmailSender()
+            email_sender.send_custom_email("QuizWise - Password Reset", f"Please follow this link to reset your password: {reset_link}", [email])
 
             messages.success(request, "Reset link sent successfully.")
         else:
@@ -126,7 +127,8 @@ def reset_password(request):
             otp = get_random_string(length=6, allowed_chars='1234567890')
             reset_link_data.otp = otp
             reset_link_data.save()
-            send_custom_email("QuizWise - Password Reset - OTP", f"Please use this one time passcode to reset your password: {otp}", [reset_link_data.user.email])
+            email_sender = EmailSender()
+            email_sender.send_custom_email("QuizWise - Password Reset - OTP", f"Please use this one time passcode to reset your password: {otp}", [reset_link_data.user.email])
             messages.success(request, "OTP Sent Successfully.")
         else:
             messages.error(request, "Invalid Rest Link URL. Please Generate it Again.")

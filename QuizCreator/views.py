@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from QuizWise.auth_decorator import examiner_required
 from django.contrib import messages
 from .models import Category, QuestionType, QuestionOption, Question, CategoryQuestionMap, Quiz, QuizQuestion, Group, GroupExamineeMapping
@@ -16,6 +16,9 @@ from io import BytesIO
 import seaborn as sns
 import pandas as pd
 import random
+from .forms import FileUploadForm
+import os
+from django.conf import settings
 
 
 @examiner_required
@@ -277,6 +280,34 @@ def create_question(request):
         Q(created_by=current_user) | Q(visible_to_others=True)
     )
     return render(request, "QuizCreator/create_question.html", {'question_types': question_types})
+
+@examiner_required
+def question_file_download(request):
+    # Here, you can implement your logic to retrieve the file for download
+    # For example, if you have a specific file to download, you can get its path
+    file_path = os.path.join(settings.MEDIA_ROOT, 'QUESTION_UPLOAD_TEMPLATE.xlsx')
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='application/force-download')
+            response['Content-Disposition'] = 'attachment; filename=QUESTION_UPLOAD_TEMPLATE.xlsx'
+            return response
+    return HttpResponse("File not found")
+
+@examiner_required
+def question_file_upload(request):
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES['file']
+            # Save the uploaded file to a specific location
+            file_path = os.path.join(settings.MEDIA_ROOT, uploaded_file.name)
+            with open(file_path, 'wb+') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+            return HttpResponse('File uploaded successfully!')
+    else:
+        form = FileUploadForm()
+    return redirect('create_question')
 
 
 @examiner_required

@@ -12,7 +12,7 @@ class Submission(models.Model):
 class UserQuizStatus(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    status = models.CharField(default="Active")
+    status = models.CharField(default="Active", max_length=10)
     timestamp = models.DateTimeField(auto_now=True)
 
 class UserQuizScore(models.Model):

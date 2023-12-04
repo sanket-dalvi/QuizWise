@@ -221,7 +221,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="form-type" value="select-group">
                         <label for="select-group" style="font-weight: bolder;">Choose Group:</label>
-                        <select id="select-group" name="select-group" style="width: 40%;">
+                        <select id="select-group" name="select-group" style="width: 40%;" required>
                             {% if not selected_group %}
                                 <option disabled selected value>-- Please Select a Group --</option>
                             {% endif %}
