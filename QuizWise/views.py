@@ -11,11 +11,13 @@ from django.db.models import Q
 import uuid
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from .decorators import log_view
 
-
+@log_view
 def index(request):
     return render(request, "index.html")
 
+@log_view
 def register_user(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -32,6 +34,7 @@ def register_user(request):
         form = UserRegistrationForm(initial={'email': request.GET.get("email")})
     return render(request, 'register.html', {'form': form})
 
+@log_view
 def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
@@ -51,18 +54,22 @@ def user_login(request):
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})
 
+@log_view
 def user_logout(request):
     logout(request)
     return redirect('login') 
 
+@log_view
 @examiner_required
 def examiner_test(request):
     return render(request, 'success_page.html')
 
 
+@log_view
 def unauthorized(request):
     return render(request, "unauthorized.html")
 
+@log_view
 def forgot(request):
     if request.method == "POST":
         first_name = request.POST['first_name'].strip()
@@ -95,6 +102,7 @@ def forgot(request):
     return render(request, "forgot.html")
 
 
+@log_view
 def reset_password(request):
     if request.method == 'POST':
         email = request.POST.get('email')

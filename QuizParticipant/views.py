@@ -7,9 +7,11 @@ import random
 from QuizWise.models import User
 from django.contrib import messages
 from difflib import SequenceMatcher
+from QuizWise.decorators import log_view
 
 
 
+@log_view
 @examinee_required
 def home(request):
     context = {}
@@ -47,13 +49,21 @@ def home(request):
 
     context['quiz_scores'] = quiz_score_data
 
-    available_quizzes = UserQuizStatus.objects.filter(user=current_user, status='Active').values('quiz').annotate(latest_timestamp=Max('timestamp')).order_by('-latest_timestamp')
-    
+    available_quizzes = []
+    quiz_list = Quiz.objects.filter(visible = True)
+    for quiz in quiz_list:
+        user_quiz_status, created = UserQuizStatus.objects.get_or_create(
+            user = request.user,
+            quiz = quiz
+        )
+        if user_quiz_status.status == "Active":
+            available_quizzes.append(quiz) 
     context['quizzes'] = available_quizzes
 
     return render(request, "QuizParticipant/home.html", context)
 
 
+@log_view
 @examinee_required
 def view_quizzes(request):
     user = request.user
@@ -69,6 +79,7 @@ def view_quizzes(request):
     return render(request, "QuizParticipant/view_quizzes.html", { 'quizzes' : quizzes })
 
 
+@log_view
 @examinee_required
 def take_quiz(request, quiz_id):
     try:
@@ -105,6 +116,7 @@ def take_quiz(request, quiz_id):
 
     return render(request, "QuizParticipant/take_quiz.html")
 
+@log_view
 @examinee_required
 def profile(request):
     
@@ -114,12 +126,18 @@ def profile(request):
             last_name = request.POST.get('last_name')
             email = request.POST.get('email')
             contact = request.POST.get('contact')
+            email_notification = request.POST.get('email_notification')
+            mobile_notification = request.POST.get('mobile_notification')
+            email_notification = email_notification == 'on'  
+            mobile_notification = mobile_notification == 'on'
 
             user = get_object_or_404(User, pk=request.user.id)
             user.first_name = first_name
             user.last_name = last_name
             user.email = email
             user.contact = contact
+            user.email_notification = email_notification
+            user.mobile_notification = mobile_notification
             user.save()
             messages.success(request, "User Details Updated Successfully")
         except Exception as e:
@@ -131,12 +149,15 @@ def profile(request):
         "first_name" : user.first_name,
         "last_name" : user.last_name,
         "email" : user.email,
-        "contact" : user.contact
+        "contact" : user.contact,
+        "email_notification" : user.email_notification,
+        "mobile_notification" : user.mobile_notification
     }
     
     return render(request, "QuizParticipant/profile.html", context)
 
 
+@log_view
 @examinee_required
 def scores(request):
     user = request.user
@@ -179,10 +200,12 @@ def scores(request):
     return render(request, "QuizParticipant/scores.html", context)
 
 
+@log_view
 @examinee_required
 def quiz_history(request):
     return render(request, "QuizParticipant/quiz_history.html")
 
+@log_view
 @examinee_required
 def submit_quiz(request, quiz_id):
     if request.method == 'POST':

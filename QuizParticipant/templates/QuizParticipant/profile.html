@@ -209,6 +209,14 @@
                             <label for="contact">Email:</label>
                             <input type="number" id="contact" name="contact" value="{{ contact }}">
                         </div>
+                        <div class="form-group">
+                            <label for="email_notification">Email Notifications:</label>
+                            <input type="checkbox" id="email_notification" name="email_notification" {% if email_notification %}checked{% endif %}>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile_notification">Mobile Notifications:</label>
+                            <input type="checkbox" id="mobile_notification" name="mobile_notification" {% if mobile_notification %}checked{% endif %}>
+                        </div>
 
                         <button type="submit">Update</button>
                         <button type="reset" class="reset">Reset</button>

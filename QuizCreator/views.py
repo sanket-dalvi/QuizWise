@@ -21,8 +21,10 @@ import os
 from django.conf import settings
 from QuizWise.notification import notification
 from openpyxl import load_workbook
+from QuizWise.decorators import log_view
 
 
+@log_view
 @examiner_required
 def home(request):
 
@@ -31,6 +33,7 @@ def home(request):
     context['last_name'] = request.user.last_name
     context['email'] = request.user.email
     context['contact'] = request.user.contact
+
 
     return render(request, "QuizCreator/home.html", context)
 
@@ -107,6 +110,7 @@ def get_quiz_metrics(request, quiz=None):
     }
     return context
 
+@log_view
 @examiner_required
 def profile(request):
 
@@ -116,12 +120,18 @@ def profile(request):
             last_name = request.POST.get('last_name')
             email = request.POST.get('email')
             contact = request.POST.get('contact')
+            email_notification = request.POST.get('email_notification')
+            mobile_notification = request.POST.get('mobile_notification')
+            email_notification = email_notification == 'on'  
+            mobile_notification = mobile_notification == 'on'
 
             user = get_object_or_404(User, pk=request.user.id)
             user.first_name = first_name
             user.last_name = last_name
             user.email = email
             user.contact = contact
+            user.email_notification = email_notification
+            user.mobile_notification = mobile_notification
             user.save()
             messages.success(request, "User Details Updated Successfully")
         except Exception as e:
@@ -133,13 +143,16 @@ def profile(request):
         "first_name" : user.first_name,
         "last_name" : user.last_name,
         "email" : user.email,
-        "contact" : user.contact
+        "contact" : user.contact,
+        "email_notification" : user.email_notification,
+        "mobile_notification" : user.mobile_notification
     }
     
 
     return render(request, "QuizCreator/profile.html", context)
 
 
+@log_view
 @examiner_required
 def scores(request):
 
@@ -198,10 +211,12 @@ def scores(request):
     return render(request, "QuizCreator/scores.html", context)
 
 
+@log_view
 @examiner_required
 def quiz_history(request):
     return render(request, "QuizCreator/quiz_history.html")
 
+@log_view
 @examiner_required
 def create_question(request):
     if request.method == "POST":
@@ -283,6 +298,7 @@ def create_question(request):
     )
     return render(request, "QuizCreator/create_question.html", {'question_types': question_types})
 
+@log_view
 @examiner_required
 def question_file_download(request):
     # Here, you can implement your logic to retrieve the file for download
@@ -295,6 +311,7 @@ def question_file_download(request):
             return response
     return HttpResponse("File not found")
 
+@log_view
 @examiner_required
 def question_file_upload(request):
     if request.method == 'POST':
@@ -361,6 +378,7 @@ def question_file_upload(request):
     return render(request, 'QuizCreator/create_question.html', {'form':form})
 
 
+@log_view
 @examiner_required
 def create_question_category(request):
     if request.method == "POST":
@@ -395,6 +413,7 @@ def create_question_category(request):
 
 
 
+@log_view
 @examiner_required
 def view_questions(request):
 
@@ -427,6 +446,7 @@ def view_questions(request):
     return render(request, 'QuizCreator/questions.html', {'questions': questions, 'categories': categories})
 
  
+@log_view
 @examiner_required
 def edit_questions(request):
 
@@ -438,6 +458,7 @@ def edit_questions(request):
     )   
 
 
+@log_view
 @examiner_required
 def edit_questions(request):
 
@@ -469,6 +490,7 @@ def edit_questions(request):
 
     return render(request, 'QuizCreator/edit_questions.html', {'questions': questions, 'categories': categories})
 
+@log_view
 @examiner_required
 def delete_question(request, question_id):
     try:
@@ -479,6 +501,7 @@ def delete_question(request, question_id):
     messages.success(request, "Question Has Been Deleted Successfully")
     return redirect("edit_questions")
 
+@log_view
 @examiner_required
 def map_question_category(request):
 
@@ -511,6 +534,7 @@ def map_question_category(request):
     return render(request, "QuizCreator/question_category_map.html", {'questions': questions, 'categories': categories})
 
 
+@log_view
 @examiner_required
 def create_quiz(request):
     if request.method == 'POST':
@@ -536,6 +560,7 @@ def create_quiz(request):
     return render(request, "QuizCreator/create_quiz.html")
 
 
+@log_view
 @examiner_required
 def edit_quiz(request):
 
@@ -552,6 +577,7 @@ def edit_quiz(request):
     return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes, 'selected_quiz': selected_quiz})
 
 
+@log_view
 @examiner_required
 def update_quiz(request):
     if request.method == 'POST':
@@ -573,13 +599,15 @@ def update_quiz(request):
     quizzes = Quiz.objects.all()
     return render(request, 'QuizCreator/edit_quiz.html', {'quizzes': quizzes})
 
+@log_view
 @examiner_required
 def delete_quiz(request):
     return redirect("edit_quiz")
 
+@log_view
 @examiner_required
 def post_quiz(request):
-    quizzes = Quiz.objects.filter(visible=False)
+    quizzes = Quiz.objects.all()
     groups = Group.objects.all()
     context = {
         'quizzes': quizzes, 
@@ -612,9 +640,13 @@ def post_quiz(request):
                     user_quiz_status = None
                 if not user_quiz_status:
                     notification_obj = notification.Notification()
-                    new_user_quiz_status = UserQuizStatus.objects.create(user=user,quiz=quiz)
+                    new_user_quiz_status = UserQuizStatus(user=user,quiz=quiz)
                     new_user_quiz_status.attach_observer(notification_obj)
                     new_user_quiz_status.save()
+                    new_user_quiz_status.detach_observer(notification_obj)
+            
+            quiz.visible = True
+            quiz.save()
 
             context['selected_quiz'] = quiz
             context['selected_group'] = group
@@ -623,6 +655,7 @@ def post_quiz(request):
 
     return render(request, 'QuizCreator/post_quiz.html', context)
 
+@log_view
 @examiner_required
 def add_quiz_questions(request):
     total_questions_added = 0
@@ -726,6 +759,7 @@ def add_quiz_questions(request):
             remaining_questions = 0
     return render(request, 'QuizCreator/modify_quiz_questions.html', {'quizzes': quizzes, 'categories' : categories, 'questions' : questions, 'quiz_questions': quiz_questions, 'total_questions_added' : total_questions_added, 'selected_quiz' : selected_quiz, 'question_id_list' : question_id_list, 'remaining_questions' : remaining_questions})
 
+@log_view
 @examiner_required
 def make_quiz_visible(request):
     if request.method == "POST":
@@ -740,6 +774,7 @@ def make_quiz_visible(request):
 
     return redirect('add_quiz_questions')
 
+@log_view
 @examiner_required
 def delete_quiz_questions(request):
 
@@ -765,6 +800,7 @@ def delete_quiz_questions(request):
         return redirect("add_quiz_questions")
     
 
+@log_view
 @examiner_required
 def preview_quiz(request):
     quizzes = Quiz.objects.all()
@@ -798,6 +834,7 @@ def preview_quiz(request):
 
 
 
+@log_view
 @examiner_required
 def add_examinee_to_group(request):
     group_id = None
@@ -840,6 +877,7 @@ def add_examinee_to_group(request):
     return render(request, 'QuizCreator/add_examinee_to_group.html', {'group_id': group_id, 'examinees': examinees, 'groups': groups})
 
 
+@log_view
 @examiner_required
 def create_group(request):
     if request.method == 'POST':
@@ -865,6 +903,7 @@ def create_group(request):
     return render(request, 'QuizCreator/create_group.html')
 
 
+@log_view
 @examiner_required
 def view_group(request):
     groups = Group.objects.filter(created_by=request.user)
