@@ -176,7 +176,7 @@ def scores(request):
             total_questions = QuizQuestion.objects.filter(quiz=selected_quiz).count()
 
             percentage = (
-                user_total_score * 100.0 / (total_questions * 1.0)
+                user_total_score * 100.0 / (selected_quiz.total_questions * 1.0)
             ) if total_questions > 0 else 0
 
             user_data = {
