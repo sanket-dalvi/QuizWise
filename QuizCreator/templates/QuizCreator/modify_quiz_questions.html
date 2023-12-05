@@ -380,11 +380,7 @@
                             <label name="total_questions_added" style="margin-top: -15px;">Total Questions in Quiz: {{ total_questions_added }}</label>
                             {% if remaining_questions == 0 %}
                                 {% if not selected_quiz.visible %}
-                                    <form method="post" action="{% url 'make_quiz_visible' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
-                                    <button type="submit">Post Quiz To Examinees</button>
-                                    </form>
+                                    
                                 {% endif %}
                             {% else %}
                                 <span> Add {{ remaining_questions }} more questions to make quiz visible to examinee or edit the quiz to update total questions. </span>

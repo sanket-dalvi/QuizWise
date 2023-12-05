@@ -239,6 +239,7 @@
                         {% csrf_token %}
                         {% if group_examinees %}
                         <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
+                        <input type="hidden" value="{{ selected_group.id }}" name="group_id">
                         <label for="select-group" style="font-weight: bolder;">Choose Quiz:</label>
                         <select id="select-quiz" name="select-quiz" required style="width: 40%;">
                             {% if not selected_quiz %}

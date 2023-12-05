@@ -84,3 +84,9 @@ class Group(models.Model):
 class GroupExamineeMapping(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    notification = models.CharField(max_length=200)
+    is_read = models.BooleanField(default=False)

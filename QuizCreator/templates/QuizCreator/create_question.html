@@ -167,6 +167,24 @@
             color: white;
             text-align: center;
         }
+        .Upload-file-container {
+            margin-top: 20px;
+            /* Add other styling properties as needed */
+        }
+
+        .Custom-file-upload {
+            border: 2px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .Custom-file-upload span {
+            font-size: 16px;
+        }
+
+
     </style>
 </head>
 
@@ -229,15 +247,17 @@
                                 <button type="submit">Submit Question</button>
                             </div>
                         </div>  
-                        <div class="Upload-file-container">
-                            <form method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <button type="submit">Upload</button>
-                                <a href="{% url 'question_file_download' %}">Download Template File</a>
-                            </form>
-                        </div>                                  
                     </form>
+                    <div class="Upload-file-container">
+                        <form method="post" action="{% url 'question_file_upload' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.file }}
+                            </label>
+                            <button type="submit">Upload</button>
+                            <a href="{% url 'question_file_download' %}">Download Template File</a>
+                        </form>
+                    </div>                                 
+                    
                 </div>
             </div>
         </div>

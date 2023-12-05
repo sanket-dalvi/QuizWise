@@ -32,6 +32,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     # New field for role selection
     is_examinee = models.BooleanField(default=False)
     is_examiner = models.BooleanField(default=False)
+    email_notification = models.BooleanField(default=False)
+    mobile_notification = models.BooleanField(default=False)
 
 
     # Update groups field with unique related_name
@@ -77,5 +79,7 @@ class PasswordReset(models.Model):
 
     def __str__(self):
         return f"Token for {self.user.username}"
+    
+
     
 

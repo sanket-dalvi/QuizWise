@@ -19,6 +19,8 @@ import random
 from .forms import FileUploadForm
 import os
 from django.conf import settings
+from QuizWise.notification import notification
+from openpyxl import load_workbook
 
 
 @examiner_required
@@ -300,14 +302,63 @@ def question_file_upload(request):
         if form.is_valid():
             uploaded_file = request.FILES['file']
             # Save the uploaded file to a specific location
-            file_path = os.path.join(settings.MEDIA_ROOT, uploaded_file.name)
+            file_path = os.path.join(settings.MEDIA_ROOT, 'upload', uploaded_file.name)
             with open(file_path, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
-            return HttpResponse('File uploaded successfully!')
+
+            # Process the uploaded Excel file
+            wb = load_workbook(file_path)
+            sheet = wb.active
+
+            questions = []
+            question_options = []
+            for row in sheet.iter_rows(min_row=11, values_only=True):
+                if len(row) >= 3:
+                    question_text = row[0].strip() if isinstance(row[0], str) else row[0]
+                    question_type_name = row[1].strip() if isinstance(row[1], str) else row[1]
+                    correct_answer = row[2].strip() if isinstance(row[2], str) else row[2]
+                    options = row[3] if len(row) >= 4 else ''  # Check if options column exists
+                
+                    # Validation: Check if the question type exists
+                    question_type = QuestionType.objects.filter(type_name=question_type_name).first()
+                    if not question_type:
+                        continue  # Skip if the question type doesn't exist
+
+                    # Validation: Check if the correct answer is among the options for MCQ type
+                    if question_type.type_code != 'FT' and correct_answer not in options.split(','):
+                        continue  # Skip if correct answer not in options for MCQ type
+
+                    # Create a new Question object
+                    new_question = Question(
+                        question=question_text,
+                        type=question_type,
+                        answer=correct_answer,
+                        created_by=request.user  # Use the current user as created_by
+                    )
+                    if question_type.type_code != 'FT':
+                        if options:
+                            options = options.split(",")
+                            for option in options:
+                                option = option.strip()
+                                question_option = QuestionOption(
+                                    question = new_question,
+                                    option = option
+                                )
+                                question_options.append(question_option)
+
+                    
+                    questions.append(new_question)
+
+            # Save valid questions to the database
+            Question.objects.bulk_create(questions)
+            QuestionOption.objects.bulk_create(question_options)
+            messages.success(request, "Questions Uploaded Successfully")
+            os.remove(file_path)
+            return redirect('create_question')
     else:
         form = FileUploadForm()
-    return redirect('create_question')
+    return render(request, 'QuizCreator/create_question.html', {'form':form})
 
 
 @examiner_required
@@ -547,12 +598,23 @@ def post_quiz(request):
             group = Group.objects.get(id=int(group_id))
             quiz_id = request.POST.get('select-quiz')
             quiz = Quiz.objects.get(id=int(quiz_id))
+            quiz_questions = QuizQuestion.objects.filter(quiz=quiz)
+            if len(quiz_questions) < quiz.total_questions:
+                messages.error(request, f"Please Add Questions To The Quiz. Required Total Questions in The Quiz : {quiz.total_questions}")
+                return redirect('post_quiz')
             quiz_participants = request.POST.getlist('checkbox-group')
             for user_id in quiz_participants:
                 user = User.objects.get(id=user_id)
-                user_quiz_status = UserQuizStatus.objects.get(user=user, quiz=quiz)
+                try:
+
+                    user_quiz_status = UserQuizStatus.objects.get(user=user, quiz=quiz)
+                except UserQuizStatus.DoesNotExist:
+                    user_quiz_status = None
                 if not user_quiz_status:
-                    UserQuizStatus.objects.create(user=user,quiz=quiz)
+                    notification_obj = notification.Notification()
+                    new_user_quiz_status = UserQuizStatus.objects.create(user=user,quiz=quiz)
+                    new_user_quiz_status.attach_observer(notification_obj)
+                    new_user_quiz_status.save()
 
             context['selected_quiz'] = quiz
             context['selected_group'] = group
