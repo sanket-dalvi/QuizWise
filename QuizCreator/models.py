@@ -48,18 +48,6 @@ class Question(models.Model):
         return f"Question: {self.question[:50]}"
     
 
-class RadioButtonQuestion(Question):
-    # Additional fields for multiple-choice question if needed
-    pass
- 
-class CheckboxQuestion(Question):
-    # Additional fields for true/false question if needed
-    pass
- 
-class FreeTextQuestion(Question):
-    # Additional fields for fill in the blank question if needed
-    pass
-
 
 class QuestionOption(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
