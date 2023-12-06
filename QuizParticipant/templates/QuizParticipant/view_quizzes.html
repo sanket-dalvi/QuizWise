@@ -157,11 +157,9 @@
 
 <body>
     <div>
-        <!-- the header -->
         {% include 'header.html' %}
     </div>
 
-    <!-- Navigation bar -->
     <div>
         {% include 'QuizParticipant/navbar.html' %}
     </div>
@@ -243,15 +241,13 @@
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 3000); // Hide the message after 3 seconds
+            }, 3000); 
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });
 
-        // Show messages for a duration when the page loads
         document.querySelectorAll('.alert').forEach(function (messageElement) {
             showMessageForDuration(messageElement);
         });

@@ -58,7 +58,6 @@
             background-color: #0056b3;
         }
 
-        /* Additional styles for dynamic fields */
         .field-container {
             display: none;
             margin-bottom: 20px;
@@ -553,9 +552,7 @@
 
         if (selectQuiz && selectedQuizIdInput) {
             selectedQuizIdInput.value = selectQuiz.value;
-            // Listen for change event on select-quiz dropdown
             selectQuiz.addEventListener('change', function () {
-                // Update the value of selected_quiz_id input when the dropdown value changes
                 selectedQuizIdInput.value = selectQuiz.value;
             });
         }
@@ -590,7 +587,7 @@
                 var tableRows = document.querySelectorAll('#questions-table tbody tr');
 
                 tableRows.forEach(function (row) {
-                    var questionText = row.children[2].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
+                    var questionText = row.children[2].textContent.toLowerCase(); 
                     if (questionText.indexOf(searchText) === -1) {
                         row.style.display = 'none';
                     } else {
@@ -605,7 +602,6 @@
             clearCategoryBtn.addEventListener('click', function () {
                 var categorySelect = document.getElementById('category-select');
                 if (categorySelect) {
-                    // Reset the selected options in the category select element
                     var options = categorySelect.options;
                     for (var i = 0; i < options.length; i++) {
                         options[i].removeAttribute('selected');
@@ -619,8 +615,8 @@
         if (searchInput) {
             searchInput.addEventListener('keypress', function (event) {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevent form submission
-                    document.getElementById('search-btn').click(); // Simulate a click on the search button
+                    event.preventDefault(); 
+                    document.getElementById('search-btn').click(); 
                 }
             });
         }
@@ -631,7 +627,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
 
         function hideMessage() {
             document.querySelectorAll('.alert').forEach(function (alert) {
@@ -643,15 +638,13 @@
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 3000); // Hide the message after 3 seconds
+            }, 3000); 
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });
 
-        // Show messages for a duration when the page loads
         document.querySelectorAll('.alert').forEach(function (messageElement) {
             showMessageForDuration(messageElement);
         });

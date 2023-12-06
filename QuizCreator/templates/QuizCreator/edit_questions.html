@@ -59,7 +59,6 @@
             background-color: #0056b3;
         }
 
-        /* Additional styles for dynamic fields */
         .field-container {
             display: none;
             margin-bottom: 20px;
@@ -396,7 +395,7 @@
                 var tableRows = document.querySelectorAll('#questions-table tbody tr');
 
                 tableRows.forEach(function (row) {
-                    var questionText = row.children[1].textContent.toLowerCase(); // Assuming Question is the second column (index 1)
+                    var questionText = row.children[1].textContent.toLowerCase(); 
                     if (questionText.indexOf(searchText) === -1) {
                         row.style.display = 'none';
                     } else {
@@ -446,7 +445,6 @@
             }, 3000); // Hide the message after 5 seconds
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });

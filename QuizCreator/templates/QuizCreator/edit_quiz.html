@@ -81,7 +81,6 @@
             transform: scale(1.5);
         }
 
-        /* Additional styles for dynamic fields */
         .field-container {
             display: none;
             margin-bottom: 20px;
@@ -350,7 +349,6 @@
                 </div>
 
                 <!-- Quiz Information Form -->
-                <!--<div class="form-container" id="quiz-info-form" style="display: {% if selected_quiz.id  %}block{% else %}none{% endif %};">-->
                 <div class="form-container" id="quiz-info-form" {% if selected_quiz.id %}style="display: block;" {% else
                     %}style="display: none;" {% endif %}>
 
@@ -417,7 +415,6 @@
             }, 3000); // Hide the message after 5 seconds
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });

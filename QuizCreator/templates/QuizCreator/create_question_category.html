@@ -192,7 +192,6 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
 
         function hideMessage() {
             document.querySelectorAll('.alert').forEach(function (alert) {
@@ -207,7 +206,6 @@
             }, 3000); // Hide the message after 5 seconds
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });

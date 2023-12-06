@@ -164,7 +164,6 @@
         .options input[type="checkbox"] {
             margin-right: 10px;
             transform: scale(1.5);
-            /* Adjust the scale factor as needed */
         }
     </style>
 </head>
@@ -254,7 +253,7 @@
             handleFormSubmission();
         });
 
-        const durationInMinutes = {{ quiz.duration }}; // Duration in minutes
+        const durationInMinutes = {{ quiz.duration }}; 
         const timerDisplay = document.getElementById('timer');
         let timer;
 
@@ -268,7 +267,6 @@
                 if (--timerSeconds < 0) {
                     clearInterval(timer);
                     timerDisplay.textContent = 'Time expired!';
-                    // Additional logic when time is up
                 }
             }, 1000);
         }

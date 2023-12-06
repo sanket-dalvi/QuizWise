@@ -242,13 +242,12 @@
         submitForm();
     }
 
-    // Logic to handle form submission on time expiration or button click
     document.getElementById('quiz_form').addEventListener('submit', function (event) {
         event.preventDefault();
         handleFormSubmission();
     });
 
-    const durationInMinutes = {{ quiz.duration }}; // Duration in minutes
+    const durationInMinutes = {{ quiz.duration }}; 
     const timerDisplay = document.getElementById('timer');
     let timer;
 

@@ -170,7 +170,6 @@
 
         .Upload-file-container {
             margin-top: 20px;
-            /* Add other styling properties as needed */
         }
 
         .Custom-file-upload {
@@ -221,7 +220,6 @@
 
                         <!-- Dynamic fields container -->
                         <div id="dynamic-fields">
-                            <!-- Additional fields based on question type will be added here -->
                         </div>
 
                         <!-- Hidden input to store options -->
@@ -357,7 +355,6 @@
                 }
             });
 
-            // Initial options load
             document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
                 addDeleteButton(label);
             });
@@ -366,7 +363,6 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
 
         function hideMessage() {
             document.querySelectorAll('.alert').forEach(function (alert) {
@@ -381,7 +377,6 @@
             }, 3000); // Hide the message after 3 seconds
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });
@@ -403,7 +398,6 @@
     }
 
     function uploadFile() {
-        // Add your file upload logic here
         alert('File uploaded!');
 
         // Clear the file selected message

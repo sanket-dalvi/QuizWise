@@ -272,14 +272,12 @@
                 <div class="container" style="margin-top: 2%; text-align: center;">
                     <form method="post" target="_blank">
                         {% csrf_token %}
-                        <!-- Select Quiz Dropdown -->
                         <div class="quiz-select" style="margin-top: 3%;">
                             <label for="select-quiz">Select Quiz:</label>
                             <select id="select-quiz" name="select-quiz" required style="width: 50%;">
                                 {% if not selected_quiz_id %}
                                 <option value="" disabled selected>--- Please select a Quiz ---</option>
                                 {% endif %}
-                                <!-- Populate dropdown with quiz options -->
                                 {% for quiz in quizzes %}
                                 <option value="{{ quiz.id }}" {% if quiz.id==selected_quiz_id %}selected{% endif %}>{{
                                     quiz.name }}</option>
