@@ -210,8 +210,7 @@
             <div class="message">
                 {% if messages %}
                 {% for message in messages %}
-                <div
-                    class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
                     {{ message }}
                 </div>
                 {% endfor %}
@@ -231,8 +230,7 @@
                             <option disabled selected value>-- Please Select a Group --</option>
                             {% endif %}
                             {% for group in groups %}
-                            <option value="{{ group.id }}" {% if selected_group.id==group.id %} selected {% endif %}>{{
-                                group.name }}</option>
+                            <option value="{{ group.id }}" {% if selected_group.id == group.id %} selected {% endif %}>{{ group.name }}</option>
                             {% endfor %}
                         </select>
                         <button id="select-group-button" type="submit" style="width: 30%;">Select group</button>
@@ -242,6 +240,7 @@
                 <div class="form-container">
                     <form method="post" action="{% url 'post_quiz' %}">
                         {% csrf_token %}
+                        {% if selected_group %}
                         {% if group_examinees %}
                         <input type="hidden" value="{{ selected_quiz.id }}" name="quiz_id">
                         <input type="hidden" value="{{ selected_group.id }}" name="group_id">
@@ -251,8 +250,7 @@
                             <option disabled selected value>-- Please Select a Quiz --</option>
                             {% endif %}
                             {% for quiz in quizzes %}
-                            <option value="{{ quiz.id }}" {% if quiz.id==selected_quiz.id %}selected{% endif %}>{{
-                                quiz.name }}</option>
+                            <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
                             {% endfor %}
                         </select>
 
@@ -269,9 +267,7 @@
                                 {% for examinee in group_examinees %}
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}"
-                                            class="larger-checkbox" {% if examinee.id in examinee_id_list %} checked {%
-                                            endif %}>
+                                        <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}" class="larger-checkbox" {% if examinee.id in examinee_id_list %} checked {% endif %}>
                                     </td>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ examinee.username }}</td>
@@ -280,10 +276,10 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: -110%;">Post quiz to
-                            group</button>
+                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: -110%;">Post quiz to group</button>
                         {% else %}
                         No Examinees In This Group
+                        {% endif %}
                         {% endif %}
                     </form>
                 </div>
@@ -294,8 +290,8 @@
     <div class="footer-content">
         {% include 'footer.html'%}
     </div>
-
 </body>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var selectAllCheckbox = document.getElementById('select-all-checkbox');

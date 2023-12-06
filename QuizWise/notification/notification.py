@@ -22,12 +22,11 @@ class Notification(Observer):
         # Initialize notification strategy based on user preferences
         if user.email_notification:
             self.notification_strategy = EmailNotification()
+            self.notification_strategy.send_notification(user, quiz)
 
         if user.mobile_notification:
             self.notification_strategy = MobileNotification()
-
-        # Send notifications using the chosen strategy
-        self.notification_strategy.send_notification(user, quiz)
+            self.notification_strategy.send_notification(user, quiz)
 
         # Send portal notification (default strategy)
         self.notification_strategy = PortalNotification()

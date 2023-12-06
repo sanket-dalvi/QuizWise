@@ -178,82 +178,88 @@
     </style>
 </head>
 
-<body>
-    <div>
-        {% include 'header.html' %}
-    </div>
 
-    <div>
-        {% include 'QuizCreator/navbar.html' %}
-    </div>
-
-    <div class="mainsection">
-        <div class="main-content">
-            <div class="message">
-                {% if messages %}
-                {% for message in messages %}
-                <div
-                    class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                    {{ message }}
+    <body>
+        <div>
+            {% include 'header.html' %}
+        </div>
+    
+        <div>
+            {% include 'QuizCreator/navbar.html' %}
+        </div>
+    
+        <div class="mainsection">
+            <div class="main-content">
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert 
+                                {% if message.tags == 'success' %}
+                                    alert-success
+                                {% elif message.tags == 'error' %}
+                                    alert-danger
+                                {% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="header-title">
-                <h1>View Group Examinees</h1>
-            </div>
-            <div class="examinee_section">
-                <div class="container">
-                    <form method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="form-type" value="select-group">
-                        <label for="select-group" style="font-weight: bolder;">Select Group:</label>
-                        <select id="select-group" name="select-group" style="width: 50%;">
-                            <option disabled selected value>-- Please Select a Group --</option>
-
-                            {% for group in groups %}
-                            <option value="{{ group.id }}" {% if group_id==group.id %} selected {% endif %}>{{
-                                group.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <button id="select-group-button" type="submit">Select</button>
-                    </form>
+                <div class="header-title">
+                    <h1>View Group Examinees</h1>
                 </div>
-                {% if group_id %}
-                <div class="examinee_container">
-                    <h2>List of Examinees</h2>
-
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th>Sr.No</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for examinee in examinees %}
-                            <tr>
-
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ examinee.first_name }} {{ examinee.last_name }}</td>
-                                <td>{{ examinee.email }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-
+                <div class="examinee_section">
+                    <div class="container">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="form-type" value="select-group">
+                            <label for="select-group" style="font-weight: bolder;">Select Group:</label>
+                            <select id="select-group" name="select-group" style="width: 50%;" required>
+                                {% if not group_id %}
+                                    <option disabled selected value>-- Please Select a Group --</option>
+                                {% endif %}
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}" {% if group_id == group.id %} selected {% endif %}>{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button id="select-group-button" type="submit">Select</button>
+                        </form>
+                    </div>
+                    {% if examinees %}
+                        <div class="examinee_container">
+                            <h2>List of Examinees</h2>
+                            <table border="1">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for examinee in examinees %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ examinee.first_name }} {{ examinee.last_name }}</td>
+                                            <td>{{ examinee.email }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                    {% if group_id %}
+                    No Examinees In The Group
+                    {% endif %}
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
         </div>
-    </div>
-
-    <div class="footer-content">
-        {% include 'footer.html'%}
-    </div>
-
-</body>
+    
+        <div class="footer-content">
+            {% include 'footer.html'%}
+        </div>
+    </body>
+    
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

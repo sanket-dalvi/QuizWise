@@ -261,8 +261,7 @@
                 <div class="message">
                     {% if messages %}
                     {% for message in messages %}
-                    <div
-                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
                         {{ message }}
                     </div>
                     {% endfor %}
@@ -279,8 +278,7 @@
                                 <option value="" disabled selected>--- Please select a Quiz ---</option>
                                 {% endif %}
                                 {% for quiz in quizzes %}
-                                <option value="{{ quiz.id }}" {% if quiz.id==selected_quiz_id %}selected{% endif %}>{{
-                                    quiz.name }}</option>
+                                <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
                                 {% endfor %}
                             </select>
                             <button type="submit" class="submitbutton">Select</button>
@@ -296,5 +294,6 @@
         {% include 'footer.html' %}
     </div>
 </body>
+
 
 </html>

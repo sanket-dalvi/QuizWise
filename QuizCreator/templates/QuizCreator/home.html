@@ -121,8 +121,7 @@
             <div class="card-content">
                 <div class="profile-container">
                     <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
-                    <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."
-                    </p>
+                    <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."</p>
                     <p class="fancy-note">- Nelson Mandela</p>
                 </div>
                 <p><strong>First Name:</strong> {{ first_name }} </p>
@@ -137,23 +136,26 @@
             </div>
         </div>
 
-
         <div class="card" style="width: 200%;">
             <div class="card-header">Recent Quiz Metrics</div>
             <div class="card-content">
+                {% if recent_quiz_metrics %}
                 <p><strong>Name:</strong> {{ recent_quiz_metrics.quiz_name }}</p>
                 <p><strong>Duration:</strong> {{ recent_quiz_metrics.duration }}</p>
                 <p><strong>Total Questions:</strong> {{ recent_quiz_metrics.total_questions }}</p>
-                {{ img_tag|safe }}
                 <p><strong>Top Score:</strong>{{ recent_quiz_metrics.max }}</p>
                 <p><strong>Lowest Score:</strong> {{ recent_quiz_metrics.min }}</p>
                 <p><strong>Mean:</strong> {{ recent_quiz_metrics.mean }}</p>
                 <p><strong>Median:</strong> {{ recent_quiz_metrics.median }}</p>
                 <p><strong>Mode:</strong> {{ recent_quiz_metrics.mode }}</p>
+                {% else %}
+                No Recent Quiz Submissions
+                {% endif %}
             </div>
             <div class="card-footer">
                 <a href="{% url 'examinee_scores' %}">
-                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
+                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;">
+                </a>
             </div>
         </div>
     </div>

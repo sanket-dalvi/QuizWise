@@ -257,12 +257,17 @@
                 <br>
                 <div class="message">
                     {% if messages %}
-                    {% for message in messages %}
-                    <div
-                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
+                        {% for message in messages %}
+                            <div class="alert 
+                                {% if message.tags == 'success' %}
+                                    alert-success
+                                {% elif message.tags == 'error' %}
+                                    alert-danger
+                                {% endif %}
+                            ">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     {% endif %}
                 </div>
                 <h1>Create Group</h1>
@@ -278,7 +283,6 @@
                             <label class="group-description" for="group-description">Description:</label>
                             <textarea id="group-description" name="group-description" required></textarea><br>
 
-
                             <div class="addgroupbutton">
                                 <button type="submit" value="Create Quiz">Create Group</button>
                                 <button type="reset">Clear</button>
@@ -293,8 +297,8 @@
     <div class="footer-content">
         {% include 'footer.html' %}
     </div>
-
 </body>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 

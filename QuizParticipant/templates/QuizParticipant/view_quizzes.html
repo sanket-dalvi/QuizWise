@@ -163,63 +163,61 @@
     <div>
         {% include 'QuizParticipant/navbar.html' %}
     </div>
+
     <div class="message">
         {% if messages %}
-        {% for message in messages %}
-        <div
-            class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-            {{ message }}
-        </div>
-        {% endfor %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
     </div>
-    <div class="mainsection">
 
+    <div class="mainsection">
         <div class="main-content">
             {% if quizzes %}
-            <h2>Available Quizzes</h2>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Quiz Name</th>
-                        <th>Description</th>
-                        <th>Total Questions</th>
-                        <th>Duration</th>
-                        <th>Created By</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for quiz in quizzes %}
-                    <tr>
-                        <td>{{ quiz.name }}</td>
-                        <td>{{ quiz.description }}</td>
-                        <td>{{ quiz.total_questions }}</td>
-                        <td>{{ quiz.duration }} mins</td>
-                        <td>{{ quiz.created_by.username }}</td>
-                        <td>
-                            <form id="quizForm{{ quiz.id }}" action="{% url 'take_quiz' quiz.id %}" method="post"
-                                target="_blank">
-                                {% csrf_token %}
-                                <input type="button" value="Take Quiz" onclick="startQuiz({{ quiz.id }})">
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                <h2>Available Quizzes</h2>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Quiz Name</th>
+                            <th>Description</th>
+                            <th>Total Questions</th>
+                            <th>Duration</th>
+                            <th>Created By</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for quiz in quizzes %}
+                            <tr>
+                                <td>{{ quiz.name }}</td>
+                                <td>{{ quiz.description }}</td>
+                                <td>{{ quiz.total_questions }}</td>
+                                <td>{{ quiz.duration }} mins</td>
+                                <td>{{ quiz.created_by.username }}</td>
+                                <td>
+                                    <form id="quizForm{{ quiz.id }}" action="{% url 'take_quiz' quiz.id %}" method="post" target="_blank">
+                                        {% csrf_token %}
+                                        <input type="button" value="Take Quiz" onclick="startQuiz({{ quiz.id }})">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
-            No Quizzes Available
+                No Quizzes Available
             {% endif %}
         </div>
     </div>
-
-
 
     <div class="footer-content">
         {% include 'footer.html' %}
     </div>
 </body>
+
 <script>
     function startQuiz(quizId) {
         const confirmation = confirm("You are about to start a quiz. Once started, there's no way back. Are you sure?");

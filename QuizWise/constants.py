@@ -16,7 +16,7 @@ USERNAME_LABEL = 'Username'
 PASSWORD_LABEL = 'Password'
 
 # User model constants
-USER_FIELDS = ['email', 'username', 'first_name', 'last_name', 'contact']
+USER_FIELDS = ['email', 'first_name', 'last_name', 'contact']
 USER_GROUPS_RELATED_NAME = 'quizwise_user_groups'
 USER_PERMISSIONS_RELATED_NAME = 'quizwise_user_permissions'
 

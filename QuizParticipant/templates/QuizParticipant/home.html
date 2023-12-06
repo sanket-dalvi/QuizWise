@@ -143,8 +143,7 @@
             <div class="card-content">
                 <div class="profile-container">
                     <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
-                    <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."
-                    </p>
+                    <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."</p>
                     <p class="fancy-note">- Nelson Mandela</p>
                 </div>
                 <p><strong>First Name:</strong> {{ first_name }} </p>
@@ -165,36 +164,41 @@
                 <div class="top-part">
                     <h2>Recent Score</h2>
                     {% if quiz_scores %}
-                    <div class="quiz-score">
-                        <h3>{{ quiz_scores.0.quiz_name }}</h3>
-                        <p>Total Questions: {{ quiz_scores.0.quiz_total_questions }}</p>
-                        <p>Total Score: {{ quiz_scores.0.total_score }}</p>
-                        <p>Percentage: {{ quiz_scores.0.percentage }}%</p>
-                    </div>
-                    <div class="divider"></div>
+                        <div class="quiz-score">
+                            <h3>{{ quiz_scores.0.quiz_name }}</h3>
+                            <p>Total Questions: {{ quiz_scores.0.quiz_total_questions }}</p>
+                            <p>Total Score: {{ quiz_scores.0.total_score }}</p>
+                            <p>Percentage: {{ quiz_scores.0.percentage }}%</p>
+                        </div>
+                        <div class="divider"></div>
                     {% else %}
-                    <p>No scores available.</p>
+                        <p>No scores available.</p>
                     {% endif %}
                 </div>
 
                 <div class="bottom-part" style="margin-top: -5px;">
                     <h2>Available Quizzes</h2>
+                    {% if quizzes %}
                     {% for quiz in quizzes %}
-                    {% if quiz.visible %}
-                    <div class="recent-quiz">
-                        <h3>{{ quiz.quiz_name }}</h3>
-                        <p>By Professor: {{ quiz.created_by.username }}</p>
-                        <div class="gotoquiz">
-                            <a href="{% url 'view_quizzes' %}">Go To Quiz</a>
-                        </div>
-                    </div>
-                    {% endif %}
+                        {% if quiz.visible %}
+                            <div class="recent-quiz">
+                                <h3>{{ quiz.quiz_name }}</h3>
+                                <p>By Professor: {{ quiz.created_by.username }}</p>
+                                <div class="gotoquiz">
+                                    <a href="{% url 'view_quizzes' %}">Go To Quiz</a>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endfor %}
+                    {% else %}
+                    No Available Quizzes
+                    {% endif %}
                 </div>
             </div>
             <div class="card-footer">
                 <a href="{% url 'scores' %}">
-                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
+                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;">
+                </a>
             </div>
         </div>
     </div>
@@ -203,5 +207,6 @@
         {% include 'footer.html'%}
     </div>
 </body>
+
 
 </html>

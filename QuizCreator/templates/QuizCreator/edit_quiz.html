@@ -309,18 +309,24 @@
     <div>
         {% include 'QuizCreator/navbar.html' %}
     </div>
+
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
                 <h1 style="margin-top: 30px;">Edit Quiz</h1>
                 <div class="message">
                     {% if messages %}
-                    {% for message in messages %}
-                    <div
-                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
+                        {% for message in messages %}
+                            <div class="alert 
+                                {% if message.tags == 'success' %}
+                                    alert-success
+                                {% elif message.tags == 'error' %}
+                                    alert-danger
+                                {% endif %}
+                            ">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     {% endif %}
                 </div>
 
@@ -333,12 +339,13 @@
                                 <label for="select-quiz" style="margin-top: 10px;">Choose Quiz:</label>
                                 <select id="select-quiz" name="select-quiz" required style="margin-top: 20px;">
                                     {% if not selected_quiz %}
-                                    <option disabled selected value>-- Please Select a Quiz --</option>
+                                        <option disabled selected value>-- Please Select a Quiz --</option>
                                     {% endif %}
                                     <!-- Populate dropdown with quiz options -->
                                     {% for quiz in quizzes %}
-                                    <option value="{{ quiz.id }}" {% if quiz.id==selected_quiz.id %}selected{% endif %}>
-                                        {{ quiz.name }}</option>
+                                        <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>
+                                            {{ quiz.name }}
+                                        </option>
                                     {% endfor %}
                                 </select>
                                 <button type="submit" value="Select" style="margin-top: 0px;">Select</button>
@@ -349,43 +356,31 @@
                 </div>
 
                 <!-- Quiz Information Form -->
-                <div class="form-container" id="quiz-info-form" {% if selected_quiz.id %}style="display: block;" {% else
-                    %}style="display: none;" {% endif %}>
-
+                <div class="form-container" id="quiz-info-form" {% if selected_quiz.id %}style="display: block;" {% else %}style="display: none;" {% endif %}>
                     <h3 style="text-align: center;">Modify Quiz Details</h3>
                     <form method="post" class="edit-quiz-form" id="edit-quiz-form" action="{% url 'update_quiz' %}">
                         {% csrf_token %}
                         <input type="hidden" id="quiz-id" name="quiz-id" value="{{ selected_quiz.id }}">
 
                         <label for="quiz-name">Quiz Name:</label>
-                        <input type="text" style="margin-bottom: -15px;" id="quiz-name" name="quiz-name"
-                            value="{{ selected_quiz.name }}" required><br><br>
+                        <input type="text" style="margin-bottom: -15px;" id="quiz-name" name="quiz-name" value="{{ selected_quiz.name }}" required><br><br>
 
                         <label for="quiz-description">Description:</label>
-                        <textarea id="quiz-description" style="margin-bottom: -15px;" name="quiz-description"
-                            required>{{ selected_quiz.description }}</textarea><br><br>
+                        <textarea id="quiz-description" style="margin-bottom: -15px;" name="quiz-description" required>{{ selected_quiz.description }}</textarea><br><br>
 
                         <label for="quiz-duration">Duration (in minutes):</label>
-                        <input type="number" style="margin-bottom: -15px;" id="quiz-duration" name="quiz-duration"
-                            value="{{ selected_quiz.duration }}" min="5" pattern="\d+"
-                            title="Please enter a positive integer starting from 5" required><br><br>
+                        <input type="number" style="margin-bottom: -15px;" id="quiz-duration" name="quiz-duration" value="{{ selected_quiz.duration }}" min="5" pattern="\d+" title="Please enter a positive integer starting from 5" required><br><br>
 
                         <label for="quiz-total-questions">Total Questions:</label>
-                        <input type="number" style="margin-bottom: -15px;" id="quiz-total-questions"
-                            name="quiz-total-questions" value="{{ selected_quiz.total_questions }}" min="5" max="100"
-                            pattern="\d+" title="Please enter a positive integer starting from 5" required><br><br>
+                        <input type="number" style="margin-bottom: -15px;" id="quiz-total-questions" name="quiz-total-questions" value="{{ selected_quiz.total_questions }}" min="5" max="100" pattern="\d+" title="Please enter a positive integer starting from 5" required><br><br>
 
                         <label for="passcode">Passcode:</label>
-                        <input type="text" id="quiz-passcode" name="quiz-passcode" value="{{ selected_quiz.passcode }}"
-                            required><br>
+                        <input type="text" id="quiz-passcode" name="quiz-passcode" value="{{ selected_quiz.passcode }}" required><br>
 
                         <div class="updatequizbutton">
                             <button type="submit" value="Update Quiz">Update Quiz</button>
                             <button type="reset" value="Update Quiz">Reset</button>
                         </div>
-                    </form>
-                    <form method="post" action="">
-
                     </form>
                 </div>
             </div>
@@ -396,7 +391,6 @@
     <div class="footer-content">
         {% include 'footer.html' %}
     </div>
-
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

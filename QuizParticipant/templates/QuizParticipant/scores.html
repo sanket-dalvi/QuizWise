@@ -149,35 +149,35 @@
     <div class="mainsection">
         <div class="main-content">
             {% if quiz_data %}
-            <h2>Quiz Scores</h2>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Quiz Name</th>
-                        <th>Description</th>
-                        <th>Total Questions</th>
-                        <th>Duration</th>
-                        <th>Created By</th>
-                        <th>Quiz Score</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for data in quiz_data %}
-                    <tr>
-                        <td>{{ data.quiz.name }}</td>
-                        <td>{{ data.quiz.description }}</td>
-                        <td>{{ data.quiz.total_questions }}</td>
-                        <td>{{ data.quiz.duration }} mins</td>
-                        <td>{{ data.quiz.created_by.username }}</td>
-                        <td>{{ data.score }}</td>
-                        <td>{{ data.percentage }}%</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                <h2>Quiz Scores</h2>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Quiz Name</th>
+                            <th>Description</th>
+                            <th>Total Questions</th>
+                            <th>Duration</th>
+                            <th>Created By</th>
+                            <th>Quiz Score</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in quiz_data %}
+                            <tr>
+                                <td>{{ data.quiz.name }}</td>
+                                <td>{{ data.quiz.description }}</td>
+                                <td>{{ data.quiz.total_questions }}</td>
+                                <td>{{ data.quiz.duration }} mins</td>
+                                <td>{{ data.quiz.created_by.username }}</td>
+                                <td>{{ data.score }}</td>
+                                <td>{{ data.percentage }}%</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
-            No Scores Available
+                No Scores Available
             {% endif %}
         </div>
     </div>
@@ -186,6 +186,7 @@
         {% include 'footer.html' %}
     </div>
 </body>
+
 
 <script>
 </script>

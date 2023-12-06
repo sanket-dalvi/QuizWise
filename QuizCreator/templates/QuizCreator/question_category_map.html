@@ -284,6 +284,7 @@
     <div>
         {% include 'QuizCreator/navbar.html' %}
     </div>
+    
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
@@ -294,12 +295,11 @@
                         <h1>Map Questions to Quizzes</h1>
                         <div class="message">
                             {% if messages %}
-                            {% for message in messages %}
-                            <div
-                                class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                {{ message }}
-                            </div>
-                            {% endfor %}
+                                {% for message in messages %}
+                                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
                             {% endif %}
                         </div>
 
@@ -313,7 +313,7 @@
                                 <div>
                                     <select id="category-select" name="category-select" multiple>
                                         {% for category in categories %}
-                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                            <option value="{{ category.id }}">{{ category.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -333,8 +333,7 @@
                             <table id="questions-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox">
-                                        </th>
+                                        <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
                                         <th>No</th>
                                         <th style="width: 25%;">Question</th>
                                         <th>Answer Choice Type</th>
@@ -346,25 +345,24 @@
                                 </thead>
                                 <tbody>
                                     {% for question in questions %}
-                                    <tr>
-                                        <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}"
-                                                class="larger-checkbox"></td>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ question.question }}</td>
-                                        <td>{{ question.type.type_code }}</td>
-                                        <td>
-                                            {% for option in question.options.all %}
-                                            -{{ option.option }}<br>
-                                            {% endfor %}
-                                        </td>
-                                        <td>
-                                            {% for category_map in question.categoryquestionmap_set.all %}
-                                            {{ category_map.category.name }}<br>
-                                            {% endfor %}
-                                        </td>
-                                        <td>{{ question.answer }}</td>
-                                        <td>{{ question.created_by.username }}</td>
-                                    </tr>
+                                        <tr>
+                                            <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ question.question }}</td>
+                                            <td>{{ question.type.type_code }}</td>
+                                            <td>
+                                                {% for option in question.options.all %}
+                                                    -{{ option.option }}<br>
+                                                {% endfor %}
+                                            </td>
+                                            <td>
+                                                {% for category_map in question.categoryquestionmap_set.all %}
+                                                    {{ category_map.category.name }}<br>
+                                                {% endfor %}
+                                            </td>
+                                            <td>{{ question.answer }}</td>
+                                            <td>{{ question.created_by.username }}</td>
+                                        </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -383,6 +381,7 @@
         {% include 'footer.html' %}
     </div>
 </body>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var searchBtn = document.getElementById('search-btn');

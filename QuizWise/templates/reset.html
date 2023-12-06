@@ -173,8 +173,7 @@
 <body>
     <header>
         <h1 style="margin-left: 50px;"><a href="{% url 'index' %}">Click here to go back to Home</a></h1>
-        <a id="login-button" href="{% url 'login' %}" style="margin-right: 50px;">Already have an account? Log in
-            here.</a>
+        <a id="login-button" href="{% url 'login' %}" style="margin-right: 50px;">Already have an account? Log in here.</a>
     </header>
 
     <div class="main-content">
@@ -198,12 +197,11 @@
 
                 <div class="message">
                     {% if messages %}
-                    {% for message in messages %}
-                    <div
-                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     {% endif %}
                 </div>
 
@@ -216,5 +214,6 @@
         {% include 'footer.html'%}
     </div>
 </body>
+
 
 </html>

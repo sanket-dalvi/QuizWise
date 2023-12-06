@@ -250,6 +250,7 @@
     <div>
         {% include 'QuizCreator/navbar.html' %}
     </div>
+    
     <div class="mainsection">
         <div class="main-content">
             <div class="content-container">
@@ -258,12 +259,17 @@
 
                 <div class="message">
                     {% if messages %}
-                    {% for message in messages %}
-                    <div
-                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
+                        {% for message in messages %}
+                            <div class="alert 
+                                {% if message.tags == 'success' %}
+                                    alert-success
+                                {% elif message.tags == 'error' %}
+                                    alert-danger
+                                {% endif %}
+                            ">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     {% endif %}
                 </div>
 

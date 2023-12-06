@@ -161,21 +161,28 @@
 
                         <label for="category_description">Category Description:</label>
                         <textarea id="category_description" name="category_description" required></textarea>
+
                         <div class="categoryvisibility">
                             <label for="visible_to_others">Visible to Others:</label>
-                            <input type="checkbox" class="larger-checkbox" id="visible_to_others"
-                                name="visible_to_others">
+                            <input type="checkbox" class="larger-checkbox" id="visible_to_others" name="visible_to_others">
                         </div>
+
                         <div class="message">
                             {% if messages %}
-                            {% for message in messages %}
-                            <div
-                                class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                {{ message }}
-                            </div>
-                            {% endfor %}
+                                {% for message in messages %}
+                                    <div class="alert 
+                                        {% if message.tags == 'success' %}
+                                            alert-success
+                                        {% elif message.tags == 'error' %}
+                                            alert-danger
+                                        {% endif %}
+                                    ">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
                             {% endif %}
                         </div>
+
                         <div class="addcategorybutton">
                             <button type="submit">Add Category</button>
                             <button type="reset">Clear</button>
@@ -190,6 +197,7 @@
         {% include 'footer.html' %}
     </div>
 </body>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 

@@ -17,7 +17,7 @@ import seaborn as sns
 import pandas as pd
 import random
 from .forms import FileUploadForm
-import os
+import os, io
 from django.conf import settings
 from QuizWise.notification import notification
 from openpyxl import load_workbook
@@ -37,14 +37,12 @@ def home(request):
     return render(request, "QuizCreator/home.html", context)
 
 def get_quiz_metrics(request, quiz=None):
-    # Retrieve the most recent quiz score for the current user
     current_user = request.user
     recent_quiz_score = UserQuizScore.objects.filter(
         quiz__created_by=current_user
     ).order_by('-timestamp').first()
 
     if recent_quiz_score:
-        # Use the specified quiz or the most recent quiz if not specified
         recent_quiz = quiz
         if not quiz:
             recent_quiz = recent_quiz_score.quiz
@@ -53,14 +51,12 @@ def get_quiz_metrics(request, quiz=None):
         )
         total_scores = [user['total_score'] for user in user_total_scores]
 
-        # Calculate overall statistics for the quiz metrics
         mean_score = statistics.mean(total_scores)
         median_score = statistics.median(total_scores)
         mode_score = statistics.mode(total_scores)
         min_score = min(user_total_scores, key=lambda x: x['total_score'])['total_score']
         max_score = max(user_total_scores, key=lambda x: x['total_score'])['total_score']
 
-        # Prepare the quiz metrics dictionary
         recent_quiz_metrics = {
             'quiz_name': recent_quiz.name,
             'duration': recent_quiz.duration,
@@ -71,37 +67,12 @@ def get_quiz_metrics(request, quiz=None):
             'median': median_score,
             'mode': mode_score
         }
-        
-        # Create a DataFrame for bar chart data
-        data = {
-            'Metrics': ['Min', 'Max', 'Mode', 'Median', 'Mean'],
-            'Scores': [min_score, max_score, mode_score, median_score, mean_score]
-        }
-        df = pd.DataFrame(data)
-        # Create a bar chart using seaborn and save it as a PNG image
-        plt.figure(figsize=(4, 2))
-        sns.barplot(x='Metrics', y='Scores', data=df, palette='viridis')
-        plt.title('Quiz Metrics')
-        plt.xlabel('Metrics')
-        plt.ylabel('Scores')
-        plt.tight_layout()
-        
-        # Convert the PNG image to base64 encoding for HTML rendering
-        buffer = BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_png = buffer.getvalue()
-        buffer.close()
-        image_base64 = base64.b64encode(image_png).decode('utf-8')
-        img_tag = f'<img src="data:image/png;base64,{image_base64} alt="Quiz Metrics" style="width: 70%; display: block; margin: 0 auto;"">'
+
     else:
         recent_quiz_metrics = None
-        img_tag = None
 
-    # Return the quiz metrics dictionary
     context = {
         'recent_quiz_metrics': recent_quiz_metrics,
-        'img_tag': img_tag  
     }
     return context
 
@@ -150,7 +121,7 @@ def profile(request):
 @examiner_required
 def scores(request):
     # Display and calculate scores for quiz submissions.
-    quizzes = Quiz.objects.all()
+    quizzes = Quiz.objects.filter(created_by=request.user)
 
     if request.method == 'POST':
         # Handle POST request to display scores for a selected quiz
@@ -491,6 +462,12 @@ def delete_question(request, question_id):
     try:
         # Attempt to retrieve and delete the question
         question = get_object_or_404(Question, pk=question_id)
+        quizzes = QuizQuestion.objects.filter(question=question)
+        for quiz in quizzes:
+            user_quiz_status = UserQuizStatus.objects.filter(quiz=quiz)
+            if user_quiz_status and quiz.visible:
+                messages.error(request, "Question Can Not Be Deleted As It Is Present In The Current Active Posted Quiz")
+                return redirect("edit_questions")
         question.delete()
     except Question.DoesNotExist as e:
         messages.error(f"ERROR :  Could Not Delete Question {str(e)}")
@@ -603,8 +580,8 @@ def delete_quiz(request):
 @examiner_required
 def post_quiz(request):
     # Handle the posting of a quiz to selected groups or participants.
-    quizzes = Quiz.objects.all()
-    groups = Group.objects.all()
+    quizzes = Quiz.objects.filter(created_by=request.user)
+    groups = Group.objects.filter(created_by=request.user)
     context = {
         'quizzes': quizzes, 
         'groups': groups
@@ -627,6 +604,9 @@ def post_quiz(request):
             quiz_id = request.POST.get('select-quiz')
             quiz = Quiz.objects.get(id=int(quiz_id))
             quiz_questions = QuizQuestion.objects.filter(quiz=quiz)
+
+            group_examinees = [mapping.user for mapping in GroupExamineeMapping.objects.filter(group=group)]
+            context['group_examinees'] = group_examinees
 
             # Check if the quiz has enough questions
             if len(quiz_questions) < quiz.total_questions:
@@ -664,7 +644,7 @@ def add_quiz_questions(request):
     # Initialize variables
     total_questions_added = 0
     quiz_questions = []
-    quizzes = Quiz.objects.all()
+    quizzes = Quiz.objects.filter(created_by=request.user)
     remaining_questions = None
     selected_quiz = None
     current_user = request.user
@@ -808,7 +788,7 @@ def delete_quiz_questions(request):
 @log_view
 @examiner_required
 def preview_quiz(request):
-    quizzes = Quiz.objects.all()
+    quizzes = Quiz.objects.filter(created_by=request.user)
     if request.method == "POST":
         quiz_id = request.POST.get("select-quiz")
         try:
@@ -909,6 +889,7 @@ def view_group(request):
         examinees = []
         for mapping in mappings:
             examinees.append(mapping.user)
+        selected_group_id = int(selected_group_id)
         return render(request, "QuizCreator/view_group.html", {"examinees" : examinees, 'groups': groups, 'group_id': selected_group_id})
     return render(request, 'QuizCreator/view_group.html', {
         'groups': groups,

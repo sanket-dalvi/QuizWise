@@ -42,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True, help_text=USERNAME_HELP_TEXT)
     first_name = models.CharField(max_length=150, help_text=FIRST_NAME_HELP_TEXT)
     last_name = models.CharField(max_length=150, help_text=LAST_NAME_HELP_TEXT)
-    contact = models.CharField(max_length=15, unique=True, validators=[RegexValidator(r'^\d{10}$', message=CONTACT_VALUE_ERROR, help_text=CONTACT_HELP_TEXT)])
+    contact = models.CharField(max_length=15, unique=True, validators=[RegexValidator(r'^\d{10}$', message=CONTACT_VALUE_ERROR)])
     password = models.CharField(max_length=128)  # Will store hashed passwords
 
     # New field for role selection

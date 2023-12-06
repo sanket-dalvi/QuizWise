@@ -172,12 +172,16 @@
     <h1>Quiz Preview</h1>
     <div class="message">
         {% if messages %}
-        {% for message in messages %}
-        <div
-            class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-            {{ message }}
-        </div>
-        {% endfor %}
+            {% for message in messages %}
+                <div class="alert 
+                    {% if message.tags == 'success' %}
+                        alert-success
+                    {% elif message.tags == 'error' %}
+                        alert-danger
+                    {% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
     </div>
     <div class="quiz-details">
@@ -186,36 +190,32 @@
         <p>Total Questions: {{ quiz.total_questions }}</p>
         <p>Duration: {{ quiz.duration }} minutes</p>
     </div>
-    <div class="timer" id="timer" style="text-align: center; color: white; font-weight: bolder; font-size: xx-large;">
-    </div>
+    <div class="timer" id="timer" style="text-align: center; color: white; font-weight: bolder; font-size: xx-large;"></div>
     <form method="post" id="quiz_form">
         {% csrf_token %}
         {% for question in quiz_questions %}
-        <div class="question">
-            <h3>Q.{{forloop.counter}}) {{ question.question }}</h3>
-            {% if question.type.type_code == 'RB' %}
-            <div class="options">
-                {% for option in question.options.all %}
-                <input type="radio" id="option_{{ option.id }}" name="question_{{ question.id }}"
-                    value="{{ option.option }}">
-                <label for="option_{{ option.id }}">{{ option.option }}</label><br>
-                {% endfor %}
+            <div class="question">
+                <h3>Q.{{forloop.counter}}) {{ question.question }}</h3>
+                {% if question.type.type_code == 'RB' %}
+                    <div class="options">
+                        {% for option in question.options.all %}
+                            <input type="radio" id="option_{{ option.id }}" name="question_{{ question.id }}" value="{{ option.option }}">
+                            <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                        {% endfor %}
+                    </div>
+                {% elif question.type.type_code == 'CB' %}
+                    <div class="options">
+                        {% for option in question.options.all %}
+                            <input type="checkbox" id="option_{{ option.id }}" name="question_{{ question.id }}[]" value="{{ option.option }}">
+                            <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                        {% endfor %}
+                    </div>
+                {% elif question.type.type_code == 'FT' %}
+                    <textarea id="answer_{{ question.id }}" name="question_{{ question.id }}" rows="4" cols="50" placeholder="Type your answer here...."></textarea>
+                {% endif %}
+                <p style="color: white; font-weight: bold;">Correct Answer: {{ question.answer }}</p>
+                <hr>
             </div>
-            {% elif question.type.type_code == 'CB' %}
-            <div class="options">
-                {% for option in question.options.all %}
-                <input type="checkbox" id="option_{{ option.id }}" name="question_{{ question.id }}[]"
-                    value="{{ option.option }}">
-                <label for="option_{{ option.id }}">{{ option.option }}</label><br>
-                {% endfor %}
-            </div>
-            {% elif question.type.type_code == 'FT' %}
-            <textarea id="answer_{{ question.id }}" name="question_{{ question.id }}" rows="4" cols="50"
-                placeholder="Type your answer here...."></textarea>
-            {% endif %}
-            <p style="color: white; font-weight: bold;">Correct Answer: {{ question.answer }}</p>
-            <hr>
-        </div>
         {% endfor %}
         <div class="submitquizbutton" style="align-content: center;">
             <button type="submit" value="Submit Quiz">Submit Quiz</button>
