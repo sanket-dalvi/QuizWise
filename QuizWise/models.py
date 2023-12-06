@@ -34,7 +34,6 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-
         return self.create_user(email, username, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -43,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=150, help_text=FIRST_NAME_HELP_TEXT)
     last_name = models.CharField(max_length=150, help_text=LAST_NAME_HELP_TEXT)
     contact = models.CharField(max_length=15, unique=True, validators=[RegexValidator(r'^\d{10}$', message=CONTACT_VALUE_ERROR, help_text=CONTACT_HELP_TEXT)])
-    password = models.CharField(max_length=128)  # Will store hashed passwords
+    password = models.CharField(max_length=128) 
 
     # New field for role selection
     is_examinee = models.BooleanField(default=False)
@@ -55,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Update groups field with unique related_name
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name=USER_GROUPS_RELATED_NAME,  # Unique related_name
+        related_name=USER_GROUPS_RELATED_NAME, 
         blank=True,
         help_text=GROUPS_HELP_TEXT,
     )
@@ -63,21 +62,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Update user_permissions field with unique related_name
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name=USER_PERMISSIONS_RELATED_NAME,  # Unique related_name
+        related_name=USER_PERMISSIONS_RELATED_NAME,
         blank=True,
         help_text=USER_PERMISSIONS_HELP_TEXT,
     )
 
-
     objects = UserManager()
-
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = USER_FIELDS
 
     def save(self, *args, **kwargs):
         # Encrypt password before saving
         if self.password.startswith('pbkdf2_sha256$'):
-            # Password already encrypted (in case of updating user profile)
             pass
         else:
             self.set_password(self.password)
@@ -90,7 +86,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class PasswordReset(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=100, unique=True)
-    otp = models.CharField(max_length=OTP_LENGTH)  # Assuming OTPs are 6 characters long
+    otp = models.CharField(max_length=OTP_LENGTH) 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
