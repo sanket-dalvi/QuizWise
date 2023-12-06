@@ -343,7 +343,7 @@ def question_file_upload(request):
                         continue  # Skip if the question type doesn't exist
 
                     # Validation: Check if the correct answer is among the options for MCQ type
-                    if question_type.type_code != 'FT' and correct_answer not in options.split(','):
+                    if question_type.type_code != 'FT' and correct_answer.lower() not in [option.strip().lower() for option in options.split(',')]:
                         continue  # Skip if correct answer not in options for MCQ type
 
                     # Create a new Question object
@@ -351,7 +351,7 @@ def question_file_upload(request):
                         question=question_text,
                         type=question_type,
                         answer=correct_answer,
-                        created_by=request.user  # Use the current user as created_by
+                        created_by=request.user 
                     )
                     if question_type.type_code != 'FT':
                         if options:

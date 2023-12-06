@@ -1,8 +1,7 @@
-# views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegistrationForm, UserLoginForm
-from .auth_decorator  import examinee_required, examiner_required
+from .auth_decorator  import examiner_required
 from django.contrib import messages
 from .email_utils import EmailSender
 from django.contrib import messages
@@ -79,10 +78,6 @@ def forgot(request):
         user = User.objects.filter(Q(first_name__iexact=first_name) & Q(last_name__iexact=last_name) & Q(email__iexact=email)).first()
 
         if user:
-            # password_reset_link_data = PasswordReset.objects.filter(user = user)
-            # if password_reset_link_data:
-            #     messages.error(request, "Reset Link has been already sent to your email id. Please use ")
-            # else:
 
             # Generate a unique token for password reset
             token = uuid.uuid4().hex  # Using UUID for generating a secure token

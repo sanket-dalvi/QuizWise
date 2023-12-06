@@ -1,13 +1,29 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.db import models
+from .constants import (
+    USER_FIELDS,
+    USER_GROUPS_RELATED_NAME,
+    USER_PERMISSIONS_RELATED_NAME,
+    OTP_LENGTH,
+    EMAIL_HELP_TEXT,
+    USERNAME_HELP_TEXT,
+    FIRST_NAME_HELP_TEXT,
+    LAST_NAME_HELP_TEXT,
+    CONTACT_HELP_TEXT,
+    GROUPS_HELP_TEXT,
+    USER_PERMISSIONS_HELP_TEXT,
+    EMAIL_VALUE_ERROR,
+    USERNAME_VALUE_ERROR,
+    CONTACT_VALUE_ERROR,
+)
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         if not email:
-            raise ValueError('Email is required')
+            raise ValueError(EMAIL_VALUE_ERROR)
         if not username:
-            raise ValueError('Username is required')
+            raise ValueError(USERNAME_VALUE_ERROR)
 
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)
@@ -22,11 +38,11 @@ class UserManager(BaseUserManager):
         return self.create_user(email, username, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    username = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    contact = models.CharField(max_length=15, unique=True, validators=[RegexValidator(r'^\d{10}$', message='Contact number must be 10 digits.')])
+    email = models.EmailField(unique=True, help_text=EMAIL_HELP_TEXT)
+    username = models.CharField(max_length=150, unique=True, help_text=USERNAME_HELP_TEXT)
+    first_name = models.CharField(max_length=150, help_text=FIRST_NAME_HELP_TEXT)
+    last_name = models.CharField(max_length=150, help_text=LAST_NAME_HELP_TEXT)
+    contact = models.CharField(max_length=15, unique=True, validators=[RegexValidator(r'^\d{10}$', message=CONTACT_VALUE_ERROR, help_text=CONTACT_HELP_TEXT)])
     password = models.CharField(max_length=128)  # Will store hashed passwords
 
     # New field for role selection
@@ -39,24 +55,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Update groups field with unique related_name
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name='quizwise_user_groups',  # Unique related_name
+        related_name=USER_GROUPS_RELATED_NAME,  # Unique related_name
         blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        help_text=GROUPS_HELP_TEXT,
     )
 
     # Update user_permissions field with unique related_name
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name='quizwise_user_permissions',  # Unique related_name
+        related_name=USER_PERMISSIONS_RELATED_NAME,  # Unique related_name
         blank=True,
-        help_text='Specific permissions for this user.',
+        help_text=USER_PERMISSIONS_HELP_TEXT,
     )
 
 
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'contact']
+    REQUIRED_FIELDS = USER_FIELDS
 
     def save(self, *args, **kwargs):
         # Encrypt password before saving
@@ -74,7 +90,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class PasswordReset(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=100, unique=True)
-    otp = models.CharField(max_length=6)  # Assuming OTPs are 6 characters long
+    otp = models.CharField(max_length=OTP_LENGTH)  # Assuming OTPs are 6 characters long
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
