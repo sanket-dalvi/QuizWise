@@ -14,11 +14,11 @@
             font-family: Arial, sans-serif;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -46,8 +46,8 @@
 
         .card-content {
             padding: 20px;
-            height: 350px; 
-            overflow-y: auto; 
+            height: 350px;
+            overflow-y: auto;
             background: #f4f4f4
         }
 
@@ -59,9 +59,9 @@
         }
 
         .quiz-details {
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
 
         @media screen and (max-width: 600px) {
@@ -70,7 +70,7 @@
             }
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             padding: 10px;
             color: white;
@@ -79,7 +79,8 @@
 
         .profile-container {
             display: flex;
-            align-items: center; /* Align items vertically in the center */
+            align-items: center;
+            /* Align items vertically in the center */
             justify-content: space-evenly;
             padding: 20px;
             background: #f4f4f4;
@@ -87,19 +88,19 @@
 
 
         .profile-pic {
-            width: 130px; 
-            height: 130px; 
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            margin-right: auto; 
-            margin-left: auto; 
+            margin-right: auto;
+            margin-left: auto;
         }
 
         .fancy-note {
             font-style: italic;
             color: #555;
-            margin-left: 20px; /* Adjust as needed for spacing */
+            margin-left: 20px;
+            /* Adjust as needed for spacing */
         }
- 
     </style>
 </head>
 
@@ -113,46 +114,47 @@
         <!-- Include the navigation bar -->
         {% include 'QuizCreator/navbar.html' %}
     </div>
-    
+
     <div class="card-container">
         <div class="card" style="width: 200%;">
             <div class="card-header">Examiner Profile</div>
             <div class="card-content">
-            <div class="profile-container">
-                <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
-                <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."</p>
-                <p class="fancy-note">- Nelson Mandela</p>   
-            </div>  
-            <p><strong>First Name:</strong> {{ first_name }} </p>
-              <p><strong>Last Name:</strong> {{ last_name }}</p>
-              <p><strong>Email:</strong> {{ email }} </p>
-              <p><strong>Contact:</strong> {{ contact }} </p>  
+                <div class="profile-container">
+                    <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
+                    <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."
+                    </p>
+                    <p class="fancy-note">- Nelson Mandela</p>
+                </div>
+                <p><strong>First Name:</strong> {{ first_name }} </p>
+                <p><strong>Last Name:</strong> {{ last_name }}</p>
+                <p><strong>Email:</strong> {{ email }} </p>
+                <p><strong>Contact:</strong> {{ contact }} </p>
             </div>
-            <div class="card-footer"> 
+            <div class="card-footer">
                 <a href="{% url 'examiner_profile' %}">
                     <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;">
                 </a>
             </div>
-          </div>
-          
-    
+        </div>
+
+
         <div class="card" style="width: 200%;">
-          <div class="card-header">Recent Quiz Metrics</div>
-          <div class="card-content">
-            <p><strong>Name:</strong> {{ recent_quiz_metrics.quiz_name }}</p>
-            <p><strong>Duration:</strong> {{ recent_quiz_metrics.duration }}</p>
-            <p><strong>Total Questions:</strong> {{ recent_quiz_metrics.total_questions }}</p>
-            {{ img_tag|safe }}
-            <p><strong>Top Score:</strong>{{ recent_quiz_metrics.max }}</p>
-            <p><strong>Lowest Score:</strong> {{ recent_quiz_metrics.min }}</p>
-            <p><strong>Mean:</strong> {{ recent_quiz_metrics.mean }}</p>
-            <p><strong>Median:</strong> {{ recent_quiz_metrics.median }}</p>
-            <p><strong>Mode:</strong> {{ recent_quiz_metrics.mode }}</p>
-          </div>
-          <div class="card-footer">
-            <a href="{% url 'examinee_scores' %}">
-            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
-          </div>
+            <div class="card-header">Recent Quiz Metrics</div>
+            <div class="card-content">
+                <p><strong>Name:</strong> {{ recent_quiz_metrics.quiz_name }}</p>
+                <p><strong>Duration:</strong> {{ recent_quiz_metrics.duration }}</p>
+                <p><strong>Total Questions:</strong> {{ recent_quiz_metrics.total_questions }}</p>
+                {{ img_tag|safe }}
+                <p><strong>Top Score:</strong>{{ recent_quiz_metrics.max }}</p>
+                <p><strong>Lowest Score:</strong> {{ recent_quiz_metrics.min }}</p>
+                <p><strong>Mean:</strong> {{ recent_quiz_metrics.mean }}</p>
+                <p><strong>Median:</strong> {{ recent_quiz_metrics.median }}</p>
+                <p><strong>Mode:</strong> {{ recent_quiz_metrics.mode }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'examinee_scores' %}">
+                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
+            </div>
         </div>
     </div>
     <div class="footer-content">

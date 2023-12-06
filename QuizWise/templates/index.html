@@ -8,7 +8,6 @@
     <title>Index</title>
     {% load static %}
     <style>
-     
         body {
             margin: 0;
             height: max-content;
@@ -22,11 +21,11 @@
             background-repeat: no-repeat;
         }
 
-        .loggeduser{
+        .loggeduser {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -42,15 +41,15 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .content-container img {
-            width: 500px; 
+            width: 500px;
             margin-left: -140px;
             margin-right: 100px;
         }
 
         .dialogbox img {
-            width: 300px; 
+            width: 300px;
             margin-left: 10px;
             margin-right: 0px;
             margin-top: -300px;
@@ -58,7 +57,7 @@
 
         .middle-content form {
             display: flex;
-            max-width: 300px; 
+            max-width: 300px;
             min-width: fit-content;
         }
 
@@ -67,7 +66,7 @@
             width: 500px;
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
-            border: 1px solid #ccc; 
+            border: 1px solid #ccc;
             padding: 15px;
             box-sizing: border-box;
         }
@@ -77,7 +76,7 @@
             color: aliceblue;
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
-            border: 1px solid #663399; 
+            border: 1px solid #663399;
             padding: 10px;
             box-sizing: border-box;
             cursor: pointer;
@@ -88,25 +87,25 @@
         }
 
         .content-container button:hover {
-            background-color: #E6549C; 
+            background-color: #E6549C;
             border: #E6549C
         }
 
-        .middle-content{
+        .middle-content {
             margin-left: 100px;
             height: 300px;
             color: black;
             text-shadow: #ccc;
-            background-color: rgba(0, 0, 0, 0.1); 
-            padding: 10px; 
-            border-radius: 25px; 
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 25px;
         }
 
-        .middle-content h2{
+        .middle-content h2 {
             font-size: 7vb;
         }
 
-        .middle-content h4{
+        .middle-content h4 {
             font-size: 3vb;
             color: white;
         }
@@ -123,16 +122,16 @@
 
 <body>
     <div>
-        {% include 'header.html' %}    
+        {% include 'header.html' %}
     </div>
 
-    
+
     <div class="main-content">
         <div class="content-container">
             <div class="middle-content">
                 <h2>Online Quiz Builder</h2>
                 <h4>QuizWise - Building Online Exams and Tests Made Fun, Easy, and Engaging!</h4>
-                <form method="get" action="{% url 'register' %}"> 
+                <form method="get" action="{% url 'register' %}">
                     <input type="text" placeholder="Your email address" name="email">
                     <button type="submit">Register</button>
                 </form>

@@ -322,16 +322,18 @@ def question_file_upload(request):
                     options = row[3] if len(row) >= 4 else ''  
                     question_type = QuestionType.objects.filter(type_name=question_type_name).first()
                     if not question_type:
-                        continue                  
-                    if question_type.type_code != 'FT' and correct_answer not in options.split(','):
-                        continue  
+                        continue  # Skip if the question type doesn't exist
+
+                    # Validation: Check if the correct answer is among the options for MCQ type
+                    if question_type.type_code != 'FT' and correct_answer.lower() not in [option.strip().lower() for option in options.split(',')]:
+                        continue  # Skip if correct answer not in options for MCQ type
 
                     # Create a new Question object
                     new_question = Question(
                         question=question_text,
                         type=question_type,
                         answer=correct_answer,
-                        created_by=request.user  
+                        created_by=request.user 
                     )
 
                     # Process and create QuestionOption objects for multiple-choice questions

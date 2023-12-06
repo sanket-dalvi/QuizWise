@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Profile</title>
     <style>
         body {
             margin: 0;
@@ -62,7 +62,7 @@
         }
 
 
-        .form-group input{
+        .form-group input {
             flex: 2;
             margin: 0;
             padding: 5px;
@@ -70,6 +70,7 @@
             border-radius: 3px;
             margin-right: 40px;
         }
+
         .form-group ul {
             flex: 2;
             margin: 0;
@@ -139,7 +140,7 @@
             background-color: lightgreen;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
@@ -181,11 +182,12 @@
             <div class="content-container">
                 <div class="message">
                     {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
+                    {% for message in messages %}
+                    <div
+                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </div>
                 <div class="form-container">
@@ -211,11 +213,13 @@
                         </div>
                         <div class="form-group">
                             <label for="email_notification">Email Notifications:</label>
-                            <input type="checkbox" id="email_notification" name="email_notification" {% if email_notification %}checked{% endif %}>
+                            <input type="checkbox" id="email_notification" name="email_notification" {% if
+                                email_notification %}checked{% endif %}>
                         </div>
                         <div class="form-group">
                             <label for="mobile_notification">Mobile Notifications:</label>
-                            <input type="checkbox" id="mobile_notification" name="mobile_notification" {% if mobile_notification %}checked{% endif %}>
+                            <input type="checkbox" id="mobile_notification" name="mobile_notification" {% if
+                                mobile_notification %}checked{% endif %}>
                         </div>
 
                         <button type="submit">Update</button>
@@ -227,7 +231,6 @@
     </div>
 
     <div class="footer-content">
-        <!-- Include the footer -->
         {% include 'footer.html'%}
     </div>
 
@@ -248,7 +251,6 @@
         }
 
         function updateProfile() {
-            // Implement logic to update the profile details
             alert('Profile updated!');
         }
     </script>

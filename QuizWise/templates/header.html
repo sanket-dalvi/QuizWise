@@ -1,13 +1,13 @@
 {% load static %}
 <style>
     header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to right, #1DA3B8, #77AB59);
-            margin-bottom: 40px;
-        }
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(to right, #1DA3B8, #77AB59);
+        margin-bottom: 40px;
+    }
 
     header button {
         padding: 15px 25px;
@@ -20,7 +20,7 @@
     }
 
     header button:hover {
-        background-color: #E6549C; 
+        background-color: #E6549C;
     }
 
 
@@ -36,7 +36,7 @@
     }
 
     h1 {
-        margin-left: 10px; 
+        margin-left: 10px;
         margin-bottom: 0;
         font-size: 40px;
         margin-top: 8px;
@@ -44,7 +44,7 @@
 
     header div {
         display: flex;
-        gap: 10px; 
+        gap: 10px;
     }
 
     h1 span.quiz {
@@ -56,30 +56,30 @@
     }
 
     header div a button {
-    font-weight: bold;
+        font-weight: bold;
     }
 
-    .loggeduser img{
+    .loggeduser img {
         max-width: 100%;
         height: auto;
         max-height: 50px;
     }
 
-    .registerbutton p{
+    .registerbutton p {
         margin-top: 25px;
         font-weight: bold;
     }
 
     header a,
-        .content-container a {
-            display: inline-block;
-            margin-right: -10px;
-            margin-top: 5px;
-            padding: 8px 12px;
-            color: #663399;
-            text-decoration:underline;
-            align-self: center;
-        }
+    .content-container a {
+        display: inline-block;
+        margin-right: -10px;
+        margin-top: 5px;
+        padding: 8px 12px;
+        color: #663399;
+        text-decoration: underline;
+        align-self: center;
+    }
 </style>
 
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
@@ -87,16 +87,16 @@
 <div class="header-content">
     <header>
         <div class="logo">
-                <img src="{% static 'logo.png' %}" alt="Your Image">
-                <h1><span class="quiz">Quiz</span><span class="wiz">Wise</span></h1>
-            </div>
+            <img src="{% static 'logo.png' %}" alt="Your Image">
+            <h1><span class="quiz">Quiz</span><span class="wiz">Wise</span></h1>
+        </div>
 
         <div class="headerbuttons">
             <a href="/login"><button>Login</button></a>
             <a href="/register"><button>Register</button></a>
         </div>
-        
-        <div class="loggeduser"> 
+
+        <div class="loggeduser">
             <img src="{% static 'notification-bell.png' %}" alt="Your Image">
             <h3>Welcome {{ user_first_name }}</h3>
         </div>

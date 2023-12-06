@@ -5,25 +5,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Create Question</title>
     {% load static %}
     <style>
-
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
-         .form-container {
+        .form-container {
             margin: 50px auto;
             width: 50%;
             padding: 20px;
@@ -57,7 +56,7 @@
         }
 
         textarea {
-            width: 96%; 
+            width: 96%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -81,11 +80,11 @@
 
         .Upload-file-container {
             text-align: center;
-            margin-top: 20px; 
+            margin-top: 20px;
         }
 
         .Upload-file-container div {
-            margin-top: 10px; 
+            margin-top: 10px;
         }
 
         .button-container {
@@ -93,13 +92,13 @@
             align-self: center;
         }
 
-        .button-container > div {
+        .button-container>div {
             margin-right: 20px;
         }
 
         .button-container button {
-            width: 180px; 
-            padding: 10px; 
+            width: 180px;
+            padding: 10px;
         }
 
         .field-container {
@@ -122,7 +121,7 @@
         #dynamic-fields {
             display: grid;
         }
-        
+
         .note {
             margin-top: 10px;
             font-size: 14px;
@@ -132,6 +131,7 @@
         .note p {
             margin: 0;
         }
+
         .message {
             margin-top: 10px;
             color: #555;
@@ -155,21 +155,21 @@
             margin-bottom: 10px;
         }
 
-        .mainsection{
+        .mainsection {
             height: 70vh;
             overflow-x: auto;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
             color: white;
             text-align: center;
         }
+
         .Upload-file-container {
             margin-top: 20px;
-            /* Add other styling properties as needed */
         }
 
         .Custom-file-upload {
@@ -183,8 +183,6 @@
         .Custom-file-upload span {
             font-size: 16px;
         }
-
-
     </style>
 </head>
 
@@ -216,13 +214,12 @@
                         <select id="type" name="type">
                             <option value="" disabled selected>--- Please select a type ---</option>
                             {% for question_type in question_types %}
-                                <option value="{{ question_type.type_code }}">{{ question_type.type_name }}</option>
+                            <option value="{{ question_type.type_code }}">{{ question_type.type_name }}</option>
                             {% endfor %}
                         </select>
 
                         <!-- Dynamic fields container -->
                         <div id="dynamic-fields">
-                            <!-- Additional fields based on question type will be added here -->
                         </div>
 
                         <!-- Hidden input to store options -->
@@ -231,11 +228,12 @@
                         <!-- Message display -->
                         <div class="message">
                             {% if messages %}
-                                {% for message in messages %}
-                                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
+                            {% for message in messages %}
+                            <div
+                                class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
                             {% endif %}
                         </div>
 
@@ -246,7 +244,7 @@
                             <div>
                                 <button type="submit">Submit Question</button>
                             </div>
-                        </div>  
+                        </div>
                     </form>
                     <div class="Upload-file-container">
                         <form method="post" action="{% url 'question_file_upload' %}" enctype="multipart/form-data">
@@ -256,8 +254,8 @@
                             <button type="submit">Upload</button>
                             <a href="{% url 'question_file_download' %}">Download Template File</a>
                         </form>
-                    </div>                                 
-                    
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -272,7 +270,7 @@
             var options = [];
 
             function updateOptions() {
-            
+
                 options = [];
                 document.querySelectorAll('#dynamic-fields label').forEach(function (label) {
                     options.push(label.textContent.trim());
@@ -290,7 +288,7 @@
 
                     var optionIndex = options.indexOf(valueToRemove);
                     if (optionIndex !== -1) {
-                        options.splice(optionIndex, 1); 
+                        options.splice(optionIndex, 1);
                         updateOptions();
                     }
 
@@ -303,9 +301,9 @@
             document.getElementById('type').addEventListener('change', function () {
                 var type = this.value;
                 var dynamicFieldDiv = document.getElementById('dynamic-fields');
-                dynamicFieldDiv.innerHTML = ''; 
+                dynamicFieldDiv.innerHTML = '';
 
-                if (type === 'RB' || type === 'CB') { 
+                if (type === 'RB' || type === 'CB') {
                     var newOption = prompt("Enter Option Value");
 
                     if (newOption !== null && newOption.trim() !== '') {
@@ -348,7 +346,7 @@
                         var label = document.createElement('label');
                         label.appendChild(input);
                         label.appendChild(document.createTextNode(input.value));
-                       
+
                         div.appendChild(label);
                         addDeleteButton(div);
                         dynamicFieldDiv.appendChild(div)
@@ -357,7 +355,6 @@
                 }
             });
 
-            // Initial options load
             document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
                 addDeleteButton(label);
             });
@@ -366,7 +363,6 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
 
         function hideMessage() {
             document.querySelectorAll('.alert').forEach(function (alert) {
@@ -381,7 +377,6 @@
             }, 3000); // Hide the message after 3 seconds
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });
@@ -403,7 +398,6 @@
     }
 
     function uploadFile() {
-        // Add your file upload logic here
         alert('File uploaded!');
 
         // Clear the file selected message

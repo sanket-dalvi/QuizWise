@@ -5,21 +5,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Category Mapping</title>
+    <title>Create Group</title>
     {% load static %}
     <style>
-
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -38,7 +37,7 @@
         }
 
         textarea {
-            width: 96%; 
+            width: 96%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -48,7 +47,7 @@
         }
 
         input {
-            width: 96%; 
+            width: 96%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -85,7 +84,7 @@
             background-color: #663399;
             color: white;
             cursor: pointer;
-            font-weight: bold; 
+            font-weight: bold;
         }
 
         .addgroupbutton button:hover {
@@ -99,11 +98,10 @@
             padding-right: 20px;
         }
 
-        .addgroupbutton button{
+        .addgroupbutton button {
             width: 25%;
         }
 
-        /* Additional styles for dynamic fields */
         .field-container {
             display: none;
             margin-bottom: 20px;
@@ -124,7 +122,7 @@
         #dynamic-fields {
             display: grid;
         }
-        
+
         .note {
             margin-top: 10px;
             font-size: 14px;
@@ -188,7 +186,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
@@ -228,12 +227,12 @@
             text-align: left;
         }
 
-        .mainsection{
+        .mainsection {
             height: 80vh;
             overflow-x: auto;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
@@ -258,11 +257,12 @@
                 <br>
                 <div class="message">
                     {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
+                    {% for message in messages %}
+                    <div
+                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </div>
                 <h1>Create Group</h1>
@@ -278,7 +278,7 @@
                             <label class="group-description" for="group-description">Description:</label>
                             <textarea id="group-description" name="group-description" required></textarea><br>
 
-                
+
                             <div class="addgroupbutton">
                                 <button type="submit" value="Create Quiz">Create Group</button>
                                 <button type="reset">Clear</button>
@@ -293,7 +293,7 @@
     <div class="footer-content">
         {% include 'footer.html' %}
     </div>
-    
+
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -308,7 +308,7 @@
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 3000); 
+            }, 3000);
         }
 
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
@@ -320,4 +320,5 @@
         });
     });
 </script>
+
 </html>

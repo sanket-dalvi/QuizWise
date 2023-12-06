@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Quiz History</title>
     <style>
         body {
             margin: 0;
@@ -13,11 +13,11 @@
             font-family: Arial, sans-serif;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -27,38 +27,34 @@
             }
         }
 
-        .mainsection{
+        .mainsection {
             height: 80vh;
             overflow-x: auto;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             padding: 10px;
             color: white;
             text-align: center;
         }
-
     </style>
 </head>
 
 <body>
     <div>
-        <!-- Include the header -->
         {% include 'header.html' %}
     </div>
 
     <div>
-        <!-- Include the navigation bar -->
         {% include 'QuizCreator/navbar.html' %}
     </div>
 
     <div class="mainsection">
-        
+
     </div>
 
     <div class="footer-content">
-        <!-- Include the footer -->
         {% include 'footer.html'%}
     </div>
 </body>

@@ -8,18 +8,17 @@
     <title>Home</title>
     {% load static %}
     <style>
-
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -28,7 +27,7 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
-            justify-content: space-evenly; 
+            justify-content: space-evenly;
         }
 
         .card {
@@ -47,8 +46,8 @@
 
         .card-content {
             padding: 20px;
-            height: 350px; 
-            overflow-y: auto; 
+            height: 350px;
+            overflow-y: auto;
             background: #f4f4f4
         }
 
@@ -63,19 +62,20 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 390px; 
+            height: 390px;
             overflow-y: auto;
             background: #f4f4f4
         }
 
-        .top-part, .bottom-part {
+        .top-part,
+        .bottom-part {
             margin-top: -10px;
             margin-left: 15px;
             padding: 10px;
             flex: 1;
         }
 
-        h2{
+        h2 {
             color: #663399;
         }
 
@@ -84,9 +84,9 @@
         }
 
         .quiz-details {
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
 
         @media screen and (max-width: 600px) {
@@ -95,7 +95,7 @@
             }
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             padding: 10px;
             color: white;
@@ -104,7 +104,7 @@
 
         .profile-container {
             display: flex;
-            align-items: center; 
+            align-items: center;
             justify-content: space-evenly;
             padding: 20px;
             background: #f4f4f4;
@@ -112,11 +112,11 @@
 
 
         .profile-pic {
-            width: 130px; 
-            height: 130px; 
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            margin-right: auto; 
-            margin-left: auto; 
+            margin-right: auto;
+            margin-left: auto;
         }
 
         .fancy-note {
@@ -125,7 +125,6 @@
             margin-left: 20px;
             background: #f4f4f4;
         }
-      
     </style>
 </head>
 
@@ -141,61 +140,62 @@
     <div class="card-container">
         <div class="card" style="width: 200%;">
             <div class="card-header">Examinee Profile</div>
-                <div class="card-content">
-                    <div class="profile-container">
-                        <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
-                        <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."</p>
-                        <p class="fancy-note">- Nelson Mandela</p>   
-                    </div>  
-                    <p><strong>First Name:</strong> {{ first_name }} </p>
-                    <p><strong>Last Name:</strong> {{ last_name }}</p>
-                    <p><strong>Email:</strong> {{ email }} </p>
-                    <p><strong>Contact:</strong> {{ contact }} </p>  
+            <div class="card-content">
+                <div class="profile-container">
+                    <img class="profile-pic" src="{% static 'profilepic.jpg' %}" alt="Profile Picture">
+                    <p class="fancy-note">"Education is the most powerful weapon which you can use to change the world."
+                    </p>
+                    <p class="fancy-note">- Nelson Mandela</p>
                 </div>
-            <div class="card-footer"> 
+                <p><strong>First Name:</strong> {{ first_name }} </p>
+                <p><strong>Last Name:</strong> {{ last_name }}</p>
+                <p><strong>Email:</strong> {{ email }} </p>
+                <p><strong>Contact:</strong> {{ contact }} </p>
+            </div>
+            <div class="card-footer">
                 <a href="{% url 'examinee_profile' %}">
                     <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;">
                 </a>
             </div>
-          </div>
-    
-        <div class="card" style="width: 200%;">
-          <div class="card-header">Quiz History</div>
-          <div class="second-card-content">
-            <div class="top-part">
-                <h2>Recent Score</h2>
-                {% if quiz_scores %}
-                <div class="quiz-score">
-                    <h3>{{ quiz_scores.0.quiz_name }}</h3>
-                    <p>Total Questions: {{ quiz_scores.0.quiz_total_questions }}</p>
-                    <p>Total Score: {{ quiz_scores.0.total_score }}</p>
-                    <p>Percentage: {{ quiz_scores.0.percentage }}%</p>
-                </div>
-                <div class="divider"></div>
-                {% else %}
-                    <p>No scores available.</p>
-                {% endif %}
-            </div>
-        
-            <div class="bottom-part" style="margin-top: -5px;">
-                <h2>Available Quizzes</h2>
-                {% for quiz in quizzes %}
-                    {% if quiz.visible %}
-                        <div class="recent-quiz">
-                            <h3>{{ quiz.quiz_name }}</h3>
-                            <p>By Professor: {{ quiz.created_by.username }}</p>
-                            <div class="gotoquiz">
-                                <a href="{% url 'view_quizzes' %}">Go To Quiz</a>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
         </div>
-          <div class="card-footer">
-            <a href="{% url 'scores' %}">
-            <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
-          </div>        
+
+        <div class="card" style="width: 200%;">
+            <div class="card-header">Quiz History</div>
+            <div class="second-card-content">
+                <div class="top-part">
+                    <h2>Recent Score</h2>
+                    {% if quiz_scores %}
+                    <div class="quiz-score">
+                        <h3>{{ quiz_scores.0.quiz_name }}</h3>
+                        <p>Total Questions: {{ quiz_scores.0.quiz_total_questions }}</p>
+                        <p>Total Score: {{ quiz_scores.0.total_score }}</p>
+                        <p>Percentage: {{ quiz_scores.0.percentage }}%</p>
+                    </div>
+                    <div class="divider"></div>
+                    {% else %}
+                    <p>No scores available.</p>
+                    {% endif %}
+                </div>
+
+                <div class="bottom-part" style="margin-top: -5px;">
+                    <h2>Available Quizzes</h2>
+                    {% for quiz in quizzes %}
+                    {% if quiz.visible %}
+                    <div class="recent-quiz">
+                        <h3>{{ quiz.quiz_name }}</h3>
+                        <p>By Professor: {{ quiz.created_by.username }}</p>
+                        <div class="gotoquiz">
+                            <a href="{% url 'view_quizzes' %}">Go To Quiz</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'scores' %}">
+                    <img src="{% static 'redirect.png' %}" alt="Your Image" style="width: 5%;"></a>
+            </div>
         </div>
     </div>
 

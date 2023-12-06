@@ -5,10 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Create Question Category</title>
     {% load static %}
     <style>
-
         body {
             margin: 0;
             padding: 0;
@@ -21,15 +20,15 @@
             background-size: cover;
             background-position: center;
             justify-content: center;
-            color: black; 
-            padding: 20px; 
+            color: black;
+            padding: 20px;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -68,7 +67,7 @@
             border-radius: 5px;
         }
 
-        
+
         .larger-checkbox {
             transform: scale(1.5);
         }
@@ -85,7 +84,7 @@
             background-color: #663399;
             color: white;
             cursor: pointer;
-            font-weight: bold; 
+            font-weight: bold;
         }
 
         button:hover {
@@ -104,7 +103,7 @@
             padding-right: 20px;
         }
 
-        .addcategorybutton button{
+        .addcategorybutton button {
             width: 25%;
         }
 
@@ -126,12 +125,12 @@
             margin-bottom: 10px;
         }
 
-        .mainsection{
+        .mainsection {
             height: 70vh;
             overflow-x: auto;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
@@ -145,7 +144,7 @@
     <div>
         {% include 'header.html' %}
     </div>
-  
+
     <div>
         {% include 'QuizCreator/navbar.html' %}
     </div>
@@ -159,20 +158,22 @@
                         {% csrf_token %}
                         <label for="category_name">Category Name:</label>
                         <input type="text" id="category_name" name="category_name" required>
-            
+
                         <label for="category_description">Category Description:</label>
                         <textarea id="category_description" name="category_description" required></textarea>
                         <div class="categoryvisibility">
                             <label for="visible_to_others">Visible to Others:</label>
-                            <input type="checkbox" class="larger-checkbox" id="visible_to_others" name="visible_to_others">
+                            <input type="checkbox" class="larger-checkbox" id="visible_to_others"
+                                name="visible_to_others">
                         </div>
                         <div class="message">
                             {% if messages %}
-                                {% for message in messages %}
-                                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
+                            {% for message in messages %}
+                            <div
+                                class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
                             {% endif %}
                         </div>
                         <div class="addcategorybutton">
@@ -191,7 +192,6 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Other code...
 
         function hideMessage() {
             document.querySelectorAll('.alert').forEach(function (alert) {
@@ -206,7 +206,6 @@
             }, 3000); // Hide the message after 5 seconds
         }
 
-        // Initial options load
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
             addDeleteButton(label);
         });
@@ -217,4 +216,5 @@
         });
     });
 </script>
+
 </html>
