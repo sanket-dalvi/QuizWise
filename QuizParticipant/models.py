@@ -10,6 +10,9 @@ class Submission(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
 
 class UserQuizStatus(models.Model):
+    """
+    Model representing the status of a user's interaction with a quiz.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     status = models.CharField(default="Active", max_length=10)
@@ -18,20 +21,33 @@ class UserQuizStatus(models.Model):
     # Create a list to hold observers
     observers = []
 
-    # Attach an observer to the list
     def attach_observer(self, observer):
+        """
+        Attach an observer to the list of observers.
+
+        Args:
+        - observer (Observer): The observer object to be attached.
+        """
         self.observers.append(observer)
 
-    # Detach an observer from the list
     def detach_observer(self, observer):
+        """
+        Detach an observer from the list of observers.
+
+        Args:
+        - observer (Observer): The observer object to be detached.
+        """
         self.observers.remove(observer)
 
-    # Notify all observers
     def notify_observers(self):
+        """Notify all attached observers."""
         for observer in self.observers:
             observer.notify(self)
 
     def save(self, *args, **kwargs):
+        """
+        Save method override to notify observers upon saving the instance.
+        """
         is_new = not self.pk  # Check if it's a new instance
         super().save(*args, **kwargs)
         if is_new:
