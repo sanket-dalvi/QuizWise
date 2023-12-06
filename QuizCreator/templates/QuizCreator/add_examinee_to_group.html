@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Add Examinees</title>
     <style>
         body {
             margin: 0;
@@ -14,8 +14,8 @@
         }
 
         h1 {
-            margin-top: 40px; /* Adjust the top margin as needed */
-            margin-bottom: 30px; /* Adjust the bottom margin as needed */
+            margin-top: 40px;
+            margin-bottom: 30px;
         }
 
         .headerbuttons {
@@ -33,13 +33,14 @@
         }
 
         table {
-            width: 60%; 
-            margin: 0 auto; 
+            width: 60%;
+            margin: 0 auto;
             border-collapse: collapse;
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
@@ -55,7 +56,7 @@
             background-color: #f2f2f2;
             text-align: center;
         }
-        
+
         .mainsection {
             height: 80vh;
             overflow-x: auto;
@@ -70,9 +71,9 @@
             width: 100%;
             margin-right: 10px;
         }
-        
-        .examinee_container{
-            margin: 3% auto; 
+
+        .examinee_container {
+            margin: 3% auto;
             margin-bottom: 50px;
             background-color: #f2f2f2;
             border: 2px solid #ccc;
@@ -81,10 +82,10 @@
         }
 
         .examinee_section {
-            margin: 10px; 
+            margin: 10px;
         }
 
-        .add_examinee{
+        .add_examinee {
             margin-bottom: 20px;
         }
 
@@ -99,7 +100,7 @@
             background-color: #663399;
             color: white;
             cursor: pointer;
-            font-weight: bold; 
+            font-weight: bold;
         }
 
         button:hover {
@@ -111,7 +112,7 @@
             align-self: center;
         }
 
-        .container h2{
+        .container h2 {
             text-align: center;
         }
 
@@ -128,15 +129,17 @@
             width: 125vh;
         }
 
-        .container button{
+        .container button {
             width: 15%;
         }
 
-        label,select,button{
+        label,
+        select,
+        button {
             margin-top: 2%;
         }
 
-        .header-title{
+        .header-title {
             margin-top: 40px;
             margin-bottom: 40px;
         }
@@ -165,7 +168,7 @@
             margin-bottom: 10px;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
@@ -188,11 +191,12 @@
         <div class="main-content">
             <div class="message">
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+                {% for message in messages %}
+                <div
+                    class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
                 {% endif %}
             </div>
             <div class="header-title">
@@ -207,7 +211,8 @@
                         <select id="select-group" name="select-group" style="width: 50%;">
                             <option disabled selected value>-- Please Select a Group --</option>
                             {% for group in groups %}
-                                <option value="{{ group.id }}" {% if group_id == group.id %} selected {% endif %}>{{ group.name }}</option>
+                            <option value="{{ group.id }}" {% if group_id==group.id %} selected {% endif %}>{{
+                                group.name }}</option>
                             {% endfor %}
                         </select>
                         <button id="select-group-button" type="submit">Select</button>
@@ -221,33 +226,35 @@
                         <input type="hidden" name="form-type" value="add-examinees">
                         <input type="hidden" name="selected-group" id="selected-group" value="{{ group_id }}">
                         <table border="1">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
-                                <th>Sr.No</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for examinee in examinees %}
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
+                                    <th>Sr.No</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for examinee in examinees %}
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}" class="larger-checkbox" {% if examinee.id in examinee_ids %} checked {% endif %}>
+                                        <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}"
+                                            class="larger-checkbox" {% if examinee.id in examinee_ids %} checked {%
+                                            endif %}>
                                     </td>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ examinee.first_name }} {{ examinee.last_name }}</td>
                                     <td>{{ examinee.email }}</td>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <div class="add_examinee">
-                        <button type="submit" id="add-examinee-button">Add Examinees</button>
-                    </div>
-                </form>
-            </div>
-            {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="add_examinee">
+                            <button type="submit" id="add-examinee-button">Add Examinees</button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -281,7 +288,7 @@
 
         selectGroupButton.addEventListener('click', function () {
             var selectedGroupId = document.getElementById('select-group').value;
-            selectedGroupInput.value = selectedGroupId;  
+            selectedGroupInput.value = selectedGroupId;
             console.log('Selected Group ID:', selectedGroupId);
         });
 
@@ -293,8 +300,8 @@
                 }
             });
             console.log('Selected Examinees:', selectedExaminees);
-            selectedGroupInput.value = selectedGroupId;  
-            document.getElementById('add-examinee-form').submit();  
+            selectedGroupInput.value = selectedGroupId;
+            document.getElementById('add-examinee-form').submit();
         });
     });
 </script>
@@ -311,7 +318,7 @@
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 3000); 
+            }, 3000);
         }
 
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {

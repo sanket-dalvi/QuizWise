@@ -5,15 +5,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>View Quizzes</title>
     {% load static %}
     <style>
-
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -22,7 +21,7 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
-            justify-content: space-evenly; 
+            justify-content: space-evenly;
         }
 
         .card {
@@ -41,8 +40,8 @@
 
         .card-content {
             padding: 20px;
-            height: 350px; 
-            overflow-y: auto; 
+            height: 350px;
+            overflow-y: auto;
             background: #EAEAEA
         }
 
@@ -92,7 +91,8 @@
             color: #fff;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 10px;
         }
@@ -127,7 +127,7 @@
             color: white;
             text-align: center;
         }
-        
+
         .alert-success {
             background-color: #d4edda;
             border-color: #c3e6cb;
@@ -167,11 +167,12 @@
     </div>
     <div class="message">
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+        {% for message in messages %}
+        <div
+            class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
         {% endif %}
     </div>
     <div class="mainsection">
@@ -192,29 +193,30 @@
                 </thead>
                 <tbody>
                     {% for quiz in quizzes %}
-                        <tr>
-                            <td>{{ quiz.name }}</td>
-                            <td>{{ quiz.description }}</td>
-                            <td>{{ quiz.total_questions }}</td>
-                            <td>{{ quiz.duration }} mins</td>
-                            <td>{{ quiz.created_by.username }}</td>
-                            <td>
-                                <form id="quizForm{{ quiz.id }}" action="{% url 'take_quiz' quiz.id %}" method="post" target="_blank">
-                                    {% csrf_token %}
-                                    <input type="button" value="Take Quiz" onclick="startQuiz({{ quiz.id }})">
-                                </form>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>{{ quiz.name }}</td>
+                        <td>{{ quiz.description }}</td>
+                        <td>{{ quiz.total_questions }}</td>
+                        <td>{{ quiz.duration }} mins</td>
+                        <td>{{ quiz.created_by.username }}</td>
+                        <td>
+                            <form id="quizForm{{ quiz.id }}" action="{% url 'take_quiz' quiz.id %}" method="post"
+                                target="_blank">
+                                {% csrf_token %}
+                                <input type="button" value="Take Quiz" onclick="startQuiz({{ quiz.id }})">
+                            </form>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
-                No Quizzes Available
+            No Quizzes Available
             {% endif %}
         </div>
     </div>
-    
-    
+
+
 
     <div class="footer-content">
         {% include 'footer.html' %}
@@ -255,4 +257,5 @@
         });
     });
 </script>
+
 </html>

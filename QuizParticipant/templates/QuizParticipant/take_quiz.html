@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Take Quiz</title>
     {% load static %}
     <style>
-      body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 20px;
@@ -16,16 +16,19 @@
             background-size: cover;
             background-position: center;
         }
+
         .timer {
             text-align: center;
             font-size: 18px;
             margin-bottom: 20px;
         }
+
         h1 {
             text-align: center;
             margin-bottom: 30px;
 
         }
+
         .question {
             background-color: rgba(0, 0, 0, 0.1);
             color: black;
@@ -34,17 +37,21 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .options {
             margin-top: 10px;
             margin-bottom: 20px;
         }
+
         .options input[type="radio"],
         .options input[type="checkbox"] {
             margin-right: 10px;
         }
+
         .options label {
             font-size: 16px;
         }
+
         textarea {
             width: 100%;
             padding: 10px;
@@ -55,11 +62,13 @@
             resize: vertical;
             font-size: 16px;
         }
+
         hr {
             border-top: 1px solid #ddd;
             margin-top: 20px;
             margin-bottom: 10px;
         }
+
         input[type="submit"] {
             padding: 10px 20px;
             border: none;
@@ -68,6 +77,7 @@
             color: white;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
@@ -89,6 +99,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+
         .quiz-details {
             background-color: #f8f9fa;
             padding: 20px;
@@ -97,11 +108,13 @@
             margin-bottom: 20px;
             background-color: rgba(256, 256, 256, 0.3);
         }
+
         .timer {
             text-align: right;
             font-size: 18px;
             margin-bottom: 20px;
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -129,7 +142,7 @@
             background-color: #663399;
             color: white;
             cursor: pointer;
-            font-weight: bold; 
+            font-weight: bold;
         }
 
         button:hover {
@@ -143,13 +156,14 @@
             padding-right: 20px;
         }
 
-        button{
+        button {
             width: 25%;
         }
+
         .options input[type="radio"],
         .options input[type="checkbox"] {
             margin-right: 10px;
-            transform: scale(1.5); 
+            transform: scale(1.5);
         }
     </style>
 </head>
@@ -163,38 +177,42 @@
             <p>Total Questions: {{ quiz.total_questions }}</p>
             <p>Duration: {{ quiz.duration }} minutes</p>
         </div>
-        <div class="timer" id="timer" style="text-align: center; color: white; font-weight: bolder; font-size: xx-large;"></div>
+        <div class="timer" id="timer"
+            style="text-align: center; color: white; font-weight: bolder; font-size: xx-large;"></div>
         <form method="post" id="quiz_form" action="{% url 'submit_quiz' quiz.id %}">
             {% csrf_token %}
             {% for question in quiz_questions %}
-                <div class="question">
-                    <h3>Q.{{forloop.counter}}) {{ question.question }}</h3>
-                    {% if question.type.type_code == 'RB' %}
-                        <div class="options">
-                            {% for option in question.options.all %}
-                                <input type="radio" id="option_{{ option.id }}" name="{{ question.id }}" value="{{ option.option }}">
-                                <label for="option_{{ option.id }}">{{ option.option }}</label><br>
-                            {% endfor %}
-                        </div>
-                    {% elif question.type.type_code == 'CB' %}
-                        <div class="options">
-                            {% for option in question.options.all %}
-                                <input type="checkbox" id="option_{{ option.id }}" name="{{ question.id }}" value="{{ option.option }}">
-                                <label for="option_{{ option.id }}">{{ option.option }}</label><br>
-                            {% endfor %}
-                        </div>
-                    {% elif question.type.type_code == 'FT' %}
-                        <textarea id="answer_{{ question.id }}" name="{{ question.id }}" rows="4" cols="50" placeholder="Type your answer here...."></textarea>
-                    {% endif %}
-                    
-                    <hr>
+            <div class="question">
+                <h3>Q.{{forloop.counter}}) {{ question.question }}</h3>
+                {% if question.type.type_code == 'RB' %}
+                <div class="options">
+                    {% for option in question.options.all %}
+                    <input type="radio" id="option_{{ option.id }}" name="{{ question.id }}"
+                        value="{{ option.option }}">
+                    <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                    {% endfor %}
                 </div>
+                {% elif question.type.type_code == 'CB' %}
+                <div class="options">
+                    {% for option in question.options.all %}
+                    <input type="checkbox" id="option_{{ option.id }}" name="{{ question.id }}"
+                        value="{{ option.option }}">
+                    <label for="option_{{ option.id }}">{{ option.option }}</label><br>
+                    {% endfor %}
+                </div>
+                {% elif question.type.type_code == 'FT' %}
+                <textarea id="answer_{{ question.id }}" name="{{ question.id }}" rows="4" cols="50"
+                    placeholder="Type your answer here...."></textarea>
+                {% endif %}
+
+                <hr>
+            </div>
             {% endfor %}
             <div class="submitquizbutton" style="align-content: center;">
                 <button type="submit" value="Submit Quiz">Submit Quiz</button>
             </div>
         </form>
-        
+
         <div id="customModal" class="modal">
             <div class="modal-content">
                 <label for="unlockCode">Enter unlock code:</label>
@@ -202,15 +220,16 @@
                 <button onclick="checkUnlockCode()">Unlock</button>
             </div>
         </div>
-    
+
         <div id="warningModal" class="modal">
             <div class="modal-content">
-                <h1>Switching tabs is not allowed! This is your first and last warning, otherwise quiz will be locked.</h1><br>
+                <h1>Switching tabs is not allowed! This is your first and last warning, otherwise quiz will be locked.
+                </h1><br>
                 <button onclick="unLockQuiz()">Unlock</button>
             </div>
         </div>
     </div>
-    
+
 
 </body>
 <script>
@@ -224,7 +243,7 @@
     }
 
     // Logic to handle form submission on time expiration or button click
-    document.getElementById('quiz_form').addEventListener('submit', function(event) {
+    document.getElementById('quiz_form').addEventListener('submit', function (event) {
         event.preventDefault();
         handleFormSubmission();
     });
@@ -239,22 +258,22 @@
             const minutes = Math.floor(timerSeconds / 60);
             const seconds = timerSeconds % 60;
             timerDisplay.textContent = `Time remaining: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            
+
             if (--timerSeconds < 0) {
                 clearInterval(timer);
                 timerDisplay.textContent = 'Time expired!';
                 handleFormSubmission()
-                
+
             }
         }, 1000);
     }
 
     startTimer(durationInMinutes);
-    
-    
+
+
     let warningCount = 0;
 
-    window.onblur = function() {
+    window.onblur = function () {
         warningCount++;
         if (warningCount === 1) {
             blurBackground();
@@ -292,20 +311,21 @@
     function checkUnlockCode() {
         const code = document.getElementById('unlockCode').value;
         if (code) {
-            if(code == "{{ quiz.passcode }}"){
+            if (code == "{{ quiz.passcode }}") {
                 document.getElementById('customModal').style.display = 'none';
-                unblurBackground() 
+                unblurBackground()
                 alert('Quiz unlocked!');
                 warningCount = 0
                 document.getElementById('unlockCode').value = ''
-            }else{
+            } else {
                 alert('Invalid Code');
             }
-            
+
         } else {
             alert('Please enter the unlock code.');
         }
     }
 
-</script> 
+</script>
+
 </html>

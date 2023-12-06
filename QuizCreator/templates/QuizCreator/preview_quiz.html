@@ -5,21 +5,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Questions</title>
+    <title>PreView Quiz</title>
     {% load static %}
     <style>
-
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -37,7 +36,7 @@
         }
 
         textarea {
-            width: 96%; 
+            width: 96%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -80,7 +79,7 @@
         #dynamic-fields {
             display: grid;
         }
-        
+
         .note {
             margin-top: 10px;
             font-size: 14px;
@@ -90,6 +89,7 @@
         .note p {
             margin: 0;
         }
+
         .message {
             margin-top: 10px;
             color: #555;
@@ -169,7 +169,7 @@
             background-color: #E6549C;
         }
 
-        
+
         button {
             padding: 10px 20px;
             border: none;
@@ -177,7 +177,7 @@
             background-color: #663399;
             color: white;
             cursor: pointer;
-            font-weight: bold; 
+            font-weight: bold;
         }
 
         button:hover {
@@ -192,7 +192,7 @@
             width: 20%;
         }
 
-        .container h2{
+        .container h2 {
             text-align: center;
         }
 
@@ -210,13 +210,14 @@
             text-align: left;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
             color: white;
             text-align: center;
         }
+
         .checked {
             color: #007bff;
         }
@@ -237,7 +238,7 @@
             flex-direction: column;
         }
 
-        .mainsection{
+        .mainsection {
             height: 70vh;
             overflow-x: auto;
         }
@@ -259,34 +260,36 @@
                 <h1 style="margin-top: 30px;">Preview Quiz</h1>
                 <div class="message">
                     {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
+                    {% for message in messages %}
+                    <div
+                        class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </div>
 
                 <div class="container" style="margin-top: 2%; text-align: center;">
                     <form method="post" target="_blank">
                         {% csrf_token %}
-                            <!-- Select Quiz Dropdown -->
-                            <div class="quiz-select" style="margin-top: 3%;">
-                                <label for="select-quiz">Select Quiz:</label>
-                                <select id="select-quiz" name="select-quiz" required style="width: 50%;">
-                                    {% if not selected_quiz_id %}
-                                    <option value="" disabled selected>--- Please select a Quiz ---</option>
-                                    {% endif %}
-                                    <!-- Populate dropdown with quiz options -->
-                                    {% for quiz in quizzes %}
-                                        <option value="{{ quiz.id }}"{% if quiz.id == selected_quiz_id %}selected{% endif %}>{{ quiz.name }}</option>
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="submitbutton">Select</button>
-                            </div>
-                            <br>
+                        <!-- Select Quiz Dropdown -->
+                        <div class="quiz-select" style="margin-top: 3%;">
+                            <label for="select-quiz">Select Quiz:</label>
+                            <select id="select-quiz" name="select-quiz" required style="width: 50%;">
+                                {% if not selected_quiz_id %}
+                                <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                {% endif %}
+                                <!-- Populate dropdown with quiz options -->
+                                {% for quiz in quizzes %}
+                                <option value="{{ quiz.id }}" {% if quiz.id==selected_quiz_id %}selected{% endif %}>{{
+                                    quiz.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="submitbutton">Select</button>
+                        </div>
+                        <br>
                     </form>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
@@ -295,4 +298,5 @@
         {% include 'footer.html' %}
     </div>
 </body>
+
 </html>

@@ -5,21 +5,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Category Mapping</title>
+    <title>Question Category Map</title>
     {% load static %}
     <style>
-
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
         }
 
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -38,7 +37,7 @@
         }
 
         textarea {
-            width: 96%; 
+            width: 96%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
@@ -68,7 +67,7 @@
         #dynamic-fields {
             display: grid;
         }
-        
+
         .note {
             margin-top: 10px;
             font-size: 14px;
@@ -78,6 +77,7 @@
         .note p {
             margin: 0;
         }
+
         .message {
             margin-top: 10px;
             color: #555;
@@ -187,7 +187,8 @@
             width: 250px;
         }
 
-        #search-btn, #map-btn {
+        #search-btn,
+        #map-btn {
             padding: 8px 16px;
             background-color: #663399;
             color: white;
@@ -214,7 +215,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
@@ -260,12 +262,12 @@
             text-align: left;
         }
 
-        .mainsection{
+        .mainsection {
             height: 80vh;
             overflow-x: auto;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
@@ -290,14 +292,15 @@
                     {% csrf_token %}
                     <div class="container">
                         <br>
-                    <h1>Map Questions to Quizzes</h1>
+                        <h1>Map Questions to Quizzes</h1>
                         <div class="message">
                             {% if messages %}
-                                {% for message in messages %}
-                                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
+                            {% for message in messages %}
+                            <div
+                                class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
                             {% endif %}
                         </div>
 
@@ -311,7 +314,7 @@
                                 <div>
                                     <select id="category-select" name="category-select" multiple>
                                         {% for category in categories %}
-                                            <option value="{{ category.id }}">{{ category.name }}</option>
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -331,7 +334,8 @@
                             <table id="questions-table">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox"></th>
+                                        <th><input type="checkbox" id="select-all-checkbox" class="larger-checkbox">
+                                        </th>
                                         <th>No</th>
                                         <th style="width: 25%;">Question</th>
                                         <th>Answer Choice Type</th>
@@ -343,24 +347,25 @@
                                 </thead>
                                 <tbody>
                                     {% for question in questions %}
-                                        <tr>
-                                            <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}" class="larger-checkbox"></td>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ question.question }}</td>
-                                            <td>{{ question.type.type_code }}</td>
-                                            <td>
-                                                {% for option in question.options.all %}
-                                                    -{{ option.option }}<br>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for category_map in question.categoryquestionmap_set.all %}
-                                                    {{ category_map.category.name }}<br>
-                                                {% endfor %}
-                                            </td>
-                                            <td>{{ question.answer }}</td>
-                                            <td>{{ question.created_by.username }}</td>
-                                        </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="checkbox-group" value="{{ question.id }}"
+                                                class="larger-checkbox"></td>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ question.question }}</td>
+                                        <td>{{ question.type.type_code }}</td>
+                                        <td>
+                                            {% for option in question.options.all %}
+                                            -{{ option.option }}<br>
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for category_map in question.categoryquestionmap_set.all %}
+                                            {{ category_map.category.name }}<br>
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ question.answer }}</td>
+                                        <td>{{ question.created_by.username }}</td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -380,15 +385,15 @@
     </div>
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var searchBtn = document.getElementById('search-btn');
         if (searchBtn) {
-            searchBtn.addEventListener('click', function() {
+            searchBtn.addEventListener('click', function () {
                 var searchText = document.getElementById('search-input').value.toLowerCase();
                 var tableRows = document.querySelectorAll('#questions-table tbody tr');
 
-                tableRows.forEach(function(row) {
-                    var questionText = row.children[2].textContent.toLowerCase(); 
+                tableRows.forEach(function (row) {
+                    var questionText = row.children[2].textContent.toLowerCase();
                     if (questionText.indexOf(searchText) === -1) {
                         row.style.display = 'none';
                     } else {
@@ -400,10 +405,10 @@
 
         var searchInput = document.getElementById('search-input');
 
-        searchInput.addEventListener('keypress', function(event) {
+        searchInput.addEventListener('keypress', function (event) {
             if (event.key === 'Enter') {
-                event.preventDefault(); 
-                document.getElementById('search-btn').click(); 
+                event.preventDefault();
+                document.getElementById('search-btn').click();
             }
         });
 
@@ -423,7 +428,7 @@
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 3000); 
+            }, 3000);
         }
 
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {

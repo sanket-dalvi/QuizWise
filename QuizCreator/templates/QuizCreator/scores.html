@@ -10,7 +10,6 @@
     <title>Scores</title>
     {% load static %}
     <style>
-
         .quiz-select {
             display: flex;
             align-items: center;
@@ -19,13 +18,14 @@
         .quiz-select label,
         .quiz-select select,
         .quiz-select button {
-            margin-right: 10px; 
+            margin-right: 10px;
         }
-        .headerbuttons{
+
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -34,7 +34,7 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
-            justify-content: space-evenly; 
+            justify-content: space-evenly;
         }
 
         .card {
@@ -53,8 +53,8 @@
 
         .card-content {
             padding: 20px;
-            height: 350px; 
-            overflow-y: auto; 
+            height: 350px;
+            overflow-y: auto;
             background: #EAEAEA
         }
 
@@ -103,7 +103,8 @@
             color: #fff;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 10px;
         }
@@ -202,21 +203,22 @@
             margin-bottom: 20px;
         }
 
-        .quiz-info-table th, .quiz-info-table td {
+        .quiz-info-table th,
+        .quiz-info-table td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: left;
         }
 
         .quiz-info-table td {
-            background-color: #f4f4f4 ;
+            background-color: #f4f4f4;
         }
 
-        .Participant-details td{
-            background-color: #f4f4f4 ;
+        .Participant-details td {
+            background-color: #f4f4f4;
         }
 
-        .select-container{
+        .select-container {
             display: inline;
             margin: 10% auto;
             margin-top: 5px;
@@ -229,7 +231,6 @@
             height: 20vh;
             width: 100vh;
         }
-
     </style>
 </head>
 
@@ -254,80 +255,81 @@
                             <h3 for="select-quiz" style="margin-right: 10px;">Select Quiz:</h3>
                             <select id="select-quiz" name="select-quiz" required>
                                 {% if not selected_quiz.id %}
-                                    <option value="" disabled selected>--- Please select a Quiz ---</option>
+                                <option value="" disabled selected>--- Please select a Quiz ---</option>
                                 {% endif %}
                                 {% for quiz in quizzes %}
-                                    <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
+                                <option value="{{ quiz.id }}" {% if quiz.id==selected_quiz.id %}selected{% endif %}>{{
+                                    quiz.name }}</option>
                                 {% endfor %}
                             </select>
                             <button type="submit">Select</button>
                         </form>
                     </div>
-                    
+
                 </div>
             </div>
             {% if selected_quiz %}
             {% if total_submissions %}
-                <div name="quiz_metrics">
-                    <h2>Quiz Metrics for {{recent_quiz_metrics.quiz_name}}</h2>
-                    <table class="quiz-info-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Duration</th>
-                                <th>Total Questions</th>
-                                <th>Top Score</th>
-                                <th>Lowest Score</th>
-                                <th>Mean</th>
-                                <th>Median</th>
-                                <th>Mode</th>
-                                <th>Total Submissions</th>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <td>{{ recent_quiz_metrics.quiz_name }}</td>
-                            <td>{{ recent_quiz_metrics.duration }}</td>
-                            <td>{{ recent_quiz_metrics.total_questions }}</td>
-                            <td>{{ recent_quiz_metrics.max }}</td>
-                            <td>{{ recent_quiz_metrics.min }}</td>
-                            <td>{{ recent_quiz_metrics.mean }}</td>
-                            <td>{{ recent_quiz_metrics.median }}</td>
-                            <td>{{ recent_quiz_metrics.mode }}</td>
-                            <td>{{ total_submissions }}</td>
-                        </tr>
-                    </table>
-                    {{ img_tag|safe }}
-                </div>            
-                <h2>Quiz Participation</h2>
-                <table border="1" class="Participant-details">
+            <div name="quiz_metrics">
+                <h2>Quiz Metrics for {{recent_quiz_metrics.quiz_name}}</h2>
+                <table class="quiz-info-table">
                     <thead>
                         <tr>
-                            <th>Sr. No</th>
                             <th>Name</th>
-                            <th>Email</th>
+                            <th>Duration</th>
                             <th>Total Questions</th>
-                            <th>Score</th>
-                            <th>Percentage</th>
+                            <th>Top Score</th>
+                            <th>Lowest Score</th>
+                            <th>Mean</th>
+                            <th>Median</th>
+                            <th>Mode</th>
+                            <th>Total Submissions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for data in quiz_data %}
-                            <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ data.username }}</td>
-                                <td>{{ data.email }}</td>
-                                <td>{{ data.total_questions }}</td>
-                                <td>{{ data.score }}</td>
-                                <td>{{ data.percentage|floatformat:2 }}%</td>
-                            
-                            </tr>
-                        {% endfor %}
-                    </tbody>
+                    <tr>
+                        <td>{{ recent_quiz_metrics.quiz_name }}</td>
+                        <td>{{ recent_quiz_metrics.duration }}</td>
+                        <td>{{ recent_quiz_metrics.total_questions }}</td>
+                        <td>{{ recent_quiz_metrics.max }}</td>
+                        <td>{{ recent_quiz_metrics.min }}</td>
+                        <td>{{ recent_quiz_metrics.mean }}</td>
+                        <td>{{ recent_quiz_metrics.median }}</td>
+                        <td>{{ recent_quiz_metrics.mode }}</td>
+                        <td>{{ total_submissions }}</td>
+                    </tr>
                 </table>
+                {{ img_tag|safe }}
+            </div>
+            <h2>Quiz Participation</h2>
+            <table border="1" class="Participant-details">
+                <thead>
+                    <tr>
+                        <th>Sr. No</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Total Questions</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in quiz_data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ data.username }}</td>
+                        <td>{{ data.email }}</td>
+                        <td>{{ data.total_questions }}</td>
+                        <td>{{ data.score }}</td>
+                        <td>{{ data.percentage|floatformat:2 }}%</td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             {% else %}
-                <div>
-                    <h3>No Submissions Yet</h3>
-                </div>
+            <div>
+                <h3>No Submissions Yet</h3>
+            </div>
             {% endif %}
             {% endif %}
 

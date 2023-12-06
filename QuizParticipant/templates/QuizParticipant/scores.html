@@ -10,11 +10,11 @@
     <title>Scores</title>
     {% load static %}
     <style>
-        .headerbuttons{
+        .headerbuttons {
             display: none;
         }
 
-        .registerbutton{
+        .registerbutton {
             display: none;
         }
 
@@ -23,7 +23,7 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
-            justify-content: space-evenly; 
+            justify-content: space-evenly;
         }
 
         .card {
@@ -42,8 +42,8 @@
 
         .card-content {
             padding: 20px;
-            height: 350px; 
-            overflow-y: auto; 
+            height: 350px;
+            overflow-y: auto;
             background: #EAEAEA
         }
 
@@ -93,7 +93,8 @@
             color: #fff;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 10px;
         }
@@ -167,20 +168,20 @@
                 </thead>
                 <tbody>
                     {% for data in quiz_data %}
-                        <tr>
-                            <td>{{ data.quiz.name }}</td>
-                            <td>{{ data.quiz.description }}</td>
-                            <td>{{ data.quiz.total_questions }}</td>
-                            <td>{{ data.quiz.duration }} mins</td>
-                            <td>{{ data.quiz.created_by.username }}</td>
-                            <td>{{ data.score }}</td>
-                            <td>{{ data.percentage }}%</td>
-                        </tr>
+                    <tr>
+                        <td>{{ data.quiz.name }}</td>
+                        <td>{{ data.quiz.description }}</td>
+                        <td>{{ data.quiz.total_questions }}</td>
+                        <td>{{ data.quiz.duration }} mins</td>
+                        <td>{{ data.quiz.created_by.username }}</td>
+                        <td>{{ data.score }}</td>
+                        <td>{{ data.percentage }}%</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
-                No Scores Available
+            No Scores Available
             {% endif %}
         </div>
     </div>

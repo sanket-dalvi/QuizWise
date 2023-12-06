@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Post Quiz</title>
     <style>
         body {
             margin: 0;
@@ -14,8 +14,8 @@
         }
 
         h1 {
-            margin-top: 40px; /* Adjust the top margin as needed */
-            margin-bottom: 30px; /* Adjust the bottom margin as needed */
+            margin-top: 40px;
+            margin-bottom: 30px;
         }
 
         .headerbuttons {
@@ -33,13 +33,14 @@
         }
 
         table {
-            width: 60%; 
-            margin: 0 auto; 
+            width: 60%;
+            margin: 0 auto;
             border-collapse: collapse;
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
@@ -55,7 +56,7 @@
             background-color: #f2f2f2;
             text-align: center;
         }
-        
+
         .mainsection {
             height: 80vh;
             overflow-x: auto;
@@ -69,9 +70,9 @@
             border-radius: 5px;
             width: 100%;
         }
-        
-        .examinee_container{
-            margin: 3% auto; 
+
+        .examinee_container {
+            margin: 3% auto;
             margin-bottom: 50px;
             background-color: #f2f2f2;
             border: 2px solid #ccc;
@@ -80,10 +81,10 @@
         }
 
         .examinee_section {
-            margin: 10px; 
+            margin: 10px;
         }
 
-        .add_examinee{
+        .add_examinee {
             margin-bottom: 20px;
         }
 
@@ -98,7 +99,7 @@
             background-color: #663399;
             color: white;
             cursor: pointer;
-            font-weight: bold; 
+            font-weight: bold;
         }
 
         button:hover {
@@ -110,11 +111,11 @@
             align-self: center;
         }
 
-        form{
+        form {
             margin-top: 1%;
         }
 
-        .container h2{
+        .container h2 {
             text-align: center;
         }
 
@@ -142,15 +143,17 @@
             width: 100%;
         }
 
-        .container button{
+        .container button {
             width: 15%;
         }
 
-        label,select,button{
+        label,
+        select,
+        button {
             margin-top: 2%;
         }
 
-        .header-title{
+        .header-title {
             margin-top: 40px;
             margin-bottom: 40px;
         }
@@ -179,7 +182,7 @@
             margin-bottom: 10px;
         }
 
-        .footer-content{
+        .footer-content {
             background: linear-gradient(to right, #1DA3B8, #77AB59);
             font-size: small;
             padding: 10px;
@@ -187,8 +190,8 @@
             text-align: center;
         }
 
-        .Participant-details td{
-            background-color: #f4f4f4 ;
+        .Participant-details td {
+            background-color: #f4f4f4;
         }
     </style>
 </head>
@@ -206,15 +209,16 @@
         <div class="main-content">
             <div class="message">
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+                {% for message in messages %}
+                <div
+                    class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
                 {% endif %}
             </div>
             <div class="header-title">
-            <h1>Post Quiz</h1>
+                <h1>Post Quiz</h1>
             </div>
             <div class="container">
                 <div class="form-container">
@@ -224,16 +228,17 @@
                         <label for="select-group" style="font-weight: bolder;">Choose Group:</label>
                         <select id="select-group" name="select-group" style="width: 40%;" required>
                             {% if not selected_group %}
-                                <option disabled selected value>-- Please Select a Group --</option>
+                            <option disabled selected value>-- Please Select a Group --</option>
                             {% endif %}
                             {% for group in groups %}
-                                <option value="{{ group.id }}" {% if selected_group.id == group.id %} selected {% endif %}>{{ group.name }}</option>
+                            <option value="{{ group.id }}" {% if selected_group.id==group.id %} selected {% endif %}>{{
+                                group.name }}</option>
                             {% endfor %}
                         </select>
                         <button id="select-group-button" type="submit" style="width: 30%;">Select group</button>
                     </form>
                 </div>
-    
+
                 <div class="form-container">
                     <form method="post" action="{% url 'post_quiz' %}">
                         {% csrf_token %}
@@ -243,13 +248,14 @@
                         <label for="select-group" style="font-weight: bolder;">Choose Quiz:</label>
                         <select id="select-quiz" name="select-quiz" required style="width: 40%;">
                             {% if not selected_quiz %}
-                                <option disabled selected value>-- Please Select a Quiz --</option>
+                            <option disabled selected value>-- Please Select a Quiz --</option>
                             {% endif %}
                             {% for quiz in quizzes %}
-                                <option value="{{ quiz.id }}" {% if quiz.id == selected_quiz.id %}selected{% endif %}>{{ quiz.name }}</option>
+                            <option value="{{ quiz.id }}" {% if quiz.id==selected_quiz.id %}selected{% endif %}>{{
+                                quiz.name }}</option>
                             {% endfor %}
                         </select>
-    
+
                         <table border="1" class="Participant-details" style="margin-left: -35%;">
                             <thead>
                                 <tr>
@@ -261,20 +267,23 @@
                             </thead>
                             <tbody>
                                 {% for examinee in group_examinees %}
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}" class="larger-checkbox" {% if examinee.id in examinee_id_list %} checked {% endif %}>
-                                        </td>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ examinee.username }}</td>
-                                        <td>{{ examinee.email }}</td>
-                                    </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="checkbox-group" value="{{ examinee.id }}"
+                                            class="larger-checkbox" {% if examinee.id in examinee_id_list %} checked {%
+                                            endif %}>
+                                    </td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ examinee.username }}</td>
+                                    <td>{{ examinee.email }}</td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: -110%;">Post quiz to group</button>
+                        <button type="submit" style="margin-bottom: 15px; width: 30%; margin-left: -110%;">Post quiz to
+                            group</button>
                         {% else %}
-                            No Examinees In This Group
+                        No Examinees In This Group
                         {% endif %}
                     </form>
                 </div>
@@ -288,44 +297,44 @@
 
 </body>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    var selectAllCheckbox = document.getElementById('select-all-checkbox');
-    var checkboxes = document.querySelectorAll('.Participant-details tbody input[type="checkbox"]');
-    var selectGroupButton = document.getElementById('select-group-button');
-    var addExamineeButton = document.getElementById('add-examinee-button');
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectAllCheckbox = document.getElementById('select-all-checkbox');
+        var checkboxes = document.querySelectorAll('.Participant-details tbody input[type="checkbox"]');
+        var selectGroupButton = document.getElementById('select-group-button');
+        var addExamineeButton = document.getElementById('add-examinee-button');
 
-    selectAllCheckbox.addEventListener('change', function () {
+        selectAllCheckbox.addEventListener('change', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
         checkboxes.forEach(function (checkbox) {
-            checkbox.checked = selectAllCheckbox.checked;
+            checkbox.addEventListener('change', function () {
+                if (!checkbox.checked) {
+                    selectAllCheckbox.checked = false;
+                }
+            });
+        });
+
+        selectGroupButton.addEventListener('click', function () {
+            var selectedGroupId = document.getElementById('select-group').value;
+            selectedGroupInput.value = selectedGroupId;
+            console.log('Selected Group ID:', selectedGroupId);
+        });
+
+        addExamineeButton.addEventListener('click', function () {
+            var selectedExaminees = [];
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedExaminees.push(checkbox.value);
+                }
+            });
+            console.log('Selected Examinees:', selectedExaminees);
+            selectedGroupInput.value = selectedGroupId;
+            document.getElementById('add-examinee-form').submit();
         });
     });
-
-    checkboxes.forEach(function (checkbox) {
-        checkbox.addEventListener('change', function () {
-            if (!checkbox.checked) {
-                selectAllCheckbox.checked = false;
-            }
-        });
-    });
-
-    selectGroupButton.addEventListener('click', function () {
-        var selectedGroupId = document.getElementById('select-group').value;
-        selectedGroupInput.value = selectedGroupId;
-        console.log('Selected Group ID:', selectedGroupId);
-    });
-
-    addExamineeButton.addEventListener('click', function () {
-        var selectedExaminees = [];
-        checkboxes.forEach(function (checkbox) {
-            if (checkbox.checked) {
-                selectedExaminees.push(checkbox.value);
-            }
-        });
-        console.log('Selected Examinees:', selectedExaminees);
-        selectedGroupInput.value = selectedGroupId;
-        document.getElementById('add-examinee-form').submit();
-    });
-});
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -340,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
             messageElement.style.display = 'block';
             setTimeout(function () {
                 messageElement.style.display = 'none';
-            }, 3000); 
+            }, 3000);
         }
 
         document.querySelectorAll('.dynamic-fields label').forEach(function (label) {
