@@ -13,8 +13,20 @@ from .constants import (
     PASSWORD_LABEL,
 )
 
-
 class UserRegistrationForm(UserCreationForm):
+    """
+    Form for user registration.
+
+    Fields:
+        - email
+        - username
+        - password1
+        - password2
+        - first_name
+        - last_name
+        - contact
+        - role
+    """
     ROLE_CHOICES = (
         ('examinee', 'Examinee'),
         ('examiner', 'Examiner'),
@@ -37,7 +49,13 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ['email', 'username', 'password1', 'password2', 'first_name', 'last_name', 'contact', 'role']
 
-
 class UserLoginForm(forms.Form):
+    """
+    Form for user login.
+
+    Fields:
+        - username
+        - password
+    """
     username = forms.CharField(max_length=150, label=USERNAME_LABEL)
     password = forms.CharField(widget=forms.PasswordInput, label=PASSWORD_LABEL)
