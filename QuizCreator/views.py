@@ -463,9 +463,9 @@ def delete_question(request, question_id):
         # Attempt to retrieve and delete the question
         question = get_object_or_404(Question, pk=question_id)
         quizzes = QuizQuestion.objects.filter(question=question)
-        for quiz in quizzes:
-            user_quiz_status = UserQuizStatus.objects.filter(quiz=quiz)
-            if user_quiz_status and quiz.visible:
+        for quiz_question in quizzes:
+            user_quiz_status = UserQuizStatus.objects.filter(quiz=quiz_question.quiz)
+            if user_quiz_status and quiz_question.quiz.visible:
                 messages.error(request, "Question Can Not Be Deleted As It Is Present In The Current Active Posted Quiz")
                 return redirect("edit_questions")
         question.delete()

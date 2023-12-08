@@ -56,11 +56,11 @@ def home(request):
     available_quizzes = []
     quiz_list = Quiz.objects.filter(visible = True)
     for quiz in quiz_list:
-        user_quiz_status, created = UserQuizStatus.objects.get_or_create(
+        user_quiz_status = UserQuizStatus.objects.filter(
             user = request.user,
             quiz = quiz
-        )
-        if user_quiz_status.status == "Active":
+        ).first()
+        if user_quiz_status and user_quiz_status.status == "Active":
             available_quizzes.append(quiz) 
     context['quizzes'] = available_quizzes
 
@@ -78,11 +78,11 @@ def view_quizzes(request):
 
     # Check the status of each quiz for the current user
     for quiz in quiz_list:
-        user_quiz_status, created = UserQuizStatus.objects.get_or_create(
+        user_quiz_status = UserQuizStatus.objects.filter(
             user = user,
             quiz = quiz
-        )
-        if user_quiz_status.status == "Active":
+        ).first()
+        if user_quiz_status and user_quiz_status.status == "Active":
             quizzes.append(quiz) 
     return render(request, "QuizParticipant/view_quizzes.html", { 'quizzes' : quizzes })
 
