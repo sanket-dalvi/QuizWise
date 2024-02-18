@@ -84,20 +84,18 @@ WSGI_APPLICATION = 'QuizWise.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     "ENGINE": "django.db.backends.postgresql",
-    #     "NAME": "QuizWise",
-    #     "USER": "postgres",
-    #     #"PASSWORD":"PostgreSQLService@24/7",
-    #     "PASSWORD":"1996", # alisha's postgres password
-    #     #"PASSWORD":"", # animesh's postgres password 
-    #     "HOST":"localhost",
-    #     "PORT":"5432",
-    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "QuizWise",
+        "USER": "postgres",
+        "PASSWORD":"postgres123",
+        "HOST":"database-1.cy1msonklglr.us-east-1.rds.amazonaws.com",
+        "PORT":"5432",
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 
